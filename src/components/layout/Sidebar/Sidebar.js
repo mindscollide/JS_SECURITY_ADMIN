@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Row, Col, Nav, Container, Navbar, NavDropdown } from "react-bootstrap";
 import Chat from "../../../assets/images/Comment-Icon.png";
 import {
@@ -14,51 +14,94 @@ import {
 } from "react-bootstrap-icons";
 import JohnCater from "../../../assets/images/profile3.png";
 import { Button, TextField } from "../../../components/elements";
+import {
+  LaptopOutlined,
+  NotificationOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Breadcrumb, Layout, Menu, theme } from "antd";
 import Users from "../../../assets/images/Assignees-Icon.png";
 import Broadcast from "../../../assets/images/6.png";
-import styles from "./Sidebar.module.css";
+import "./Sidebar.css";
 
 const Sidebar = () => {
-  //for chat open after click sidebar chat icon
-  const [openChat, setOpenChat] = useState(false);
+  const { SubMenu } = Menu;
+  const { Sider } = Layout;
+  const navigate = useNavigate();
 
-  //for chat open logged in user
-  const [openLogIn, setOpenLogIn] = useState(false);
+  const navigateToCreateUser = () => {
+    navigate("/createUser");
+  };
 
-  //for open invite user panel state
-  const [openInvite, setOpenInvite] = useState(false);
+  const navigateToEdit = () => {
+    navigate("/editUser");
+  };
 
-  //for another chat box open
-  const [chatBoxOpen, setChatBoxOpen] = useState(false);
+  const navigateToReport = () => {
+    navigate("/userReport");
+  };
 
   return (
-    <>
-      <Row className={styles["sidebar-row"]}>
-        <Col sm={4} className={styles["js-sidebar"]}>
-          <Nav disabled={true} className={styles["new_sidebar"]}>
-            <>
-              {/* ChatIcon */}
-              <Nav.Link disabled={false}>
-                <span className={styles["sidebar-icons-color"]}>
-                  <i className="icon-settings" size={30}></i>
-                </span>
-
-                <label className={styles["sidebar-text"]}>Setup</label>
-              </Nav.Link>
-
-              {/* Logged In User */}
-              <Nav.Link disabled={false}>
-                <span className={styles["sidebar-icons-color"]}>
-                  <i className="icon-user" size={30}></i>
-                </span>
-                <label className={styles["sidebar-text"]}>Reports</label>
-              </Nav.Link>
-            </>
-          </Nav>
+    <Fragment>
+      <Row className="sidebar-row">
+        <Col sm={4} className="js-sidebar">
+          <Layout>
+            <Sider
+              width={250}
+              style={{
+                background: "#000000",
+              }}
+            >
+              <div className="logo" />
+              <Menu
+                theme="light"
+                defaultSelectedKeys={["1"]}
+                mode="inline"
+                className="Menu-sidebar-class"
+              >
+                <SubMenu
+                  key="sub1"
+                  icon={<i className="icon-user menu-icons"></i>}
+                  title="User Management"
+                  className="submenu-sidebar-icons"
+                >
+                  <Menu.Item
+                    className="menu-items-sidebar"
+                    key="3"
+                    onClick={navigateToEdit}
+                  >
+                    Edit User
+                  </Menu.Item>
+                  <Menu.Item
+                    className="menu-items-sidebar"
+                    key="4"
+                    onClick={navigateToCreateUser}
+                  >
+                    Create User
+                  </Menu.Item>
+                </SubMenu>
+                <SubMenu
+                  key="sub2"
+                  icon={<i className="icon-user menu-icons"></i>}
+                  title="Report"
+                  className="submenu-sidebar-icons"
+                >
+                  <Menu.Item
+                    className="menu-items-sidebar"
+                    key="5"
+                    onClick={navigateToReport}
+                  >
+                    User Report
+                  </Menu.Item>
+                </SubMenu>
+              </Menu>
+            </Sider>
+          </Layout>
         </Col>
-        {/* <Col sm={11} className={""}></Col> */}
       </Row>
-    </>
+    </Fragment>
   );
 };
 

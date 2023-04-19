@@ -29,7 +29,7 @@
 }
 
 .select-field-edit {
-  width: 24%;
+  width: 24.8%;
   height: 37px !important;
   align-items: center !important;
   margin-top: 23px !important;
@@ -97,7 +97,6 @@
 
 .check-status {
   color: green !important;
-  
 }
 
 .locked-status {
@@ -117,10 +116,10 @@
   margin-right: 5px !important;
 }
 
-.span-edit-user{
-  width: 92%;
+.span-edit-user {
+  width: 93%;
   border-radius: 4px;
-  padding: 0px 16px !important;
+  padding: 0px 10px !important;
   background-color: white !important;
 }
 
@@ -142,4 +141,11 @@
   font-size: 11px;
   font-weight: 700 !important;
   pointer-events: none;
+}
+
+.issue-date-column {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
+  font-family: "Montserrat", sans-serif !important;
 }

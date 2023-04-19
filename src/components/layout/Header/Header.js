@@ -20,19 +20,21 @@ const Header = () => {
         <Navbar collapseOnSelect expand="lg">
           <Container fluid>
             <Navbar.Brand>
-              <img src={JsLogo} width={220} height={52} />
+              <img src={JsLogo} width={220} height={50} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="nav-rfq-calculator ms-auto">
                 <Nav.Link>
                   <span className="d-inline-block notification icn-wrapper">
-                    <i className="Bell-icon icon-bell"></i>
+                    <i className="icon-bell icon-bell-color"></i>
                     <span className="notification-badge">25</span>
                   </span>
                 </Nav.Link>
                 <Nav.Link>
-                  <i className="Bell-icon icon-logout"></i>
+                  <span className="d-inline-block logout icn-wrapper">
+                    <i className="icon-logout icon-bell-color"></i>
+                  </span>
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>
@@ -45,7 +47,7 @@ const Header = () => {
 
               <Dropdown.Menu className="dropdown_menu">
                 <Dropdown.Item>
-                  <Nav.Link >
+                  <Nav.Link>
                     <Gear />
                     <label className="dropdown-select-labels">Setting</label>
                   </Nav.Link>

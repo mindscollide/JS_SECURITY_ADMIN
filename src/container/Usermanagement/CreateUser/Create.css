@@ -10,7 +10,7 @@
 .create-user-label {
   display: flex;
   justify-content: start;
-  font-size: 19px;
+  font-size: 18px;
   color: #004990;
   font-weight: 600;
 }
@@ -60,8 +60,14 @@
 }
 
 .span-table {
-  width: 90% !important;
+  width: 92% !important;
+  margin-left: 12px;
   border-radius: 4px;
   padding: 0px 10px !important;
   background-color: #ffffff !important;
+}
+
+.bottom-table-header {
+  font-weight: 700;
+  font-size: 14px;
 }

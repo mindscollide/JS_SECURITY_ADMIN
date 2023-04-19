@@ -74,7 +74,9 @@
 }
 
 .report-btm-buttons {
-  padding: 5px 61px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 5px 65px;
   background-color: white;
   color: #0d6efd;
   border: 1px solid #0d6efd;
@@ -95,9 +97,17 @@
 }
 
 .span-user-color {
-  width: 90%;
+  width: 93%;
   border-radius: 4px;
-  margin-top: 2%;
+  margin-top: 1%;
+  padding: 2px 8px !important;
+  background-color: white !important;
+}
+
+.status-user-panel {
+  width: 93%;
+  border-radius: 4px;
+  margin-top: 8px;
   padding: 2px 8px !important;
   background-color: white !important;
 }

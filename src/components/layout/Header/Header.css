@@ -47,9 +47,7 @@
 
 .nav-rfq-calculator {
   display: flex;
-  justify-content: start !important;
-  gap: 0px !important;
-  margin-right: 40px;
+  justify-content: end !important;
 }
 
 .profilebtn-dropdown {
@@ -58,7 +56,7 @@
 
 .dropdown-toggle {
   margin: 0;
-  padding: 2px 0px;
+  padding: 2px 2px;
   border-radius: 50px;
   display: flex;
   justify-content: center;
@@ -83,10 +81,11 @@
 }
 
 .user-name {
+  font-size: 14px;
+  font-weight: 500;
   margin: 0;
   padding: 0px 4px;
   max-width: 100px;
-  font-size: 15px;
   color: #45494d !important;
   text-overflow: ellipsis !important;
   overflow: hidden;
@@ -225,24 +224,29 @@
 }
 
 .icn-wrapper {
-  margin-right: 15px;
-}
-.icn-wrapper > i {
   font-size: 20px;
   cursor: pointer;
 }
-.notification .notification-badge {
-  width: 25px !important;
-  height: 25px !important;
-  padding: 1px 3px;
+
+.site-header .icn-wrapper > i {
+  font-size: 20px;
+  cursor: pointer;
+}
+.notification-badge {
+  width: 18px;
+  height: 18px;
   background: #dd4e4e;
   color: #ffffff;
   border-radius: 100%;
   overflow: hidden;
-  font-size: 11px;
+  font-size: 10px;
   line-height: 19px;
-  position: relative;
-  left: -8px;
-  top: -15px !important;
+  position: absolute;
+  right: 212px !important;
+  top: 15px !important;
   text-align: center;
+}
+
+.icon-bell-color {
+  color: #45494d !important;
 }

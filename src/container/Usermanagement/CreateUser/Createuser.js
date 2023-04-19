@@ -32,7 +32,7 @@ const Createuser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "role",
       key: "role",
-      width: "150px",
+      width: "200px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {

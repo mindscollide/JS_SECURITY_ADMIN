@@ -11,9 +11,9 @@ function App() {
     <>
       <Sidebar />
       <Header />
-      {/* <Edituser /> */}
+      <Edituser />
       {/* {<Createuser />} */}
-      <Userreport />
+      {/* <Userreport /> */}
     </>
   );
 }

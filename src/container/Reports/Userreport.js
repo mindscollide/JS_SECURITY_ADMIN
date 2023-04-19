@@ -59,7 +59,9 @@ const Userreport = () => {
               />
             </Col>
           </Row>
+        </div>
 
+        <div className="status-user-panel">
           <Row className="mt-3">
             <Col lg={12} md={12} sm={12}>
               <label className="user-status-heading">Status</label>
