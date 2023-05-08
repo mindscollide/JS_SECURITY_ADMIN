@@ -60,14 +60,30 @@
 }
 
 .span-table {
-  width: 92% !important;
-  margin-left: 12px;
+  width: 94% !important;
+  /* margin-left: 12px; */
   border-radius: 4px;
-  padding: 0px 10px !important;
+  padding: 3px 10px !important;
   background-color: #ffffff !important;
 }
 
 .bottom-table-header {
   font-weight: 700;
   font-size: 14px;
+}
+
+.icon-Reject-column {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
+  font-family: "Montserrat", sans-serif !important;
+  cursor: pointer;
+}
+
+.icon-accept-column {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
+  font-family: "Montserrat", sans-serif !important;
+  cursor: pointer;
 }

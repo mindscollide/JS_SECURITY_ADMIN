@@ -25,6 +25,7 @@
   width: 140% !important;
   font-size: 13px;
   height: 37px;
+  color: #45494d;
   border: 1px solid #ccc;
 }
 
@@ -44,26 +45,38 @@
   padding: 0 11px;
 }
 
-.search-btn {
+.search-Edit-User-btn {
+  font-size: 14px;
   margin-left: 10px;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  padding: 6px 16px !important;
+  padding: 7px 12px !important;
   border: none;
   background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%);
 }
 
-.reset-btn {
+.search-Edit-User-btn:hover {
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.reset-Edit-User-btn {
   margin-left: 10px;
+  font-size: 14px;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  padding: 6px 16px !important;
+  padding: 7px 12px !important;
   border: none;
   background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.reset-Edit-User-btn:hover {
+  border: none;
+  background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%) !important;
 }
 
 .Edituser-table {
@@ -117,7 +130,7 @@
 }
 
 .span-edit-user {
-  width: 93%;
+  width: 95%;
   border-radius: 4px;
   padding: 0px 10px !important;
   background-color: white !important;
@@ -148,4 +161,64 @@
   font-weight: 500 !important;
   color: #000000 !important;
   font-family: "Montserrat", sans-serif !important;
+}
+
+.edit-update-column {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
+  font-family: "Montserrat", sans-serif !important;
+  cursor: pointer;
+}
+
+:where(
+    .css-dev-only-do-not-override-1e3x2xa
+  ).ant-select-single.ant-select-show-arrow
+  .ant-select-selection-placeholder {
+  padding-inline-end: 18px;
+  color: #45494d !important;
+}
+
+.modal-Update .modal-content {
+  position: relative;
+  top: 0px !important;
+  left: 100px;
+  height: 180px !important;
+  width: 650px !important;
+  background-color: white;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  border: none;
+  padding: 25px 10px;
+  box-shadow: 10px 10px 40px rgb(0 0 0 / 10%);
+}
+
+.modal-update-footer {
+  width: 100% !important;
+  display: contents;
+}
+
+.update-modal-heading {
+  text-align: center;
+  font-size: 1.5rem !important;
+  color: #002650;
+  font-weight: 600 !important;
+}
+
+
+.Update-Proceed-btn {
+  font-size: 14px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 9px 20px !important;
+  border: none;
+  background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%);
+}
+
+.Update-Proceed-btn:hover {
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
 }

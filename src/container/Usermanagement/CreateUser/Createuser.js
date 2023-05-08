@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
-import { TextField, Button, Table } from "../../../components/elements";
+import { TextField, Button, Table, Paper } from "../../../components/elements";
 import { Select } from "antd";
+import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
+import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
 import "./Create.css";
 
 const Createuser = () => {
+  //modal for create user for reject
+  const [createRejectModal, setCreateRejectModal] = useState(false);
+
+  //modal for accept user in create
+  const [acceptModal, setAcceptModal] = useState(false);
+
+  //open modal accept
+  const openAcceptModal = async () => {
+    setAcceptModal(true);
+  };
+
+  // open modal reject
+  const openRejectModal = async () => {
+    setCreateRejectModal(true);
+  };
+
   const columnsCreate = [
     {
       title: <label className="bottom-table-header">Email</label>,
@@ -41,7 +59,11 @@ const Createuser = () => {
       key: "accept",
       width: "100px",
       align: "center",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      render: (text) => (
+        <label className="icon-accept-column" onClick={openAcceptModal}>
+          {text}
+        </label>
+      ),
     },
     {
       title: <label className="bottom-table-header">Reject</label>,
@@ -49,7 +71,11 @@ const Createuser = () => {
       key: "reject",
       width: "100px",
       align: "center",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      render: (text) => (
+        <label className="icon-Reject-column" onClick={openRejectModal}>
+          {text}
+        </label>
+      ),
     },
   ];
 
@@ -90,7 +116,7 @@ const Createuser = () => {
         </Row>
 
         <Row className="mt-3">
-          <span className="span-table">
+          <Paper className="span-table">
             <Col lg={12} md={12} sm={12} className="mt-3">
               <Table
                 column={columnsCreate}
@@ -99,9 +125,23 @@ const Createuser = () => {
                 pagination={false}
               />
             </Col>
-          </span>
+          </Paper>
         </Row>
       </Container>
+
+      {createRejectModal ? (
+        <CreateModal
+          modalReject={createRejectModal}
+          setModalReject={setCreateRejectModal}
+        />
+      ) : null}
+
+      {acceptModal ? (
+        <AcceptModal
+          modalAccept={acceptModal}
+          setModalAccept={setAcceptModal}
+        />
+      ) : null}
     </>
   );
 };

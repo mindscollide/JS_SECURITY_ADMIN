@@ -54,10 +54,11 @@ const Sidebar = () => {
                 background: "#000000",
               }}
             >
-              <div className="logo" />
+              <span className="logo" />
               <Menu
                 theme="light"
-                defaultSelectedKeys={["1"]}
+                defaultOpenKeys={["sub1"]}
+                defaultSelectedKeys={["3"]}
                 mode="inline"
                 className="Menu-sidebar-class"
               >

@@ -1,10 +1,37 @@
-import React from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import { TextField, Button, Table } from "../../../components/elements";
+import React, { Fragment, useState } from "react";
+import { Container, Col, Row, ModalFooter } from "react-bootstrap";
+import {
+  TextField,
+  Button,
+  Table,
+  Paper,
+  Modal,
+} from "../../../components/elements";
 import { Select } from "antd";
+import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./Edituser.css";
 
-const Edituser = () => {
+const Edituser = ({ show, setShow, ModalTitle }) => {
+  //edit modal on js-security-admin
+  const [editModalSecurity, setEditModalSecurity] = useState(false);
+
+  const [updateModal, setUpdateModal] = useState(false);
+
+  // open Update modal
+  const openUpdateModal = async () => {
+    setUpdateModal(true);
+  };
+
+  // open edit modal
+  const openModalEdit = async () => {
+    setEditModalSecurity(true);
+  };
+
+  //onClose modal
+  const closeUpdateModal = () => {
+    setUpdateModal(false);
+  };
+
   const columns = [
     {
       title: <label className="bottom-table-header">LoginID</label>,
@@ -39,8 +66,8 @@ const Edituser = () => {
       title: <label className="bottom-table-header">Status</label>,
       dataIndex: "status",
       key: "status",
-      width: "100px",
-      align: "center",
+      width: "120px",
+      align: "right",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
@@ -49,7 +76,11 @@ const Edituser = () => {
       key: "edit",
       width: "100px",
       align: "center",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      render: (text) => (
+        <label className="edit-update-column" onClick={openModalEdit}>
+          {text}
+        </label>
+      ),
     },
   ];
 
@@ -78,8 +109,23 @@ const Edituser = () => {
       ),
       edit: <i className={"icon-edit userEdit-edit-icon"}></i>,
     },
+    {
+      login: "Mindscollide.aamir@hbl.com",
+      firstname: "Mohammad",
+      lastname: "Aamir",
+      role: "Data Entry - Business Team",
+      status: (
+        <>
+          <i className={"icon-lock locked-status"}></i>
+        </>
+      ),
+      edit: <i className={"icon-edit userEdit-edit-icon"}></i>,
+    },
   ];
-
+  const UpdateBtnHandle = () => {
+    setEditModalSecurity(false);
+    setUpdateModal(true);
+  };
   return (
     <>
       <Container className="edit-user-container">
@@ -89,21 +135,12 @@ const Edituser = () => {
           </Col>
         </Row>
 
-        <div className="span-edit-user">
+        <Paper className="span-edit-user">
           <Row className="mt-3">
             <Col lg={12} md={12} sm={12} className="text-field-column">
-              <TextField
-                className="text-fields-edituser"
-                placeholder="Login ID"
-              />
-              <TextField
-                className="text-fields-edituser"
-                placeholder="First Name"
-              />
-              <TextField
-                className="text-fields-edituser"
-                placeholder="Last Name"
-              />
+              <TextField className="text-fields-edituser" value="Login ID" />
+              <TextField className="text-fields-edituser" value="First Name" />
+              <TextField className="text-fields-edituser" value="Last Name" />
               <Select className="select-field-edit" placeholder="Select Role" />
             </Col>
           </Row>
@@ -114,12 +151,12 @@ const Edituser = () => {
               <Button
                 icon={<i className="icon-search icon-search-space"></i>}
                 text="Search"
-                className="search-btn"
+                className="search-Edit-User-btn"
               />
               <Button
                 icon={<i className="icon-refresh icon-reset-space"></i>}
                 text="Reset"
-                className="reset-btn"
+                className="reset-Edit-User-btn"
               />
             </Col>
           </Row>
@@ -134,8 +171,59 @@ const Edituser = () => {
               />
             </Col>
           </Row>
-        </div>
+        </Paper>
       </Container>
+
+      <Modal
+        show={updateModal}
+        setShow={setUpdateModal}
+        size="lg"
+        className={"modaldialog modal-Update"}
+        modalHeaderClassName="d-none"
+        modalFooterClassName="modal-update-footer"
+        onHide={closeUpdateModal}
+        ModalBody={
+          <Fragment>
+            {updateModal ? (
+              <Fragment>
+                <Row>
+                  <Col lg={12} md={12} sm={12}>
+                    <p className="update-modal-heading">
+                      Are you sure want to update?
+                    </p>
+                  </Col>
+                </Row>
+              </Fragment>
+            ) : null}
+          </Fragment>
+        }
+        ModalFooter={
+          <Fragment>
+            <Row>
+              <Col
+                lg={12}
+                md={12}
+                sm={12}
+                className="d-flex justify-content-center"
+              >
+                <Button
+                  icon={<i className="icon-arrow-right"></i>}
+                  text="Proceed"
+                  className="Update-Proceed-btn"
+                />
+              </Col>
+            </Row>
+          </Fragment>
+        }
+      />
+
+      {editModalSecurity ? (
+        <EditModal
+          modalEdit={editModalSecurity}
+          setModalEdit={setEditModalSecurity}
+          UpdateButtonOnClick={UpdateBtnHandle}
+        />
+      ) : null}
     </>
   );
 };

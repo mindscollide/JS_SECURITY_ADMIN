@@ -15,6 +15,7 @@
 }
 
 .js-sidebar {
+  border-top-right-radius: 10px;
   z-index: 1;
   margin: 0 !important;
   background-color: #ffffff !important;
@@ -75,6 +76,11 @@
   border-bottom: 1px solid #e2e6e9 !important;
 }
 
+.submenu-sidebar-icons:active,
+.submenu-sidebar-icons::selection {
+  color: #004990 !important;
+}
+
 .menu-items-sidebar {
   font-size: 14px !important;
   font-family: "Montserrat", sans-serif !important;
@@ -93,7 +99,14 @@
   border-radius: 0px !important;
 }
 
-
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light .ant-menu-item-selected, :where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light>.ant-menu .ant-menu-item-selected {
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light
+  .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light
+  > .ant-menu
+  .ant-menu-item-selected {
   background-color: #e6e8ff;
+}
+
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-layout .ant-layout-sider {
+  background: #ffffff !important;
 }

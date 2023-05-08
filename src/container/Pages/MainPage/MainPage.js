@@ -15,8 +15,6 @@ const MainPage = () => {
     <Fragment>
       <Header />
       <Sidebar />
-      
-
       <Outlet />
     </Fragment>
   );
