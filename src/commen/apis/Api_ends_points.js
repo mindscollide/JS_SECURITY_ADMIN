@@ -7,6 +7,6 @@ const securityAdmintPort = ":12001/SecurityAdmin";
 
 //our Final Api
 const authenticationAPI = baseURL + authenticationPort;
-const securityAdminApi= baseURL + securityAdmintPort;
+const securityAdminApi = baseURL + securityAdmintPort;
 
-export { authenticationAPI,securityAdminApi };
+export { authenticationAPI, securityAdminApi };
