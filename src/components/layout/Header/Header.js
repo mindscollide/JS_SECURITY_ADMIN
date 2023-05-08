@@ -4,7 +4,7 @@ import { Button, Modal } from "../../../components/elements";
 import Navbar from "react-bootstrap/Navbar";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "../../../store/actions/Auth-Actions";
+import { signOut } from "../../../store/actions/Auth_Actions";
 import { Checkbox, Switch } from "antd";
 import {
   ListUl,

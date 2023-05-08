@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Container, Col, Row, InputGroup, Form } from "react-bootstrap";
 import { Button, TextField, Loader } from "../../../components/elements";
 import jsLogo from "../../../assets/images/js-logo.png";
-import { logIn } from "../../../store/actions/Auth-Actions";
+import { logIn } from "../../../store/actions/Auth_Actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./SecurityLogin.css";
