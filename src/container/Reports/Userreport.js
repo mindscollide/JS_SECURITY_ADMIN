@@ -1,10 +1,13 @@
-import React from "react";
+import React,{useState} from "react";
 import { Container, Col, Row } from "react-bootstrap";
-import { TextField, Button, Table } from "../../components/elements";
+import { TextField, Button, Table, Paper } from "../../components/elements";
 import { Select } from "antd";
+import DatePicker from "react-multi-date-picker";
 import "./Userreport.css";
 
 const Userreport = () => {
+  const [value, setValue] = useState(new Date());
+
   return (
     <>
       <Container className="report-user-container">
@@ -14,33 +17,32 @@ const Userreport = () => {
           </Col>
         </Row>
 
-        <div className="span-user-color">
+        <Paper className="span-user-color">
           <Row className="mb-2">
-            <Col lg={12} md={12} sm={12} className="report-text-field-column">
-              <TextField
-                className="text-fields-report "
-                placeholder="Login ID"
-              />
+            <Col lg={8} md={8} sm={12} className="report-text-field-column">
+              <TextField className="text-fields-report" value="Login ID" />
               <Select
                 className="report-select-field-edit"
-                placeholder="Select Role"
+                value="Select Role"
               />
-              <TextField
-                className="text-fields-report "
-                placeholder="First Name"
+              <TextField className="text-fields-report" value="First Name" />
+              <TextField className="text-fields-report" value="Last Name" />
+            </Col>
+
+            <Col lg={4} md={4} sm={12} className="JS-Security-Datepicker">
+              <DatePicker
+                value={value}
+                onChange={setValue}
+                showOtherDays={true}
+                inputClass="date-picker-left"
               />
-              <TextField
-                className="text-fields-report "
-                placeholder="Last Name"
-              />
-              <TextField
-                className="text-fields-report"
-                placeholder="Start Date"
-              />
-              <span className="date-to">To</span>
-              <TextField
-                className="text-fields-report"
-                placeholder="End Date"
+              <label className="date-to">to</label>
+
+              <DatePicker
+                value={value}
+                onChange={setValue}
+                showOtherDays={true}
+                inputClass="date-picker-right"
               />
             </Col>
           </Row>
@@ -59,9 +61,9 @@ const Userreport = () => {
               />
             </Col>
           </Row>
-        </div>
+        </Paper>
 
-        <div className="status-user-panel">
+        <Paper className="status-user-panel">
           <Row className="mt-3">
             <Col lg={12} md={12} sm={12}>
               <label className="user-status-heading">Status</label>
@@ -92,7 +94,7 @@ const Userreport = () => {
               />
             </Col>
           </Row>
-        </div>
+        </Paper>
       </Container>
     </>
   );

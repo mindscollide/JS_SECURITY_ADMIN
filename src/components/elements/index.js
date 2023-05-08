@@ -5,14 +5,17 @@ import InputDatePicker from "./date-picker/DatePicker";
 import TextField from "./Inputfield/InputField";
 import CustomModal from "./modal/Modal";
 import CustomPaper from "./paper/Paper";
-import Modal from "./modal/Modal"
+import Modal from "./modal/Modal";
 import CustomRadio from "./radioButton/Radio";
 import Table from "./table/Table";
+import Paper from "./paper/Paper";
+import Loader from "./loader/Loader";
 
 export {
   Button,
   Accordian,
   Checkbox,
+  Loader,
   Modal,
   InputDatePicker,
   TextField,
@@ -20,4 +23,5 @@ export {
   CustomPaper,
   CustomRadio,
   Table,
+  Paper,
 };

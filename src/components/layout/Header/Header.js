@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Container, Row, Col, Nav, Dropdown } from "react-bootstrap";
 import { Button, Modal } from "../../../components/elements";
 import Navbar from "react-bootstrap/Navbar";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "../../../store/actions/Auth-Actions";
 import { Checkbox, Switch } from "antd";
 import {
   ListUl,
@@ -14,6 +17,8 @@ import JohnCater from "../../../assets/images/profile3.png";
 import JsLogo from "../../../assets/images/js-logo.png";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <>
       <Container fluid className="container-header">
@@ -48,20 +53,25 @@ const Header = () => {
               <Dropdown.Menu className="dropdown_menu">
                 <Dropdown.Item>
                   <Nav.Link>
-                    <Gear />
+                    <i className="icon-settings me-1"></i>
                     <label className="dropdown-select-labels">Setting</label>
                   </Nav.Link>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <QuestionCircle />
+                  <i className="icon-help-circle me-1"></i>
                   <label className="dropdown-select-labels">
                     Help & Support
                   </label>
                 </Dropdown.Item>
                 <Dropdown.Item>
                   <Nav.Link>
-                    <BoxArrowRight />
-                    <label className="dropdown-select-labels">Logout</label>
+                    <i className="icon-logout me-1"></i>
+                    <label
+                      className="dropdown-select-labels"
+                      onClick={() => dispatch(signOut(navigate))}
+                    >
+                      Logout
+                    </label>
                   </Nav.Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
