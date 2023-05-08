@@ -2,9 +2,11 @@ import * as actions from "../action_types";
 import axios from "axios";
 import {
   authenticationLogIn,
+  authenticationRefreshToken,
   authenticationSignUp,
-} from "../../assets/common/apis/Api_config";
-import { authenticationAPI } from "../../assets/common/apis/Api_ends_points";
+} from "../../commen/apis/Api_config";
+import { authenticationAPI } from "../../commen/apis/Api_ends_points";
+import { getNewUserRequestsCount } from "./Security_Admin";
 
 const logininit = () => {
   return {
@@ -127,44 +129,14 @@ const logIn = (UserData, navigate) => {
                 );
                 localStorage.setItem(
                   "token",
-                  response.data.responseResult.token
+                  JSON.stringify(response.data.responseResult.token)
                 );
                 localStorage.setItem(
                   "refreshToken",
-                  response.data.responseResult.refreshToken
+                  JSON.stringify(response.data.responseResult.refreshToken)
                 );
-                navigate("/Js/");
-                dispatch(loginsuccess("Successfully Logged In"));
-              } else if (response.data.responseResult.roleID === 4) {
-                localStorage.setItem(
-                  "userID",
-                  response.data.responseResult.userID
-                );
-                localStorage.setItem(
-                  "firstName",
-                  response.data.responseResult.firstName
-                );
-                localStorage.setItem(
-                  "lastName",
-                  response.data.responseResult.lastName
-                );
-                localStorage.setItem(
-                  "userName",
-                  response.data.responseResult.userName
-                );
-                localStorage.setItem(
-                  "roleID",
-                  response.data.responseResult.roleID
-                );
-                localStorage.setItem(
-                  "token",
-                  response.data.responseResult.token
-                );
-                localStorage.setItem(
-                  "refreshToken",
-                  response.data.responseResult.refreshToken
-                );
-                navigate("/AdminDashboard/");
+                await dispatch(getNewUserRequestsCount())
+                navigate("/Js/Admin/");
                 dispatch(loginsuccess("Successfully Logged In"));
               } else {
                 dispatch(
@@ -273,28 +245,35 @@ const signUp = (UserData, navigate) => {
         if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
-              response.data.responseResult.responseMessage ===
-              "ERM_AuthService_SignUpManager_SignUp_01"
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_SignUpManager_SignUp_01".toLowerCase()
+                )
             ) {
               dispatch(
                 signupFail(
                   "Invalid Role for Signup. Please select a role from the given options"
                 )
               );
-            }
-            if (
-              response.data.responseResult.responseMessage ===
-              "ERM_AuthService_SignUpManager_SignUp_02"
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_SignUpManager_SignUp_02".toLowerCase()
+                )
             ) {
               dispatch(
                 signupFail(
                   "Signup request for the Login ID is in pending state. Please use a different ID"
                 )
               );
-            }
-            if (
-              response.data.responseResult.responseMessage ===
-              "ERM_AuthService_SignUpManager_SignUp_03"
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_SignUpManager_SignUp_03".toLowerCase()
+                )
             ) {
               if (response.data.responseResult.roleID === 1) {
                 localStorage.setItem(
@@ -363,20 +342,24 @@ const signUp = (UserData, navigate) => {
                   loginfail("This user is not authorise for this domain")
                 );
               }
-            }
-            if (
-              response.data.responseResult.responseMessage ===
-              "ERM_AuthService_SignUpManager_SignUp_04"
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_SignUpManager_SignUp_04".toLowerCase()
+                )
             ) {
               dispatch(
                 signupFail(
                   "Unable to submit signup request. Please try after some time"
                 )
               );
-            }
-            if (
-              response.data.responseResult.responseMessage ===
-              "ERM_AuthService_SignUpManager_SignUp_05"
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_SignUpManager_SignUp_05".toLowerCase()
+                )
             ) {
               dispatch(signupFail("Something went wrong"));
             }
@@ -396,4 +379,65 @@ const signUp = (UserData, navigate) => {
   };
 };
 
-export { logIn, signUp, signOut };
+// REFRESH TOKEN
+// FAIL
+const refreshtokenFail = (response, message) => {
+  return {
+    type: actions.REFRESH_TOKEN_FAIL,
+    response: response,
+    message: message,
+  };
+};
+// SUCCESS
+const refreshtokenSuccess = (response, message) => {
+  return {
+    type: actions.REFRESH_TOKEN_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+// API
+const RefreshToken = (props, navigate) => {
+  let Token = JSON.parse(localStorage.getItem("token"));
+  let RefreshToken = JSON.parse(localStorage.getItem("RefreshToken"));
+  console.log("RefreshToken", Token, RefreshToken);
+  let Data = {
+    Token: Token,
+    RefreshToken: RefreshToken,
+  };
+  console.log("RefreshToken", Data);
+  return async (dispatch) => {
+    let form = new FormData();
+    form.append("RequestMethod", authenticationRefreshToken.RequestMethod);
+    form.append("RequestData", JSON.stringify(Data));
+    await axios({
+      method: "post",
+      url: authenticationAPI,
+      data: form,
+    })
+      .then(async (response) => {
+        console.log("RefreshToken", response);
+        if (response.data.responseCode === 200) {
+          await dispatch(
+            refreshtokenSuccess(
+              response.data.responseResult,
+              "Refresh Token Update Successfully"
+            )
+          );
+        } else {
+          console.log("RefreshToken", response);
+          let message2 = "Your Session has expired. Please login again";
+          dispatch(signOut(navigate, message2));
+          await dispatch(
+            refreshtokenFail("Your Session has expired. Please login again.")
+          );
+        }
+      })
+      .catch((response) => {
+        dispatch(
+          refreshtokenFail("Your Session has expired. Please login again.")
+        );
+      });
+  };
+};
+export { logIn, signUp, signOut, RefreshToken };

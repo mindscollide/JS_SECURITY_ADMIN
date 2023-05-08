@@ -32,15 +32,15 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const navigateToCreateUser = () => {
-    navigate("/createUser");
+    navigate("/Js/Admin/createUser");
   };
 
   const navigateToEdit = () => {
-    navigate("/editUser");
+    navigate("/Js/Admin/editUser");
   };
 
   const navigateToReport = () => {
-    navigate("/userReport");
+    navigate("/Js/Admin/userReport");
   };
 
   return (
