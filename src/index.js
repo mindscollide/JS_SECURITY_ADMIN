@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import App from "./App";
 import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import { router } from "./routes/Routes";
