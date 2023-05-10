@@ -27,20 +27,27 @@ const getNewUserRequestCountFail = (message) => {
   };
 };
 
-const getNewUserRequestsCount = () => {
+const getNewUserRequestsCount = (roleID) => {
   // let userID = localStorage.getItem("userID");
   // let email = localStorage.getItem("UserEmail");
   // let data = { UserID: JSON.parse(userID), Email: email };
-
+  let token = JSON.parse(localStorage.getItem("token"))
+  let Data = {
+    RoleID: roleID,
+  };
+  console.log("RoleIDRoleID", Data);
   return (dispatch) => {
     dispatch(getNewUserRequestCountInit());
     let form = new FormData();
-    // form.append("RequestData", JSON.stringify(data));
     form.append("RequestMethod", getNewUserRequestsCounts.RequestMethod);
+    form.append("RequestData", JSON.stringify(Data));
     axios({
       method: "post",
       url: securityAdminApi,
       data: form,
+      headers: {
+        _token: token,
+      }
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
@@ -79,6 +86,14 @@ const getNewUserRequestsCount = () => {
               dispatch(
                 getNewUserRequestCountFail("Not authorized to view information")
               );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_GetNewUserRequestsCount_04".toLowerCase()
+                )
+            ) {
+              dispatch(getNewUserRequestCountFail("Exception No Count Found"));
             }
           } else {
             dispatch(getNewUserRequestCountFail("Something went wrong"));
@@ -92,10 +107,10 @@ const getNewUserRequestsCount = () => {
       });
   };
 };
-const clearSecurityAdminMessage=()=>{
+const clearSecurityAdminMessage = () => {
   return {
     type: actions.CLEARE_SECURITY_ADMIN_RESPONCE_MESSAGE,
   };
-}
+};
 
 export { getNewUserRequestsCount, clearSecurityAdminMessage };

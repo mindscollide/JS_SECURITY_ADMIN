@@ -135,7 +135,7 @@ const logIn = (UserData, navigate) => {
                   "refreshToken",
                   JSON.stringify(response.data.responseResult.refreshToken)
                 );
-                await dispatch(getNewUserRequestsCount())
+                await dispatch(getNewUserRequestsCount(response.data.responseResult.roleID))
                 navigate("/Js/Admin/");
                 dispatch(loginsuccess("Successfully Logged In"));
               } else {

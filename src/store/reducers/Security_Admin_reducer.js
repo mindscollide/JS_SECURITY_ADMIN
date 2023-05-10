@@ -12,12 +12,12 @@ const securitReducer = (state = initialState, action) => {
     case actions.GET_NEW_USER_REQUEST_COUNT_INIT:
       return { ...state, Loading: true };
     case actions.GET_NEW_USER_REQUEST_COUNT_SUCCESS:
-      console.log("getNewUserRequestsCount",action.response)
+      console.log("getNewUserRequestsCount", action.response);
       return {
         ...state,
+        Loading: false,
         NewUserCountData: action.response,
         ResponseMessageUserCount: action.message,
-        Loading: false,
       };
     case actions.GET_NEW_USER_REQUEST_COUNT_FAIL:
       return {
