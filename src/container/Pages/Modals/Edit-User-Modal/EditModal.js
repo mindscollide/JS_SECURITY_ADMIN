@@ -6,7 +6,8 @@ import {
   Table,
   Modal,
 } from "../../../../components/elements";
-import { Select } from "antd";
+// import { Select } from "antd";
+import Select from "react-select";
 import "./EditModal.css";
 
 const EditModal = ({

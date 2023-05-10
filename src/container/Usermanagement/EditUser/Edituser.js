@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Container, Col, Row, ModalFooter } from "react-bootstrap";
 import {
   TextField,
@@ -7,11 +7,16 @@ import {
   Paper,
   Modal,
 } from "../../../components/elements";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Select } from "antd";
+import { getNewUserRequest } from "../../../store/actions/Security_Admin";
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./Edituser.css";
 
 const Edituser = ({ show, setShow, ModalTitle }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
 
@@ -122,6 +127,11 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       edit: <i className={"icon-edit userEdit-edit-icon"}></i>,
     },
   ];
+
+  useEffect(() => {
+    dispatch(getNewUserRequest());
+  }, []);
+
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
     setUpdateModal(true);
