@@ -1,11 +1,11 @@
 import * as actions from "../action_types";
 
 const initialState = {
+  ResponseMessage: "",
   Loading: false,
   ResponseMessageUserCount: "",
   NewUserCountData: 0,
-  ResponseMessageUserRequest: "",
-  NewUserRegistrationID: 0,
+  userRequestList: [],
 };
 
 const securitReducer = (state = initialState, action) => {
@@ -45,15 +45,16 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
-        NewUserRegistrationID: action.response,
-        ResponseMessageUserRequest: action.message,
+        userRequestList: action.response,
+        ResponseMessage: action.message,
       };
 
     case actions.GET_NEW_USER_REQUESTS_FAIL:
       return {
         ...state,
         Loading: false,
-        ResponseMessageUserRequest: action.message,
+        userRequestList: [],
+        ResponseMessage: action.message,
       };
 
     default:

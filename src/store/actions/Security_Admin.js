@@ -1,6 +1,7 @@
 import {
   getNewUserRequestsCounts,
   getNewUserRequests,
+  saveUserSecurityAdmin,
 } from "../../commen/apis/Api_config";
 import * as actions from "../action_types";
 
@@ -259,6 +260,45 @@ const getNewUserRequest = (userRoleID) => {
       .catch((response) => {
         dispatch(getUserRequestFail("Something went wrong"));
       });
+  };
+};
+
+// save User Security Admin
+
+const saveUserInit = () => {
+  return {
+    type: actions.SAVE_USER_INIT,
+  };
+};
+
+const saveUserSuccess = (response, message) => {
+  return {
+    type: actions.SAVE_USER_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const saveUserFail = (message) => {
+  return {
+    type: actions.SAVE_USER_FAIL,
+    message: message,
+  };
+};
+
+const saveSecurityAdmin = (userSave) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  let Data = {
+    FirstName: userSave.FirstName,
+    Lastname: userSave.Lastname,
+    UserReferenceCode: userSave.UserReferenceCode,
+    UserLDAPAccount: userSave.UserLDAPAccount,
+    Email: userSave.Email,
+    ContactNumber: userSave.ContactNumber,
+    LDAPAccount: userSave.LDAPAccount,
+    FailedAttemptCount: userSave.FailedAttemptCount,
+    UserRegistrationRequestID: userSave.UserRegistrationRequestID,
+    UserID: userSave.UserID,
   };
 };
 
