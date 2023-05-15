@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import { TextField, Button, Table, Paper } from "../../../components/elements";
 import { Select } from "antd";
 import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { allUserList } from "../../../store/actions/Security_Admin";
 import "./Create.css";
 
 const Createuser = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
 
@@ -105,6 +110,10 @@ const Createuser = () => {
       reject: <i className={"icon-close usercreate-cross-icon"}></i>,
     },
   ];
+
+  useEffect(() => {
+    dispatch(allUserList());
+  }, []);
 
   return (
     <>

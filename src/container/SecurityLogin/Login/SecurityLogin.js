@@ -108,7 +108,7 @@ const SecurityLogin = () => {
                         <Form.Control
                           name="Password"
                           onChange={setCredentialHandler}
-                          className="form-comtrol-textfield"
+                          className="form-comtrol-textfield-password"
                           placeholder="Password"
                           aria-label="Username"
                           aria-describedby="basic-addon1"

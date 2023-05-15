@@ -43,6 +43,11 @@ const Sidebar = () => {
     navigate("/Js/Admin/userReport");
   };
 
+  // when user refresh the page it's goes to the specific route
+  useEffect(() => {
+    navigate("/Js/Admin/editUser");
+  }, []);
+
   return (
     <Fragment>
       <Row className="sidebar-row">
@@ -54,50 +59,51 @@ const Sidebar = () => {
                 background: "#000000",
               }}
             >
-              <span className="logo" />
-              <Menu
-                theme="light"
-                defaultOpenKeys={["sub1"]}
-                defaultSelectedKeys={["3"]}
-                mode="inline"
-                className="Menu-sidebar-class"
-              >
-                <SubMenu
-                  key="sub1"
-                  icon={<i className="icon-user menu-icons"></i>}
-                  title="User Management"
-                  className="submenu-sidebar-icons"
+              <span className="SecurityMenu">
+                <Menu
+                  theme="light"
+                  defaultOpenKeys={["sub1"]}
+                  defaultSelectedKeys={["3"]}
+                  mode="inline"
+                  className="Menu-sidebar-class"
                 >
-                  <Menu.Item
-                    className="menu-items-sidebar"
-                    key="3"
-                    onClick={navigateToEdit}
+                  <SubMenu
+                    key="sub1"
+                    icon={<i className="icon-user menu-icons"></i>}
+                    title="User Management"
+                    className="submenu-sidebar-icons"
                   >
-                    Edit User
-                  </Menu.Item>
-                  <Menu.Item
-                    className="menu-items-sidebar"
-                    key="4"
-                    onClick={navigateToCreateUser}
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="3"
+                      onClick={navigateToEdit}
+                    >
+                      Edit User
+                    </Menu.Item>
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="4"
+                      onClick={navigateToCreateUser}
+                    >
+                      Create User
+                    </Menu.Item>
+                  </SubMenu>
+                  <SubMenu
+                    key="sub2"
+                    icon={<i className="icon-user menu-icons"></i>}
+                    title="Report"
+                    className="submenu-sidebar-icons"
                   >
-                    Create User
-                  </Menu.Item>
-                </SubMenu>
-                <SubMenu
-                  key="sub2"
-                  icon={<i className="icon-user menu-icons"></i>}
-                  title="Report"
-                  className="submenu-sidebar-icons"
-                >
-                  <Menu.Item
-                    className="menu-items-sidebar"
-                    key="5"
-                    onClick={navigateToReport}
-                  >
-                    User Report
-                  </Menu.Item>
-                </SubMenu>
-              </Menu>
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="5"
+                      onClick={navigateToReport}
+                    >
+                      User Report
+                    </Menu.Item>
+                  </SubMenu>
+                </Menu>
+              </span>
             </Sider>
           </Layout>
         </Col>

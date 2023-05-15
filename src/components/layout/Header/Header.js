@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Nav, Dropdown } from "react-bootstrap";
 import { Button, Modal } from "../../../components/elements";
 import Navbar from "react-bootstrap/Navbar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../../../store/actions/Auth_Actions";
+import { getNewUserRequestsCount } from "../../../store/actions/Security_Admin";
 import { Checkbox, Switch } from "antd";
 import {
   ListUl,
@@ -17,8 +18,27 @@ import JohnCater from "../../../assets/images/profile3.png";
 import JsLogo from "../../../assets/images/js-logo.png";
 
 const Header = () => {
+  const { securitReducer } = useSelector((state) => state);
+  const roleID = parseInt(localStorage.getItem("roleID"));
+
+  const [countState, setCountState] = useState(5);
+  console.log(securitReducer.NewUserCountData, "securitReducersecuritReducer");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (
+      securitReducer.NewUserCountData !== undefined &&
+      securitReducer.NewUserCountData !== null
+    ) {
+      setCountState(securitReducer.NewUserCountData);
+    }
+  }, [securitReducer.NewUserCountData]);
+
+  // For Api hit on refresh page
+  useEffect(() => {
+    dispatch(getNewUserRequestsCount(roleID));
+  }, []);
   return (
     <>
       <Container fluid className="container-header">
@@ -33,7 +53,7 @@ const Header = () => {
                 <Nav.Link>
                   <span className="d-inline-block notification icn-wrapper">
                     <i className="icon-bell icon-bell-color"></i>
-                    <span className="notification-badge">25</span>
+                    <span className="notification-badge">{countState}</span>
                   </span>
                 </Nav.Link>
                 <Nav.Link>

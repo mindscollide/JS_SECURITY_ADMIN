@@ -110,3 +110,16 @@
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-layout .ant-layout-sider {
   background: #ffffff !important;
 }
+
+.SecurityMenu > ant-menu-submenu-arrow,
+.ant-menu-submenu-arrow {
+  /* right: 10px !important; */
+  transform: rotate(270deg) translateX(2.5px) !important;
+}
+
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu
+  .ant-menu-submenu-open.ant-menu-submenu-inline
+  > .ant-menu-submenu-title
+  > .ant-menu-submenu-arrow::after {
+  transform: rotate(135deg) translateX(-2.5px) translateY(0px);
+}

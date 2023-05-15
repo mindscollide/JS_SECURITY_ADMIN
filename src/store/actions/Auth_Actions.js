@@ -135,9 +135,16 @@ const logIn = (UserData, navigate) => {
                   "refreshToken",
                   JSON.stringify(response.data.responseResult.refreshToken)
                 );
-                await dispatch(getNewUserRequestsCount())
+                await dispatch(
+                  getNewUserRequestsCount(response.data.responseResult.roleID)
+                );
                 navigate("/Js/Admin/");
-                dispatch(loginsuccess("Successfully Logged In"));
+                dispatch(
+                  loginsuccess(
+                    response.data.responseResult,
+                    "Successfully Logged In"
+                  )
+                );
               } else {
                 dispatch(
                   loginfail("This user is not authorise for this domain")
