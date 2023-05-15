@@ -6,6 +6,7 @@ const initialState = {
   ResponseMessageUserCount: "",
   NewUserCountData: 0,
   userRequestList: [],
+  allUserList: [],
 };
 
 const securitReducer = (state = initialState, action) => {
@@ -54,6 +55,67 @@ const securitReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         userRequestList: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.SAVE_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.SAVE_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        ResponseMessage: action.message,
+      };
+
+    case actions.SAVE_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
+      };
+
+    case actions.EDIT_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.EDIT_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        ResponseMessage: action.message,
+      };
+
+    case actions.EDIT_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_USER_LIST_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_USER_LIST_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        allUserList: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_USER_LIST_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        allUserList: [],
         ResponseMessage: action.message,
       };
 
