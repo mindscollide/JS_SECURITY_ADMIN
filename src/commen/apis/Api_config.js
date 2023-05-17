@@ -30,6 +30,10 @@ const getAllUserList = {
   RequestMethod: "ServiceManager.GetAllUsersList",
 };
 
+const allUserRolesList = {
+  RequestMethod: "ServiceManager.RoleList",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -39,4 +43,5 @@ export {
   saveUserSecurityAdmin,
   editUserSecurityAdmin,
   getAllUserList,
+  allUserRolesList,
 };

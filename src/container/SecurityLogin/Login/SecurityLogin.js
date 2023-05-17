@@ -88,6 +88,7 @@ const SecurityLogin = () => {
                         </InputGroup.Text>
                         <Form.Control
                           name="UserName"
+                          autoComplete="off"
                           value={securityCredentials.UserName}
                           onChange={setCredentialHandler}
                           className="form-comtrol-textfield"
@@ -107,6 +108,7 @@ const SecurityLogin = () => {
                         </InputGroup.Text>
                         <Form.Control
                           name="Password"
+                          autoComplete="off"
                           onChange={setCredentialHandler}
                           className="form-comtrol-textfield-password"
                           placeholder="Password"

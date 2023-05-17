@@ -10,17 +10,160 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Select } from "antd";
-import { getNewUserRequest } from "../../../store/actions/Security_Admin";
+import {
+  getNewUserRequest,
+  allUserList,
+} from "../../../store/actions/Security_Admin";
+import { allUserRole } from "../../../store/actions/Auth_Actions";
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./Edituser.css";
 
 const Edituser = ({ show, setShow, ModalTitle }) => {
+  const { auth } = useSelector((state) => state);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
 
   const [updateModal, setUpdateModal] = useState(false);
+
+  //state for selectRole
+  const [editSelectRole, setEditSelectRole] = useState([]);
+  const [editSelectROleValue, setEditSelectRoleValue] = useState("");
+
+  // state for userRole
+  const [editStatusRole, setEditStatusRole] = useState([]);
+
+  // state for edit user
+  const [editUser, setEditUser] = useState({
+    loginID: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    firstName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    lastName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    roleID: {
+      value: 0,
+      errorMessage: "",
+      errorStatus: false,
+    },
+    selectStatus: 0,
+  });
+
+  //edit user security admin validate handler
+  const editUserValidateHandler = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    if (name === "loginID" && value !== "") {
+      let valueCheck = value.replace(/[^\d]/g, "");
+      if (valueCheck !== "") {
+        setEditUser({
+          ...editUser,
+          loginID: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "loginID" && value === "") {
+      setEditUser({
+        ...editUser,
+        loginID: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "firstName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      if (valueCheck !== "") {
+        setEditUser({
+          ...editUser,
+          firstName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "firstName" && value === "") {
+      setEditUser({
+        ...editUser,
+        firstName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "lastName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      if (valueCheck !== "") {
+        setEditUser({
+          ...editUser,
+          lastName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "lastName" && value === "") {
+      setEditUser({
+        ...editUser,
+        lastName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+  };
+
+  // onchange handler for edit select role
+  const selectRoleHandler = async (selectedRole) => {
+    console.log(selectedRole, "selectroleselectroleselectrole");
+    setEditUser({
+      ...editUser,
+      roleID: {
+        value: selectedRole.value,
+      },
+    });
+  };
+
+  // onChange handler for edit select status
+  const selectStatusHandler = async (selectedStatus) => {
+    console.log(selectedStatus, "selectedStatusselectedStatus");
+    setEditUser({
+      ...editUser,
+      selectStatus: selectedStatus.value,
+    });
+  };
+
+  //reset handler for edit user
+  const resetHandler = () => {
+    setEditUser({
+      ...editUser,
+      loginID: {
+        value: "",
+      },
+
+      firstName: {
+        value: "",
+      },
+
+      lastName: {
+        value: "",
+      },
+
+      roleID: {
+        value: 0,
+      },
+    });
+    setEditSelectRoleValue("");
+  };
 
   // open Update modal
   const openUpdateModal = async () => {
@@ -129,6 +272,25 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
   ];
 
   useEffect(() => {
+    if (Object.keys(auth.UserRoleList).length > 0) {
+      let tem = [];
+      auth.UserRoleList.map((data, index) => {
+        console.log(data, "datadatadatadata");
+        tem.push({
+          label: data.roleName,
+          value: data.roleID,
+        });
+      });
+      setEditSelectRole(tem);
+    }
+  }, [auth.UserRoleList]);
+
+  useEffect(() => {
+    // on page refresh
+    dispatch(allUserList());
+  }, []);
+
+  useEffect(() => {
     dispatch(getNewUserRequest());
   }, []);
 
@@ -148,16 +310,51 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
         <Paper className="span-edit-user">
           <Row className="mt-3">
             <Col lg={12} md={12} sm={12} className="text-field-column">
-              <TextField className="text-fields-edituser" value="Login ID" />
-              <TextField className="text-fields-edituser" value="First Name" />
-              <TextField className="text-fields-edituser" value="Last Name" />
-              <Select className="select-field-edit" placeholder="Select Role" />
+              <TextField
+                name="loginID"
+                className="text-fields-edituser"
+                placeholder="Login ID"
+                maxLength={100}
+                value={editUser.loginID.value}
+                onChange={editUserValidateHandler}
+              />
+              <TextField
+                name="firstName"
+                maxLength={100}
+                className="text-fields-edituser"
+                placeholder="First Name"
+                value={editUser.firstName.value}
+                onChange={editUserValidateHandler}
+              />
+              <TextField
+                name="lastName"
+                maxLength={100}
+                className="text-fields-edituser"
+                placeholder="Last Name"
+                value={editUser.lastName.value}
+                onChange={editUserValidateHandler}
+              />
+              <Select
+                name="roleID"
+                options={editSelectRole}
+                className="select-field-edit"
+                placeholder="Select Role"
+                onChange={selectRoleHandler}
+
+                // defaultValue={editSelectROleValue}
+              />
             </Col>
           </Row>
 
           <Row>
             <Col lg={12} md={12} sm={12}>
-              <Select className="select-field-edit" placeholder="Select Role" />
+              <Select
+                name="selectStatus"
+                className="select-field-edit"
+                placeholder="Select Status"
+                options={editStatusRole}
+                onChange={selectStatusHandler}
+              />
               <Button
                 icon={<i className="icon-search icon-search-space"></i>}
                 text="Search"
@@ -166,6 +363,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
               <Button
                 icon={<i className="icon-refresh icon-reset-space"></i>}
                 text="Reset"
+                onClick={resetHandler}
                 className="reset-Edit-User-btn"
               />
             </Col>

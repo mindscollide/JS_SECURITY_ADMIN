@@ -1,12 +1,179 @@
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import { TextField, Button, Table, Paper } from "../../components/elements";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Select } from "antd";
+import { allUserRole } from "../../store/actions/Auth_Actions";
 import DatePicker from "react-multi-date-picker";
 import "./Userreport.css";
 
 const Userreport = () => {
+  const { auth } = useSelector((state) => state);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [value, setValue] = useState(new Date());
+
+  const [startDateProps, setStartDateProps] = useState({
+    value: new Date(),
+    format: "MM-DD-YYYY",
+    onChange: (date) => console.log(date.format()),
+  });
+
+  const [endDateProps, setEndDateProps] = useState({
+    value: new Date(),
+    format: "MM-DD-YYYY",
+    onChange: (date) => console.log(date.format()),
+  });
+
+  // state for select Role
+  const [selectRoleReport, setSelectRoleReport] = useState([]);
+
+  //state for userReports fields
+  const [userReport, setUserReport] = useState({
+    loginID: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    firstName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    lastName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    roleID: {
+      value: 0,
+      errorMessage: "",
+      errorStatus: false,
+    },
+  });
+
+  // onchange handler for user report
+  const userReportHandler = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    if (name === "loginID" && value !== "") {
+      console.log(value, "loginIDloginIDloginID");
+      let valueCheck = value.replace(/[^\d]/g, "");
+      if (valueCheck !== "") {
+        setUserReport({
+          ...userReport,
+          loginID: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "loginID" && value === "") {
+      setUserReport({
+        ...userReport,
+        loginID: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "firstName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      if (valueCheck !== "") {
+        setUserReport({
+          ...userReport,
+          firstName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "firstName" && value === "") {
+      setUserReport({
+        ...userReport,
+        firstName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "lastName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      if (valueCheck !== "") {
+        setUserReport({
+          ...userReport,
+          lastName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "lastName" && value === "") {
+      setUserReport({
+        ...userReport,
+        lastName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+  };
+
+  //reset handler
+  const resetHandler = () => {
+    setUserReport({
+      ...userReport,
+      loginID: {
+        value: "",
+      },
+      firstName: {
+        value: "",
+      },
+      lastName: {
+        value: "",
+      },
+
+      roleID: {
+        value: 0,
+      },
+    });
+    setStartDateProps({
+      ...startDateProps,
+      value: "",
+    });
+
+    setEndDateProps({
+      ...endDateProps,
+      value: "",
+    });
+  };
+
+  // onchange handler for user Report select role
+  const reportSelectRoleHandler = async (selectedRole) => {
+    setUserReport({
+      ...userReport,
+      roleID: {
+        value: selectedRole.value,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (Object.keys(auth.UserRoleList).length > 0) {
+      let tem = [];
+      auth.UserRoleList.map((data, index) => {
+        console.log(data, "datadatadatadata");
+        tem.push({
+          label: data.roleName,
+          value: data.roleID,
+        });
+      });
+      setSelectRoleReport(tem);
+    }
+  }, [auth.UserRoleList]);
+
+  useEffect(() => {
+    // on page refresh
+    dispatch(allUserRole());
+  }, []);
 
   return (
     <>
@@ -20,29 +187,57 @@ const Userreport = () => {
         <Paper className="span-user-color">
           <Row className="mb-2">
             <Col lg={8} md={8} sm={12} className="report-text-field-column">
-              <TextField className="text-fields-report" value="Login ID" />
-              <Select
-                className="report-select-field-edit"
-                value="Select Role"
+              <TextField
+                name="loginID"
+                maxLength={100}
+                value={userReport.loginID.value}
+                onChange={userReportHandler}
+                className="text-fields-report"
+                placeholder="Login ID"
               />
-              <TextField className="text-fields-report" value="First Name" />
-              <TextField className="text-fields-report" value="Last Name" />
+              <Select
+                name="roleID"
+                options={selectRoleReport}
+                onChange={reportSelectRoleHandler}
+                className="report-select-field-edit"
+                placeholder="Select Role"
+              />
+              <TextField
+                maxLength={100}
+                name="firstName"
+                value={userReport.firstName.value}
+                onChange={userReportHandler}
+                className="text-fields-report"
+                placeholder="First Name"
+              />
+              <TextField
+                maxLength={100}
+                name="lastName"
+                value={userReport.lastName.value}
+                onChange={userReportHandler}
+                className="text-fields-report"
+                placeholder="Last Name"
+              />
             </Col>
 
             <Col lg={4} md={4} sm={12} className="JS-Security-Datepicker">
               <DatePicker
-                value={value}
-                onChange={setValue}
+                // value={value}
+                // onChange={setValue}
+                {...startDateProps}
+                onPropsChange={setStartDateProps}
                 showOtherDays={true}
                 inputClass="date-picker-left"
+                placeholder="Start Date"
               />
               <label className="date-to">to</label>
 
               <DatePicker
-                value={value}
-                onChange={setValue}
+                {...endDateProps}
+                onPropsChange={setEndDateProps}
                 showOtherDays={true}
                 inputClass="date-picker-right"
+                placeholder="End Date"
               />
             </Col>
           </Row>
@@ -57,6 +252,7 @@ const Userreport = () => {
               <Button
                 icon={<i className="icon-refresh user-reset"></i>}
                 text="Reset"
+                onClick={resetHandler}
                 className="user-report-reset"
               />
             </Col>
