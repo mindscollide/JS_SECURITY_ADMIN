@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -10,6 +10,36 @@ import { Select } from "antd";
 import "./CreateModal.css";
 
 const CreateModal = ({ ModalTitle, modalReject, setModalReject }) => {
+  // states for comment field
+  const [commentField, setCommentField] = useState({
+    commentType: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+  });
+
+  const commentHandler = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    if (name === "commentType" && value !== "") {
+      setCommentField({
+        ...commentField,
+        commentType: {
+          value: value.trimStart(),
+          errorMessage: "",
+          errorStatus: false,
+        },
+      });
+    } else if (name === "commentType" && value === "") {
+      setCommentField({
+        ...commentField,
+        commentType: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+  };
+
   // for close modal handler
   const closeRejectModal = () => {
     setModalReject(false);
@@ -62,6 +92,10 @@ const CreateModal = ({ ModalTitle, modalReject, setModalReject }) => {
                     className="CreateModal textAreaDiv"
                   >
                     <TextField
+                      name={"commentType"}
+                      maxLength={500}
+                      value={commentField.commentType.value}
+                      onChange={commentHandler}
                       type="text"
                       as={"textarea"}
                       className="textfield-Reject-modal"

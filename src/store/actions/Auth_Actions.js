@@ -4,6 +4,7 @@ import {
   authenticationLogIn,
   authenticationRefreshToken,
   authenticationSignUp,
+  allUserRolesList,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
 import { getNewUserRequestsCount } from "./Security_Admin";
@@ -447,4 +448,85 @@ const RefreshToken = (props, navigate) => {
       });
   };
 };
-export { logIn, signUp, signOut, RefreshToken };
+
+// FOR GET ALL USER ROLE LIST API
+
+const userRoleInit = () => {
+  return {
+    type: actions.GET_ALL_USER_ROLE_LIST_INIT,
+  };
+};
+
+const userRoleSuccess = (response, message) => {
+  return {
+    type: actions.GET_ALL_USER_ROLE_LIST_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const userRoleFail = (message) => {
+  return {
+    type: actions.GET_ALL_USER_ROLE_LIST_FAIL,
+    message: message,
+  };
+};
+
+const allUserRole = () => {
+  return (dispatch) => {
+    dispatch(userRoleInit());
+    let form = new FormData();
+    form.append("RequestMethod", allUserRolesList.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+    })
+      .then(async (response) => {
+        console.log("UserRoleListUserRoleList", response);
+        if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_RoleManager_RoleList_01".toLowerCase()
+            ) {
+              console.log("UserRoleListUserRoleList", response);
+              dispatch(
+                userRoleSuccess(
+                  response.data.responseResult.roles,
+                  "Record found"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_RoleManager_RoleList_02".toLowerCase()
+                )
+            ) {
+              dispatch(userRoleFail("No Record Found"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_RoleManager_RoleList_03".toLowerCase()
+                )
+            ) {
+              dispatch(userRoleFail("Exception No roles available"));
+            }
+          } else {
+            dispatch(userRoleFail("Something went wrong"));
+            console.log("There's no User Role");
+          }
+        } else {
+          dispatch(userRoleFail("Something went wrong"));
+          console.log("There's no User Role");
+        }
+      })
+      .catch((response) => {
+        dispatch(userRoleFail("something went wrong"));
+      });
+  };
+};
+
+export { logIn, signUp, signOut, RefreshToken, allUserRole };
