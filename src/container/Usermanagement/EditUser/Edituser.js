@@ -5,34 +5,48 @@ import {
   Button,
   Table,
   Paper,
+  Loader,
   Modal,
 } from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Select } from "antd";
+import { Select, Spin } from "antd";
 import {
-  getNewUserRequest,
+  editSecurityAdmin,
   allUserList,
 } from "../../../store/actions/Security_Admin";
-import { allUserRole } from "../../../store/actions/Auth_Actions";
+import {
+  allUserRole,
+  allUserStatus,
+} from "../../../store/actions/Auth_Actions";
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./Edituser.css";
+import { ColumnsGap } from "react-bootstrap-icons";
 
 const Edituser = ({ show, setShow, ModalTitle }) => {
-  const { auth } = useSelector((state) => state);
+  const { auth, securitReducer } = useSelector((state) => state);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [rows, setRows] = useState([]);
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
-
+  const [editUserStatusValue, setEditUserStatusValue] = useState({
+    value: 0,
+    label: "",
+  });
+  const [editUserRoleValue, setEditUserRoleValue] = useState({
+    label: "",
+    value: 0,
+  });
   const [updateModal, setUpdateModal] = useState(false);
 
   //state for selectRole
   const [editSelectRole, setEditSelectRole] = useState([]);
-  const [editSelectROleValue, setEditSelectRoleValue] = useState("");
+  const [editSelectRoleValue, setEditSelectRoleValue] = useState([]);
 
-  // state for userRole
-  const [editStatusRole, setEditStatusRole] = useState([]);
+  // state for select Status
+  const [editSelectStatus, setEditSelectStatus] = useState([]);
+  const [editSelectStatusValue, setEditSelectStatusValue] = useState([]);
 
   // state for edit user
   const [editUser, setEditUser] = useState({
@@ -56,8 +70,35 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       errorMessage: "",
       errorStatus: false,
     },
-    selectStatus: 0,
+    statusID: {
+      value: 0,
+      errorMessage: "",
+      errorStatus: false,
+    },
   });
+
+  const [modalEditState, setModalEditState] = useState({
+    Email: "",
+    selectRole: {
+      value: 0,
+      label: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    selectStatus: {
+      value: 0,
+      label: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    userID: 0,
+  });
+  console.log("modalEditState", modalEditState);
+
+  useEffect(() => {
+    dispatch(allUserRole());
+    dispatch(allUserStatus());
+  }, []);
 
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {
@@ -125,22 +166,28 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
   // onchange handler for edit select role
   const selectRoleHandler = async (selectedRole) => {
     console.log(selectedRole, "selectroleselectroleselectrole");
+    setEditSelectRoleValue(selectedRole);
     setEditUser({
       ...editUser,
       roleID: {
-        value: selectedRole.value,
+        value: selectedRole,
       },
     });
   };
+  console.log("selectRoleValue", editSelectRoleValue, editUser);
 
   // onChange handler for edit select status
   const selectStatusHandler = async (selectedStatus) => {
     console.log(selectedStatus, "selectedStatusselectedStatus");
+    setEditSelectStatusValue(selectedStatus);
     setEditUser({
       ...editUser,
-      selectStatus: selectedStatus.value,
+      statusID: {
+        value: selectedStatus,
+      },
     });
   };
+  console.log("statusIDstatusID", editSelectStatusValue, editUser);
 
   //reset handler for edit user
   const resetHandler = () => {
@@ -161,8 +208,24 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       roleID: {
         value: 0,
       },
+
+      statusID: {
+        value: 0,
+      },
     });
-    setEditSelectRoleValue("");
+    setEditSelectRoleValue([]);
+    setEditSelectStatusValue([]);
+
+    let data = {
+      FirstName: "",
+      LastName: "",
+      UserLDAPAccount: "",
+      Email: "",
+      UserRoleID: 0,
+      UserStatusID: 0,
+      RequestingUserID: 0,
+    };
+    dispatch(allUserList(data));
   };
 
   // open Update modal
@@ -171,7 +234,62 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
   };
 
   // open edit modal
-  const openModalEdit = async () => {
+  const openModalEdit = async (record) => {
+    let roleNew;
+    let statusNew;
+    console.log("recordrecordrecord", record);
+
+    try {
+      if (Object.keys(auth.UserRoleList && auth.UserStatus).length > 0) {
+        await auth.UserRoleList.map((data, index) => {
+          if (data.roleID === record.userRoleID) {
+            roleNew = {
+              label: data.roleName,
+              value: data.roleID,
+            };
+          }
+        });
+        await auth.UserStatus.map((data, index) => {
+          console.log(data, "datadatadatadata");
+          console.log(record.userStatusID, "datadatadatadata");
+
+          if (data.statusID === record.userStatusID) {
+            statusNew = {
+              label: data.statusName,
+              value: data.statusID,
+            };
+          }
+        });
+      }
+    } catch {
+      console.log("error on role select edit");
+    }
+
+    try {
+      if (Object.keys(roleNew && statusNew).length > 0) {
+        await setModalEditState({
+          ...modalEditState,
+          Email: record.email,
+          selectRole: {
+            value: roleNew.value,
+            label: roleNew.label,
+            errorMessage: "",
+            errorStatus: false,
+          },
+          selectStatus: {
+            value: statusNew.value,
+            label: statusNew.label,
+            errorMessage: "",
+            errorStatus: false,
+          },
+          userID: record.userID,
+        });
+      }
+    } catch {
+      console.log("error on state select edit");
+    }
+    console.log("openModalEdit", record);
+
     setEditModalSecurity(true);
   };
 
@@ -183,40 +301,143 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
   const columns = [
     {
       title: <label className="bottom-table-header">LoginID</label>,
-      dataIndex: "login",
-      key: "login",
+      dataIndex: "email",
+      key: "email",
       width: "200px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
-      dataIndex: "firstname",
-      key: "firstname",
+      dataIndex: "firstName",
+      key: "firstName",
       width: "100px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Last Name</label>,
-      dataIndex: "lastname",
-      key: "lastname",
+      dataIndex: "lastName",
+      key: "lastName",
       width: "100px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Role</label>,
-      dataIndex: "role",
-      key: "role",
+      dataIndex: "userRoleID",
+      key: "userRoleID",
       width: "200px",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      render: (text, record) => {
+        if (record.userRoleID === 1) {
+          return (
+            <>
+              <p className="user-role-status">Bank</p>
+            </>
+          );
+        } else if (record.userRoleID === 2) {
+          return (
+            <>
+              <p className="user-role-status">Cooperate</p>
+            </>
+          );
+        } else if (record.userRoleID === 3) {
+          return (
+            <>
+              <p className="user-role-status">Broker</p>
+            </>
+          );
+        } else if (record.userRoleID === 4) {
+          return (
+            <>
+              <p className="user-role-status">SystemAdmin</p>
+            </>
+          );
+        } else if (record.userRoleID === 5) {
+          return (
+            <>
+              <p className="user-role-status">SecurtyAdmin</p>
+            </>
+          );
+        } else if (record.userRoleID === 6) {
+          return (
+            <>
+              <p className="user-role-status">Auditor</p>
+            </>
+          );
+        }
+      },
     },
     {
       title: <label className="bottom-table-header">Status</label>,
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "userStatusID",
+      key: "userStatusID",
       width: "120px",
-      align: "right",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      align: "center",
+      render: (text, record) => {
+        if (record.userStatusID === 1) {
+          return (
+            <>
+              <i className="icon-check edit-user-enabled"></i>
+              {/* <p>Enabled</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 2) {
+          return (
+            <>
+              <i className="icon-block"></i>
+              {/* <p>Disabled</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 3) {
+          return (
+            <>
+              <i className="icon-lock"></i>
+              {/* <p>{record.userStatusID}</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 4) {
+          return (
+            <>
+              <i className="icon-close"></i>
+              {/* <p>{record.userStatusID}</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 5) {
+          return (
+            <>
+              <i className="icon-reply"></i>
+              {/* <p>{record.userStatusID}</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 6) {
+          return (
+            <>
+              <i className="icon-star"></i>
+              {/* <p>{record.userStatusID}</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 7) {
+          return (
+            <>
+              <i className="icon-trash"></i>
+              {/* <p>{record.userStatusID}</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 8) {
+          return (
+            <>
+              <i className="icon-share"></i>
+              {/* <p>{record.userStatusID}</p> */}
+            </>
+          );
+        } else if (record.userStatusID === 9) {
+          return (
+            <>
+              <i className="icon-share"></i>
+              {/* <p>{record.userStatusID}</p> */}
+            </>
+          );
+        }
+      },
     },
     {
       title: <label className="bottom-table-header">Edit</label>,
@@ -224,53 +445,35 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       key: "edit",
       width: "100px",
       align: "center",
-      render: (text) => (
-        <label className="edit-update-column" onClick={openModalEdit}>
-          {text}
-        </label>
-      ),
+      render: (text, record) => {
+        console.log("recordrecordrecord");
+        return (
+          <label
+            className="edit-update-column"
+            onClick={() => openModalEdit(record)}
+          >
+            <i className="icon-edit edit-user-icon-color" />
+          </label>
+        );
+      },
     },
   ];
 
-  const data = [
-    {
-      login: "Mindscollide.aamir@hbl.com",
-      firstname: "Mohammad",
-      lastname: "Aamir",
-      role: "Data Entry - Business Team",
-      status: (
-        <>
-          <i className={"icon-check check-status"}></i>
-        </>
-      ),
-      edit: <i className={"icon-edit userEdit-edit-icon"}></i>,
-    },
-    {
-      login: "Mindscollide.aamir@hbl.com",
-      firstname: "Mohammad",
-      lastname: "Aamir",
-      role: "Data Entry - Business Team",
-      status: (
-        <>
-          <i className={"icon-lock locked-status"}></i>
-        </>
-      ),
-      edit: <i className={"icon-edit userEdit-edit-icon"}></i>,
-    },
-    {
-      login: "Mindscollide.aamir@hbl.com",
-      firstname: "Mohammad",
-      lastname: "Aamir",
-      role: "Data Entry - Business Team",
-      status: (
-        <>
-          <i className={"icon-lock locked-status"}></i>
-        </>
-      ),
-      edit: <i className={"icon-edit userEdit-edit-icon"}></i>,
-    },
-  ];
+  // for search btn all user list
+  const onSearchBtnHit = () => {
+    let data = {
+      FirstName: editUser.firstName.value,
+      LastName: editUser.lastName.value,
+      UserLDAPAccount: "",
+      Email: editUser.loginID.value,
+      UserRoleID: editUser.roleID.value,
+      UserStatusID: editUser.statusID.value,
+      RequestingUserID: 0,
+    };
+    dispatch(allUserList(data));
+  };
 
+  // for userRoles in select drop down
   useEffect(() => {
     if (Object.keys(auth.UserRoleList).length > 0) {
       let tem = [];
@@ -285,19 +488,93 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
     }
   }, [auth.UserRoleList]);
 
+  // for userStatus in select dropdown
   useEffect(() => {
-    // on page refresh
-    dispatch(allUserList());
-  }, []);
+    if (Object.keys(auth.UserStatus).length > 0) {
+      let tem = [];
+      auth.UserStatus.map((data, index) => {
+        console.log(data, "userStatususerStatus");
+        tem.push({
+          label: data.statusName,
+          value: data.statusID,
+        });
+      });
+      setEditSelectStatus(tem);
+    }
+  }, [auth.UserStatus]);
 
   useEffect(() => {
-    dispatch(getNewUserRequest());
+    if (
+      securitReducer.allUserList !== null &&
+      securitReducer.allUserList !== undefined &&
+      securitReducer.allUserList.length > 0
+    ) {
+      setRows(securitReducer.allUserList);
+    } else {
+      setRows([]);
+    }
+  }, [securitReducer.allUserList]);
+
+  console.log("roewwwww", rows);
+
+  useEffect(() => {
+    let data = {
+      FirstName: "",
+      LastName: "",
+      UserLDAPAccount: "",
+      Email: "",
+      UserRoleID: 0,
+      UserStatusID: 0,
+      RequestingUserID: 0,
+    };
+    dispatch(allUserList(data));
   }, []);
 
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
     setUpdateModal(true);
   };
+
+  const HandleUpdateUser = () => {
+    let Data = {
+      UserRoleID: modalEditState.selectRole.value,
+      UserStatusID: modalEditState.selectStatus.value,
+      UserIdToEdit: modalEditState.userID,
+    };
+    dispatch(editSecurityAdmin(Data, setEditModalSecurity, setUpdateModal));
+  };
+
+  //onChange for modaledit role state passing props in modal on bottom
+  const SelectRoleEditModalChangeHandler = (selectValue) => {
+    console.log(selectValue, "check");
+    setModalEditState({
+      ...modalEditState,
+      selectRole: {
+        value: selectValue.value,
+        label: selectValue.label,
+        errorMessage: "",
+        errorStatus: false,
+      },
+    });
+  };
+
+  //onChange for modaledit userStatus state passing props in modal on bottom
+  const SelectStatusEditModalChangeHandler = (selectStatus) => {
+    console.log(selectStatus, "check");
+    setModalEditState({
+      ...modalEditState,
+      selectStatus: {
+        value: selectStatus.value,
+        label: selectStatus.label,
+        errorMessage: "",
+        errorStatus: false,
+      },
+    });
+  };
+  console.log("editSelectRole", editSelectRole);
+
+  console.log("editUsereditUser", editUser);
+
   return (
     <>
       <Container className="edit-user-container">
@@ -340,6 +617,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
                 className="select-field-edit"
                 placeholder="Select Role"
                 onChange={selectRoleHandler}
+                value={editSelectRoleValue}
 
                 // defaultValue={editSelectROleValue}
               />
@@ -349,15 +627,17 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
           <Row>
             <Col lg={12} md={12} sm={12}>
               <Select
-                name="selectStatus"
+                name="statusID"
                 className="select-field-edit"
                 placeholder="Select Status"
-                options={editStatusRole}
+                options={editSelectStatus}
                 onChange={selectStatusHandler}
+                value={editSelectStatusValue}
               />
               <Button
                 icon={<i className="icon-search icon-search-space"></i>}
                 text="Search"
+                onClick={onSearchBtnHit}
                 className="search-Edit-User-btn"
               />
               <Button
@@ -371,12 +651,18 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
 
           <Row className="mt-4">
             <Col lg={12} md={12} sm={12}>
-              <Table
-                column={columns}
-                rows={data}
-                className="Edituser-table"
-                pagination={false}
-              />
+              {securitReducer.Spinner === true ? (
+                <span className="edit-user-spinner">
+                  <Spin size="large" />
+                </span>
+              ) : (
+                <Table
+                  column={columns}
+                  rows={rows}
+                  className="Edituser-table"
+                  pagination={false}
+                />
+              )}
             </Col>
           </Row>
         </Paper>
@@ -418,6 +704,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
                   icon={<i className="icon-arrow-right"></i>}
                   text="Proceed"
                   className="Update-Proceed-btn"
+                  onClick={HandleUpdateUser}
                 />
               </Col>
             </Row>
@@ -428,10 +715,18 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       {editModalSecurity ? (
         <EditModal
           modalEdit={editModalSecurity}
+          modalEditState={modalEditState}
+          setModalEditState={setModalEditState}
           setModalEdit={setEditModalSecurity}
+          Role={editSelectRole}
+          StatusData={editSelectStatus}
           UpdateButtonOnClick={UpdateBtnHandle}
+          SelectRoleChangeHandler={SelectRoleEditModalChangeHandler}
+          SelectStatusChangeHandler={SelectStatusEditModalChangeHandler}
         />
       ) : null}
+
+      {securitReducer.Loading ? <Loader /> : null}
     </>
   );
 };

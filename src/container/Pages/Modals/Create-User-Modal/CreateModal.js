@@ -8,9 +8,17 @@ import {
 } from "../../../../components/elements";
 import { Select } from "antd";
 import "./CreateModal.css";
+import { useDispatch } from "react-redux";
+import { getRejectUser } from "../../../../store/actions/Security_Admin";
 
-const CreateModal = ({ ModalTitle, modalReject, setModalReject }) => {
+const CreateModal = ({
+  ModalTitle,
+  modalReject,
+  setModalReject,
+  rejectUserData,
+}) => {
   // states for comment field
+  const dispatch = useDispatch();
   const [commentField, setCommentField] = useState({
     commentType: {
       value: "",
@@ -44,6 +52,17 @@ const CreateModal = ({ ModalTitle, modalReject, setModalReject }) => {
   const closeRejectModal = () => {
     setModalReject(false);
   };
+  const handleRejectUserRequest = () => {
+    console.log(rejectUserData, "rejectUserDatarejectUserDatarejectUserData");
+    let Data = {
+      UserRegistrationRequestID: rejectUserData.userRegistrationRequestID,
+      Comments: commentField.commentType.value,
+      UserID: rejectUserData.fK_UserID,
+    };
+    dispatch(getRejectUser(Data));
+    setModalReject(false);
+    console.log(Data, "rejectUserDatarejectUserDatarejectUserData");
+  };
   return (
     <Fragment>
       <Modal
@@ -65,7 +84,7 @@ const CreateModal = ({ ModalTitle, modalReject, setModalReject }) => {
                     sm={12}
                     className="d-flex justify-content-center"
                   >
-                    <label className="edit-Reject-label">Edit User</label>
+                    <label className="edit-Reject-label">Reject User</label>
                   </Col>
                 </Row>
 
@@ -114,11 +133,14 @@ const CreateModal = ({ ModalTitle, modalReject, setModalReject }) => {
                   icon={<i class="icon-refresh icon-right"></i>}
                   text="Update"
                   className="update-btn"
+                  onClick={handleRejectUserRequest}
                 />
+
                 <Button
                   icon={<i class="icon-close icon-right"></i>}
                   text="Discard"
                   className="discard-btn"
+                  onClick={closeRejectModal}
                 />
               </Col>
             </Row>

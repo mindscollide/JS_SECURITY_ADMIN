@@ -16,7 +16,7 @@
 
 .js-sidebar {
   border-top-right-radius: 10px;
-  z-index: 1;
+  z-index: 0;
   margin: 0 !important;
   background-color: #ffffff !important;
   position: absolute;

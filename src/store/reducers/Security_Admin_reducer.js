@@ -1,9 +1,13 @@
 import * as actions from "../action_types";
 
 const initialState = {
+  Spinner: false,
   ResponseMessage: "",
+  SaveResponse: "",
   Loading: false,
+  EditUserResponse: null,
   ResponseMessageUserCount: "",
+  RejectedUser: "",
   NewUserCountData: 0,
   userRequestList: [],
   allUserList: [],
@@ -40,12 +44,14 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: true,
+        Spinner: true,
       };
 
     case actions.GET_NEW_USER_REQUESTS_SUCCESS:
       return {
         ...state,
         Loading: false,
+        Spinner: false,
         userRequestList: action.response,
         ResponseMessage: action.message,
       };
@@ -54,6 +60,7 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
+        Spinner: false,
         userRequestList: [],
         ResponseMessage: action.message,
       };
@@ -68,6 +75,7 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
+        SaveResponse: action.response,
         ResponseMessage: action.message,
       };
 
@@ -75,6 +83,8 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
+        SaveResponse: "",
+        ResponseMessage: action.message,
       };
 
     case actions.EDIT_USER_INIT:
@@ -87,6 +97,7 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
+        EditUserResponse: action.response,
         ResponseMessage: action.message,
       };
 
@@ -94,6 +105,7 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
+        EditUserResponse: null,
         ResponseMessage: action.message,
       };
 
@@ -101,12 +113,14 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: true,
+        Spinner: true,
       };
 
     case actions.GET_ALL_USER_LIST_SUCCESS:
       return {
         ...state,
         Loading: false,
+        Spinner: false,
         allUserList: action.response,
         ResponseMessage: action.message,
       };
@@ -115,7 +129,30 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
+        Spinner: false,
         allUserList: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_REJECT_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_REJECT_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        RejectedUser: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_REJECT_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        RejectedUser: "",
         ResponseMessage: action.message,
       };
 

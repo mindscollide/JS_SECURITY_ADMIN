@@ -7,6 +7,7 @@ const initialState = {
   ResponseMessage: "",
   isSignUp: false,
   UserRoleList: [],
+  UserStatus: [],
   SessionExpeireResponseMessage: "",
   roles: null,
   Token: "",
@@ -19,6 +20,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state, Loading: true };
 
     case actions.LOG_IN_SUCCESS:
+      console.log(action, "LOG_IN_SUCCESSLOG_IN_SUCCESS");
       return {
         ...state,
         UserDetails: action.response,
@@ -73,6 +75,28 @@ const authReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         UserRoleList: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_USER_STATUS_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        UserStatus: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_USER_STATUS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        UserStatus: [],
         ResponseMessage: action.message,
       };
 
