@@ -4,6 +4,7 @@ import {
   saveUserSecurityAdmin,
   editUserSecurityAdmin,
   getAllUserList,
+  rejectUserRequestSecurityAdmin,
 } from "../../commen/apis/Api_config";
 import * as actions from "../action_types";
 
@@ -123,6 +124,7 @@ const getUserRequestInit = () => {
 };
 
 const getUserRequestSuccess = (response, message) => {
+  console.log(response, message);
   return {
     type: actions.GET_NEW_USER_REQUESTS_SUCCESS,
     response: response,
@@ -163,67 +165,19 @@ const getNewUserRequest = (userRoleID) => {
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
-              response.data.responseResult.userRequestList
+              response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
                   "SecurityAdmin_SecurityAdminManager_GetNewUserRequests_01".toLowerCase()
                 )
             ) {
-              if (response.data.responseResult.roleID === 4) {
-                localStorage.setItem(
-                  "userRegistrationRequestID",
-                  response.data.responseResult.userRegistrationRequestID
-                );
-                localStorage.setItem(
-                  "email",
-                  response.data.responseResult.email
-                );
-                localStorage.setItem(
-                  "contactnumber",
-                  response.data.responseResult.contactnumber
-                );
-                localStorage.setItem(
-                  "firstname",
-                  response.data.responseResult.firstname
-                );
-                localStorage.setItem(
-                  "lastname",
-                  response.data.responseResult.lastname
-                );
-                localStorage.setItem(
-                  "fK_UserRoleID",
-                  response.data.responseResult.fK_UserRoleID
-                );
-                localStorage.setItem(
-                  "fK_UserStatusID",
-                  response.data.responseResult.fK_UserStatusID
-                );
-                localStorage.setItem(
-                  "fK_UserID",
-                  response.data.responseResult.fK_UserID
-                );
-                localStorage.setItem(
-                  "comments",
-                  response.data.responseResult.comments
-                );
-                localStorage.setItem(
-                  "token",
-                  JSON.stringify(response.data.responseResult.token)
-                );
-                localStorage.setItem(
-                  "refreshToken",
-                  JSON.stringify(response.data.responseResult.refreshToken)
-                );
-                // navigate("/Js/Admin/");
-                dispatch(
-                  getUserRequestSuccess(
-                    response.data.responseResult,
-                    "Record Found"
-                  )
-                );
-              } else {
-                dispatch(getUserRequestFail("This is not authorized"));
-              }
+              console.log(response.data.responseResult.userRequestList);
+              dispatch(
+                getUserRequestSuccess(
+                  response.data.responseResult.userRequestList,
+                  "Record Found"
+                )
+              );
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -287,21 +241,9 @@ const saveUserFail = (message) => {
   };
 };
 
-const saveSecurityAdmin = (userSave) => {
+const saveSecurityAdmin = (Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
-  let Data = {
-    // FirstName: userSave.FirstName,
-    // Lastname: userSave.Lastname,
-    // UserReferenceCode: userSave.UserReferenceCode,
-    // UserLDAPAccount: userSave.UserLDAPAccount,
-    // Email: userSave.Email,
-    // ContactNumber: userSave.ContactNumber,
-    // LDAPAccount: userSave.LDAPAccount,
-    // FailedAttemptCount: userSave.FailedAttemptCount,
-    // UserRegistrationRequestID: userSave.UserRegistrationRequestID,
-    // UserID: userSave.UserID,
-  };
-
+  let roleID = JSON.parse(localStorage.getItem("roleID"));
   return (dispatch) => {
     dispatch(saveUserInit());
     let form = new FormData();
@@ -325,7 +267,7 @@ const saveSecurityAdmin = (userSave) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SecurityAdmin_SecurityAdminManagerSaveUser_01".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SaveUser_01".toLowerCase()
                 )
             ) {
               dispatch(saveUserFail("Invalid User Request"));
@@ -333,7 +275,7 @@ const saveSecurityAdmin = (userSave) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SecurityAdmin_SecurityAdminManagerSaveUser_02".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SaveUser_02".toLowerCase()
                 )
             ) {
               // if (response.data.responseResult.roleID === 4) {
@@ -401,11 +343,13 @@ const saveSecurityAdmin = (userSave) => {
                   "User Request Accepted and User Created Successfully"
                 )
               );
+              dispatch(getNewUserRequest(roleID));
+              dispatch(getNewUserRequestsCount(roleID));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SecurityAdmin_SecurityAdminManagerSaveUser_03".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SaveUser_03".toLowerCase()
                 )
             ) {
               dispatch(
@@ -415,7 +359,7 @@ const saveSecurityAdmin = (userSave) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SecurityAdmin_SecurityAdminManagerSaveUser_04".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SaveUser_04".toLowerCase()
                 )
             ) {
               dispatch(saveUserFail("Not authorized to perform action"));
@@ -423,7 +367,7 @@ const saveSecurityAdmin = (userSave) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SecurityAdmin_SecurityAdminManagerSaveUser_05".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SaveUser_05".toLowerCase()
                 )
             ) {
               dispatch(saveUserFail("Exception User not save"));
@@ -469,14 +413,17 @@ const editUserFail = (message) => {
   };
 };
 
-const editSecurityAdmin = (editUser) => {
+const editSecurityAdmin = (Data, setEditModalSecurity, setUpdateModal) => {
   let token = JSON.parse(localStorage.getItem("token"));
-  let Data = {
-    UserRoleID: editUser.UserRoleID,
-    UserStatusID: editUser.UserStatusID,
-    UserIdToEdit: editUser.UserIdToEdit,
+  let data = {
+    FirstName: "",
+    LastName: "",
+    UserLDAPAccount: "",
+    Email: "",
+    UserRoleID: 0,
+    UserStatusID: 0,
+    RequestingUserID: 0,
   };
-
   return (dispatch) => {
     dispatch(editUserInit());
     let form = new FormData();
@@ -493,7 +440,7 @@ const editSecurityAdmin = (editUser) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken());
-          dispatch(editSecurityAdmin(editUser));
+          dispatch(editSecurityAdmin(Data));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -509,6 +456,9 @@ const editSecurityAdmin = (editUser) => {
                   "User updated successfully"
                 )
               );
+              setEditModalSecurity(false);
+              setUpdateModal(false);
+              dispatch(allUserList(data));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -587,17 +537,10 @@ const allUserFail = (message) => {
   };
 };
 
-const allUserList = (allUser) => {
+const allUserList = (Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
-  let Data = {
-    FirstName: "Aun",
-    LastName: "Naqvi",
-    UserLDAPAccount: "bsahbas",
-    Email: "ahksbbhxa",
-    UserRoleID: 0,
-    UserStatusID: 0,
-    RequestingUserID: 0,
-  };
+  // console.log(token, "token");
+
   return (dispatch) => {
     dispatch(allUserInit());
     let form = new FormData();
@@ -614,7 +557,7 @@ const allUserList = (allUser) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken());
-          dispatch(allUserList(allUser));
+          dispatch(allUserList(Data));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -668,6 +611,112 @@ const allUserList = (allUser) => {
   };
 };
 
+// get Reject User Request
+
+const rejectedUserInit = () => {
+  return {
+    type: actions.GET_REJECT_USER_INIT,
+  };
+};
+
+const rejectedUserSuccess = (response, message) => {
+  return {
+    type: actions.GET_REJECT_USER_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const rejectedUserFail = (message) => {
+  return {
+    type: actions.GET_REJECT_USER_FAIL,
+    message: message,
+  };
+};
+
+const getRejectUser = (rejectedData) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  let roleID = JSON.parse(localStorage.getItem("roleID"));
+  return (dispatch) => {
+    dispatch(rejectedUserInit());
+    let form = new FormData();
+    form.append("RequestMethod", rejectUserRequestSecurityAdmin.RequestMethod);
+    form.append("RequestData", JSON.stringify(rejectedData));
+    axios({
+      method: "post",
+      url: securityAdminApi,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken());
+          dispatch(getRejectUser());
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_RejectUserRequest_01".toLowerCase()
+                )
+            ) {
+              dispatch(rejectedUserFail("invalid request data"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_RejectUserRequest_02".toLowerCase()
+                )
+            ) {
+              dispatch(
+                rejectedUserSuccess(
+                  response.data.responseResult.responseMessage,
+                  "user rejected"
+                )
+              );
+              dispatch(getNewUserRequest(roleID));
+              dispatch(getNewUserRequestsCount(roleID));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_RejectUserRequest_03".toLowerCase()
+                )
+            ) {
+              dispatch(rejectedUserFail("user not rejected"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_RejectUserRequest_04".toLowerCase()
+                )
+            ) {
+              dispatch(rejectedUserFail("invalid role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_RejectUserRequest_05".toLowerCase()
+                )
+            ) {
+              dispatch(rejectedUserFail("Exception No User Rejected"));
+            }
+          } else {
+            dispatch(rejectedUserFail("Something went wrong"));
+          }
+        } else {
+          dispatch(rejectedUserFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(rejectedUserFail("Something went wrong"));
+      });
+  };
+};
+
 export {
   getNewUserRequestsCount,
   clearSecurityAdminMessage,
@@ -675,4 +724,5 @@ export {
   getNewUserRequest,
   allUserList,
   editSecurityAdmin,
+  getRejectUser,
 };

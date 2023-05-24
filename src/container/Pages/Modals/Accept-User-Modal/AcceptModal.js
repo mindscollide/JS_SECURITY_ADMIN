@@ -8,7 +8,12 @@ import {
 } from "../../../../components/elements";
 import "./AcceptModal.css";
 
-const AcceptModal = ({ ModalTitle, modalAccept, setModalAccept }) => {
+const AcceptModal = ({
+  ModalTitle,
+  modalAccept,
+  setModalAccept,
+  acceptHandler,
+}) => {
   // for close modal handler
   const closeAcceptModal = () => {
     setModalAccept(false);
@@ -51,10 +56,12 @@ const AcceptModal = ({ ModalTitle, modalAccept, setModalAccept }) => {
                   text="Proceed"
                   className="proceed-btn"
                   icon={<i class="icon-arrow-right icon-right"></i>}
+                  onClick={acceptHandler}
                 />
                 <Button
                   text="Discard"
                   className="discard-accept-btn"
+                  onClick={closeAcceptModal}
                   icon={<i class="icon-close icon-right"></i>}
                 />
               </Col>

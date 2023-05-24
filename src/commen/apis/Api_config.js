@@ -34,6 +34,14 @@ const allUserRolesList = {
   RequestMethod: "ServiceManager.RoleList",
 };
 
+const getAllUserStatus = {
+  RequestMethod: "ServiceManager.GetAllUserStatus",
+};
+
+const rejectUserRequestSecurityAdmin = {
+  RequestMethod: "ServiceManager.RejectUserRequest",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -44,4 +52,6 @@ export {
   editUserSecurityAdmin,
   getAllUserList,
   allUserRolesList,
+  getAllUserStatus,
+  rejectUserRequestSecurityAdmin,
 };

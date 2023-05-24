@@ -81,9 +81,15 @@
 }
 
 .icon-accept-column {
-  font-size: 14px !important;
+  font-size: 17px !important;
   font-weight: 500 !important;
-  color: #000000 !important;
-  font-family: "Montserrat", sans-serif !important;
+  color: #12a812 !important;
+  cursor: pointer;
+}
+
+.icon-close-column {
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #2230aa !important;
   cursor: pointer;
 }

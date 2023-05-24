@@ -28,6 +28,7 @@ const Userreport = () => {
 
   // state for select Role
   const [selectRoleReport, setSelectRoleReport] = useState([]);
+  const [selectRoleValueReport, setSelectRoleValueReport] = useState([]);
 
   //state for userReports fields
   const [userReport, setUserReport] = useState({
@@ -144,14 +145,16 @@ const Userreport = () => {
       ...endDateProps,
       value: "",
     });
+    setSelectRoleValueReport([]);
   };
 
   // onchange handler for user Report select role
   const reportSelectRoleHandler = async (selectedRole) => {
+    setSelectRoleValueReport(selectedRole);
     setUserReport({
       ...userReport,
       roleID: {
-        value: selectedRole.value,
+        value: selectedRole,
       },
     });
   };
@@ -201,6 +204,7 @@ const Userreport = () => {
                 onChange={reportSelectRoleHandler}
                 className="report-select-field-edit"
                 placeholder="Select Role"
+                value={selectRoleValueReport}
               />
               <TextField
                 maxLength={100}

@@ -35,6 +35,11 @@ const Header = () => {
     }
   }, [securitReducer.NewUserCountData]);
 
+  // navigate to create User page
+  const navigateToCreatePage = () => {
+    navigate("/JS/Admin/createUser");
+  };
+
   // For Api hit on refresh page
   useEffect(() => {
     dispatch(getNewUserRequestsCount(roleID));
@@ -52,7 +57,12 @@ const Header = () => {
               <Nav className="nav-rfq-calculator ms-auto">
                 <Nav.Link>
                   <span className="d-inline-block notification icn-wrapper">
-                    <i className="icon-bell icon-bell-color"></i>
+                    <i
+                      className="icon-bell icon-bell-color"
+                      onClick={navigateToCreatePage}
+                    >
+                      {" "}
+                    </i>
                     <span className="notification-badge">{countState}</span>
                   </span>
                 </Nav.Link>

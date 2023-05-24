@@ -5,9 +5,10 @@ import {
   authenticationRefreshToken,
   authenticationSignUp,
   allUserRolesList,
+  getAllUserStatus,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
-import { getNewUserRequestsCount } from "./Security_Admin";
+import { getNewUserRequestsCount, allUserList } from "./Security_Admin";
 
 const logininit = () => {
   return {
@@ -79,6 +80,15 @@ const logIn = (UserData, navigate) => {
     DeviceID: id.toString(),
     Device: "browser",
   };
+  let dataForEditUser = {
+    FirstName: "",
+    LastName: "",
+    UserLDAPAccount: "",
+    Email: "",
+    UserRoleID: 0,
+    UserStatusID: 0,
+    RequestingUserID: 0,
+  };
   console.log("logincredentials", Data);
   return (dispatch) => {
     dispatch(logininit());
@@ -107,7 +117,7 @@ const logIn = (UserData, navigate) => {
               response.data.responseResult.responseMessage ===
               "ERM_AuthService_AuthManager_Login_03"
             ) {
-              if (response.data.responseResult.roleID === 2) {
+              if (response.data.responseResult.roleID === 5) {
                 localStorage.setItem(
                   "userID",
                   response.data.responseResult.userID
@@ -136,16 +146,17 @@ const logIn = (UserData, navigate) => {
                   "refreshToken",
                   JSON.stringify(response.data.responseResult.refreshToken)
                 );
-                await dispatch(
+                dispatch(
                   getNewUserRequestsCount(response.data.responseResult.roleID)
                 );
-                navigate("/Js/Admin/");
+                navigate("/JS/Admin");
                 dispatch(
                   loginsuccess(
                     response.data.responseResult,
                     "Successfully Logged In"
                   )
                 );
+                dispatch(allUserList(dataForEditUser));
               } else {
                 dispatch(
                   loginfail("This user is not authorise for this domain")
@@ -488,7 +499,7 @@ const allUserRole = () => {
           if (response.data.responseResult.isExecuted === true) {
             if (
               response.data.responseResult.responseMessage.toLowerCase() ===
-              "ERM_AuthService_RoleManager_RoleList_01".toLowerCase()
+              "ERM_AuthService_CommonManager_RoleList_01".toLowerCase()
             ) {
               console.log("UserRoleListUserRoleList", response);
               dispatch(
@@ -501,7 +512,7 @@ const allUserRole = () => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_RoleManager_RoleList_02".toLowerCase()
+                  "ERM_AuthService_CommonManager_RoleList_02".toLowerCase()
                 )
             ) {
               dispatch(userRoleFail("No Record Found"));
@@ -509,7 +520,7 @@ const allUserRole = () => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_RoleManager_RoleList_03".toLowerCase()
+                  "ERM_AuthService_CommonManager_RoleList_03".toLowerCase()
                 )
             ) {
               dispatch(userRoleFail("Exception No roles available"));
@@ -529,4 +540,83 @@ const allUserRole = () => {
   };
 };
 
-export { logIn, signUp, signOut, RefreshToken, allUserRole };
+// FOR USER STATUS API
+const userStatusInit = () => {
+  return {
+    type: actions.GET_ALL_USER_STATUS_INIT,
+  };
+};
+
+const userStatusSuccess = (response, message) => {
+  return {
+    type: actions.GET_ALL_USER_STATUS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const userStatusFail = (message) => {
+  return {
+    type: actions.GET_ALL_USER_STATUS_FAIL,
+    message: message,
+  };
+};
+
+const allUserStatus = () => {
+  return (dispatch) => {
+    dispatch(userStatusInit());
+    let form = new FormData();
+    form.append("RequestMethod", getAllUserStatus.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+    })
+      .then(async (response) => {
+        console.log("UserStatusUserStatus", response);
+        if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_GetAllUserStatus_01".toLowerCase()
+            ) {
+              console.log("UserRoleListUserRoleList", response);
+              dispatch(
+                userStatusSuccess(
+                  response.data.responseResult.status,
+                  "Record found"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllUserStatus_02".toLowerCase()
+                )
+            ) {
+              dispatch(userStatusFail("No Record Found"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllUserStatus_03".toLowerCase()
+                )
+            ) {
+              dispatch(userStatusFail("Exception No roles available"));
+            }
+          } else {
+            dispatch(userStatusFail("Something went wrong"));
+            console.log("There's no User Role");
+          }
+        } else {
+          dispatch(userStatusFail("Something went wrong"));
+          console.log("There's no User Role");
+        }
+      })
+      .catch((response) => {
+        dispatch(userStatusFail("something went wrong"));
+      });
+  };
+};
+
+export { logIn, signUp, signOut, RefreshToken, allUserRole, allUserStatus };

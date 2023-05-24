@@ -11,15 +11,22 @@ import Select from "react-select";
 import "./EditModal.css";
 
 const EditModal = ({
-  ModalTitle,
   modalEdit,
+  modalEditState,
+  setModalEditState,
   setModalEdit,
+  Role,
+  StatusData,
   UpdateButtonOnClick,
+  SelectRoleChangeHandler,
+  SelectStatusChangeHandler,
 }) => {
   // for close modal handler
   const closeEditModal = async () => {
     setModalEdit(false);
   };
+
+  console.log("editSelectRole", Role);
   return (
     <Fragment>
       <Modal
@@ -28,7 +35,7 @@ const EditModal = ({
         className="modaldialog modal-Edit-styles"
         modalHeaderClassName={"header-Edit-Modal-close-btn"}
         modalFooterClassName="modal-footer-edit"
-        ButtonTitle={ModalTitle}
+        // ButtonTitle={ModalTitle}
         size="lg"
         onHide={closeEditModal}
         ModalTitle={
@@ -63,9 +70,10 @@ const EditModal = ({
                 <Row>
                   <Col lg={12} md={12} sm={12}>
                     <TextField
-                      value="mindscollide.aamir@hbl.com"
+                      value={modalEditState.Email}
                       label={<small className="email-heading">Email</small>}
                       className="textfield-edit-modal"
+                      disable={true}
                     />
                   </Col>
                 </Row>
@@ -73,13 +81,22 @@ const EditModal = ({
                 <Row className="mt-3">
                   <Col lg={6} md={6} sm={12}>
                     <label className="select-labels">Select Role</label>
-                    <Select placeholder="Select Role" className="select-role" />
+                    <Select
+                      placeholder="Select Role"
+                      className="select-role"
+                      value={modalEditState.selectRole}
+                      options={Role}
+                      onChange={SelectRoleChangeHandler}
+                    />
                   </Col>
                   <Col lg={6} md={6} sm={12}>
                     <label className="select-labels">Select Status </label>
                     <Select
+                      value={modalEditState.selectStatus}
                       placeholder="Select Status"
                       className="select-status"
+                      options={StatusData}
+                      onChange={SelectStatusChangeHandler}
                     />
                   </Col>
                 </Row>
@@ -101,6 +118,7 @@ const EditModal = ({
                   icon={<i class="icon-close icon-right"></i>}
                   text="Discard"
                   className="discard-btn"
+                  onClick={closeEditModal}
                 />
               </Col>
             </Row>
