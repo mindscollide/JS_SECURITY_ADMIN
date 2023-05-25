@@ -10,6 +10,8 @@ import Userreport from "../container/Reports/Userreport";
 import SecurityLogin from "../container/SecurityLogin/Login/SecurityLogin";
 import MainPage from "../container/Pages/MainPage/MainPage";
 import PrivateRoutes from "./PrivateRoute";
+import Bankuser from "../container/Usermanagement/BankUser/Bankuser";
+import Addcustomer from "../container/Usermanagement/AddCustomer/Addcustomer";
 export const router = createHashRouter(
   createRoutesFromElements(
     <>
@@ -21,6 +23,8 @@ export const router = createHashRouter(
           <Route path="" element={<Edituser />} />
           <Route path="createUser" element={<Createuser />} />
           <Route path="userReport" element={<Userreport />} />
+          <Route path="bankUser" element={<Bankuser />} />
+          <Route path="addCustomer" element={<Addcustomer />} />
         </Route>
       </Route>
     </>

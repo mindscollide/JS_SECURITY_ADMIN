@@ -1,0 +1,83 @@
+.modal-Bank-styles .modal-content {
+  position: relative;
+  left: 150px;
+  height: 370px !important;
+  width: 500px !important;
+  background-color: #f2f3f9;
+  border-radius: 8px !important;
+  display: flex !important;
+  /* align-items: center !important; */
+  justify-content: center !important;
+  border: 1px solid #dcdde6;
+  padding: 10px 10px;
+  box-shadow: 10px 10px 40px rgb(0 0 0 / 10%);
+}
+
+.header-Bank-Modal-close-btn {
+  font-size: 11px;
+  border: none !important;
+  right: 0px;
+  font-size: 9px;
+}
+
+.Modal-Title-Bank {
+  margin-top: -55px;
+  font-size: 20px;
+  justify-content: center !important;
+  font-weight: 500;
+  color: #002650 !important;
+}
+
+.modal-bank-footer {
+  width: 100% !important;
+  display: contents;
+}
+
+.labels-bank-modal {
+  font-size: 12px !important;
+  color: #004990;
+  font-weight: 500;
+}
+
+.aesterick-color {
+  color: #cf5b5b !important;
+}
+
+.AddUser-btn {
+  font-size: 14px;
+  margin-left: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 8px 18px !important;
+  border: none;
+  background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%);
+}
+
+.AddUser-btn:hover {
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.Cancel-btn {
+  font-size: 14px;
+  margin-left: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 8px 18px !important;
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.Cancel-btn:hover {
+  border: none;
+  background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%) !important;
+}
+
+.icon-bank-modal {
+  font-size: 17px !important;
+  margin-right: 5px;
+}
