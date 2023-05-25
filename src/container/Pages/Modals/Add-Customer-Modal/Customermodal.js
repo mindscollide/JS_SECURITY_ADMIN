@@ -6,6 +6,7 @@ import {
   Table,
   Modal,
 } from "../../../../components/elements";
+import { validateEmail } from "../../../../commen/functions/emailValidation";
 import Select from "react-select";
 import "./Customermodal.css";
 
@@ -121,6 +122,40 @@ const CustomerModal = ({
         Contact: { value: "", errorMessage: "", errorStatus: false },
       });
     }
+
+    if (name === "Email" && value !== "") {
+      console.log("valuevalueemailvaluevalueemail", value);
+      if (value !== "") {
+        setAddCustomerModal({
+          ...addCustomerModal,
+          Email: {
+            value: value.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "Email" && value === "") {
+      setAddCustomerModal({
+        ...addCustomerModal,
+        Email: {
+          value: "",
+          errorMessage: "",
+          errorStatus: true,
+        },
+      });
+    }
+  };
+
+  //email validation handler
+  const handlerEmail = () => {
+    if (addCustomerModal.Email.value !== "") {
+      if (validateEmail(addCustomerModal.Email.value)) {
+        alert("Email verified");
+      } else {
+        alert("Email Not Verified");
+      }
+    }
   };
 
   // for close modal handler
@@ -208,7 +243,13 @@ const CustomerModal = ({
                     </span>
                   </Col>
                   <Col lg={8} md={8} sm={12}>
-                    <TextField labelClass="d-none" />
+                    <TextField
+                      name="Email"
+                      value={addCustomerModal.Email.value}
+                      onChange={addCustomerModalValidateHandler}
+                      onBlur={handlerEmail}
+                      labelClass="d-none"
+                    />
                   </Col>
                 </Row>
 

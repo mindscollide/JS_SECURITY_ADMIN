@@ -4,6 +4,7 @@ import { PlusLg } from "react-bootstrap-icons";
 import { Paper, TextField, Button } from "../../../components/elements";
 import CustomerModal from "../../Pages/Modals/Add-Customer-Modal/Customermodal";
 import UploadCustomerModal from "../../Pages/Modals/Upload-Customer-Modal/UploadCustomerModal";
+import { validateEmail } from "../../../commen/functions/emailValidation";
 import "./Addcustomer.css";
 import Select from "react-select";
 
@@ -112,6 +113,40 @@ const Addcustomer = () => {
         Contact: { value: "", errorMessage: "", errorStatus: false },
       });
     }
+
+    if (name === "Email" && value !== "") {
+      console.log("valuevalueemailvaluevalueemail", value);
+      if (value !== "") {
+        setAddCustomerState({
+          ...addCustomerState,
+          Email: {
+            value: value.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "Email" && value === "") {
+      setAddCustomerState({
+        ...addCustomerState,
+        Email: {
+          value: "",
+          errorMessage: "",
+          errorStatus: true,
+        },
+      });
+    }
+  };
+
+  //email validation handler
+  const handlerEmail = () => {
+    if (addCustomerState.Email.value !== "") {
+      if (validateEmail(addCustomerState.Email.value)) {
+        alert("Email verified");
+      } else {
+        alert("Email Not Verified");
+      }
+    }
   };
 
   // open modal on Plus icon
@@ -206,7 +241,13 @@ const Addcustomer = () => {
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
-                      <TextField labelClass="d-none" />
+                      <TextField
+                        name="Email"
+                        value={addCustomerState.Email.value}
+                        onChange={addCustomerValidationHandler}
+                        onBlur={handlerEmail}
+                        labelClass="d-none"
+                      />
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
                   </Row>

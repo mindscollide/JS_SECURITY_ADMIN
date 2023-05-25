@@ -6,6 +6,7 @@ import {
   Table,
   Modal,
 } from "../../../../components/elements";
+import { validateEmail } from "../../../../commen/functions/emailValidation";
 import Select from "react-select";
 import "./Bankuser-Modal.css";
 
@@ -90,6 +91,40 @@ const BankModal = ({ ModalTitle, bankModal, setBankModal, acceptHandler }) => {
         Contact: { value: "", errorMessage: "", errorStatus: false },
       });
     }
+
+    if (name === "Email" && value !== "") {
+      console.log("valuevalueemailvaluevalueemail", value);
+      if (value !== "") {
+        setAddBankModal({
+          ...addBankModal,
+          Email: {
+            value: value.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "Email" && value === "") {
+      setAddBankModal({
+        ...addBankModal,
+        Email: {
+          value: "",
+          errorMessage: "",
+          errorStatus: true,
+        },
+      });
+    }
+  };
+
+  //email validation handler
+  const handlerEmail = () => {
+    if (addBankModal.Email.value !== "") {
+      if (validateEmail(addBankModal.Email.value)) {
+        alert("Email verified");
+      } else {
+        alert("Email Not Verified");
+      }
+    }
   };
 
   // for close modal handler
@@ -144,7 +179,13 @@ const BankModal = ({ ModalTitle, bankModal, setBankModal, acceptHandler }) => {
                     </span>
                   </Col>
                   <Col lg={8} md={8} sm={12}>
-                    <TextField labelClass="d-none" />
+                    <TextField
+                      name="Email"
+                      value={addBankModal.Email.value}
+                      onChange={addBankModalValidateHandler}
+                      onBlur={handlerEmail}
+                      labelClass="d-none"
+                    />
                   </Col>
                 </Row>
 

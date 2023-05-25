@@ -76,13 +76,40 @@ const Bankuser = () => {
         Contact: { value: "", errorMessage: "", errorStatus: false },
       });
     }
-    // if(name === "Email" && value !== "") {
-    //     if(validateEmail(value)) {
 
-    //     }else {
+    if (name === "Email" && value !== "") {
+      console.log("valuevalueemailvaluevalueemail", value);
+      if (value !== "") {
+        setAddBankUser({
+          ...addBankUser,
+          Email: {
+            value: value.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "Email" && value === "") {
+      setAddBankUser({
+        ...addBankUser,
+        Email: {
+          value: "",
+          errorMessage: "",
+          errorStatus: true,
+        },
+      });
+    }
+  };
 
-    //     }
-    // }
+  //email validation handler
+  const handlerEmail = () => {
+    if (addBankUser.Email.value !== "") {
+      if (validateEmail(addBankUser.Email.value)) {
+        alert("Email verified");
+      } else {
+        alert("Email Not Verified");
+      }
+    }
   };
 
   //state for Bankmodal
@@ -183,7 +210,13 @@ const Bankuser = () => {
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
-                      <TextField name="Email" labelClass="d-none" />
+                      <TextField
+                        name="Email"
+                        value={addBankUser.Email.value}
+                        onChange={addBankUserValidateHandler}
+                        onBlur={handlerEmail}
+                        labelClass="d-none"
+                      />
                     </Col>
                     <Col lg={4} md={4} sm={12}></Col>
                   </Row>
