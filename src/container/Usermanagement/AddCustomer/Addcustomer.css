@@ -1,0 +1,89 @@
+.addCustomer-user-container {
+  align-items: top !important;
+  height: 350px !important;
+  width: 100% !important;
+  left: 260px !important;
+  justify-content: center !important;
+  position: fixed !important;
+}
+
+.addCustomer-paper {
+  border-radius: 4px;
+  padding: 3px 10px !important;
+  background-color: #ffffff !important;
+}
+
+.labels-add-Customer {
+  font-size: 12px !important;
+  color: #004990 !important;
+  font-weight: 500;
+}
+
+.addCustomer-aesterick-color {
+  color: #cf5b5b !important;
+}
+
+.span-field {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.field-clickable-icon {
+  height: 38px !important;
+  max-height: 38px;
+  width: 45px;
+  font-size: 20px !important;
+  background-color: #ccc !important;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+
+.Text-field-with-icon {
+  width: 360px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.add-customer-active-cancel {
+  display: flex;
+  justify-content: center !important;
+  gap: 5px !important;
+  margin-bottom: 10px;
+}
+
+.Active-btn-Add-Customer {
+  font-size: 14px;
+  margin-left: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 8px 18px !important;
+  border: none;
+  background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%);
+}
+
+.Active-btn-Add-Customer:hover {
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.Cancel-btn-Add-Customer {
+  font-size: 14px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 8px 18px !important;
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.Cancel-btn-Add-Customer:hover {
+  border: none;
+  background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%) !important;
+}

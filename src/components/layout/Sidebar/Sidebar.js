@@ -39,8 +39,20 @@ const Sidebar = () => {
     navigate("/Js/Admin/editUser");
   };
 
+  const navigateToBankUser = () => {
+    navigate("/Js/Admin/bankUser");
+  };
+
+  const navigateToCustomer = () => {
+    navigate("/Js/Admin/addCustomer");
+  };
+
   const navigateToReport = () => {
     navigate("/Js/Admin/userReport");
+  };
+
+  const navigateToCustomerList = () => {
+    navigate("/Js/Admin/customerList");
   };
 
   // when user refresh the page it's goes to the specific route
@@ -86,6 +98,28 @@ const Sidebar = () => {
                       onClick={navigateToCreateUser}
                     >
                       Create User
+                    </Menu.Item>
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="5"
+                      onClick={navigateToBankUser}
+                    >
+                      Add a Bank User
+                    </Menu.Item>
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="6"
+                      onClick={navigateToCustomer}
+                    >
+                      Add a Customer
+                    </Menu.Item>
+
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="7"
+                      onClick={navigateToCustomerList}
+                    >
+                      Customer List
                     </Menu.Item>
                   </SubMenu>
                   <SubMenu
