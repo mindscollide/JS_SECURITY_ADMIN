@@ -12,6 +12,9 @@ const Addcustomer = () => {
   // customer modal States
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
 
+  //state for error message show on add a customer page
+  const [errorShow, setErrorShow] = useState(false);
+
   // Upload Customer modal states
   const [customerUpload, setCustomerUpload] = useState(false);
 
@@ -149,6 +152,20 @@ const Addcustomer = () => {
     }
   };
 
+  // Activate Button Handler when user hit button then error messages shown on field
+  const activateCustomerHandler = () => {
+    if (
+      addCustomerState.Name.value !== "" &&
+      addCustomerState.companyName.value !== "" &&
+      addCustomerState.Email.value !== "" &&
+      addCustomerState.Contact.value !== ""
+    ) {
+      setErrorShow(false);
+    } else {
+      setErrorShow(true);
+    }
+  };
+
   // open modal on Plus icon
   const openModalPlusIcon = () => {
     setModalAddCustomer(true);
@@ -158,6 +175,7 @@ const Addcustomer = () => {
   const openUploadCustomerModal = () => {
     setCustomerUpload(true);
   };
+
   return (
     <Fragment>
       <Container className="addCustomer-user-container">
@@ -185,11 +203,24 @@ const Addcustomer = () => {
                         onChange={addCustomerValidationHandler}
                         labelClass="d-none"
                       />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addCustomerState.Name.value === ""
+                                ? "addCustomerErrorMessage"
+                                : "addCustomerErrorMessage_hidden"
+                            }
+                          >
+                            Name is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-1">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-Customer">
                         Company Name
@@ -212,11 +243,25 @@ const Addcustomer = () => {
                           <PlusLg />
                         </span>
                       </span>
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow &&
+                              addCustomerState.companyName.value === ""
+                                ? "addCustomerErrorMessage"
+                                : "addCustomerErrorMessage_hidden"
+                            }
+                          >
+                            Company Name is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-1">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-Customer">
                         Category
@@ -248,11 +293,24 @@ const Addcustomer = () => {
                         onBlur={handlerEmail}
                         labelClass="d-none"
                       />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addCustomerState.Email.value === ""
+                                ? "addCustomerErrorMessage"
+                                : "addCustomerErrorMessage_hidden"
+                            }
+                          >
+                            Email is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-1">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-Customer">
                         Contact
@@ -266,11 +324,25 @@ const Addcustomer = () => {
                         onChange={addCustomerValidationHandler}
                         labelClass="d-none"
                       />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addCustomerState.Contact.value === ""
+                                ? "addCustomerErrorMessage"
+                                : "addCustomerErrorMessage_hidden"
+                            }
+                          >
+                            Contact is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
+
                     <Col lg={5} md={5} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-1">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-Customer">
                         RFQ Timer
@@ -281,7 +353,11 @@ const Addcustomer = () => {
                       <Select
                         name="Category"
                         labelClass="d-none"
-                        isDisabled={true}
+                        isDisabled={
+                          true
+                            ? "isDisable-select-field"
+                            : "nonedisable-select-field"
+                        }
                       />
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
@@ -326,6 +402,7 @@ const Addcustomer = () => {
                         <Button
                           icon={<i className="icon-check icon-check-space"></i>}
                           text="Activate"
+                          onClick={activateCustomerHandler}
                           className="Active-btn-Add-Customer"
                         />
                         <Button

@@ -18,6 +18,9 @@ const CustomerModal = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
+  // state for addCompanyModal errorMessage handler
+  const [errorShow, setErrorShow] = useState(false);
+
   // add bank modal states
   const [addCustomerModal, setAddCustomerModal] = useState({
     Name: {
@@ -158,6 +161,21 @@ const CustomerModal = ({
     }
   };
 
+  //error show on input field when user hit Add btn
+  const addHandler = () => {
+    if (
+      addCustomerModal.Name.value !== "" &&
+      addCustomerModal.companyName.value !== "" &&
+      addCustomerModal.userRole !== 0 &&
+      addCustomerModal.Email.value !== "" &&
+      addCustomerModal.Contact.value
+    ) {
+      setErrorShow(false);
+    } else {
+      setErrorShow(true);
+    }
+  };
+
   // for close modal handler
   const customerCloseModal = () => {
     setCustomerModal(false);
@@ -200,10 +218,23 @@ const CustomerModal = ({
                       onChange={addCustomerModalValidateHandler}
                       labelClass="d-none"
                     />
+                    <Row>
+                      <Col className="d-flex justify-content-start">
+                        <p
+                          className={
+                            errorShow && addCustomerModal.Name.value === ""
+                              ? "customerModalErrorMessage"
+                              : "customerModalErrorMessage_hidden"
+                          }
+                        >
+                          Name is required
+                        </p>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
 
-                <Row className="mt-3">
+                <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
                       Company Name<span className="aesterick-color">*</span>
@@ -216,10 +247,24 @@ const CustomerModal = ({
                       onChange={addCustomerModalValidateHandler}
                       labelClass="d-none"
                     />
+                    <Row>
+                      <Col className="d-flex justify-content-start">
+                        <p
+                          className={
+                            errorShow &&
+                            addCustomerModal.companyName.value === ""
+                              ? "customerModalErrorMessage"
+                              : "customerModalErrorMessage_hidden"
+                          }
+                        >
+                          Company Name is required
+                        </p>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
 
-                <Row className="mt-3">
+                <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
                       Category<span className="aesterick-color">*</span>
@@ -233,10 +278,23 @@ const CustomerModal = ({
                       isSearchable={true}
                       labelClass="d-none"
                     />
+                    <Row>
+                      <Col className="d-flex justify-content-start">
+                        <p
+                          className={
+                            errorShow && addCustomerModal.userRole === 0
+                              ? "customerModalErrorMessage"
+                              : "customerModalErrorMessage_hidden"
+                          }
+                        >
+                          Category is required
+                        </p>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
 
-                <Row className="mt-3">
+                <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
                       Email<span className="aesterick-color">*</span>
@@ -250,10 +308,23 @@ const CustomerModal = ({
                       onBlur={handlerEmail}
                       labelClass="d-none"
                     />
+                    <Row>
+                      <Col className="d-flex justify-content-start">
+                        <p
+                          className={
+                            errorShow && addCustomerModal.Email.value === ""
+                              ? "customerModalErrorMessage"
+                              : "customerModalErrorMessage_hidden"
+                          }
+                        >
+                          Email is required
+                        </p>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
 
-                <Row className="mt-3">
+                <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
                       Contact<span className="aesterick-color">*</span>
@@ -266,6 +337,19 @@ const CustomerModal = ({
                       onChange={addCustomerModalValidateHandler}
                       labelClass="d-none"
                     />
+                    <Row>
+                      <Col className="d-flex justify-content-start">
+                        <p
+                          className={
+                            errorShow && addCustomerModal.Contact.value === ""
+                              ? "customerModalErrorMessage"
+                              : "customerModalErrorMessage_hidden"
+                          }
+                        >
+                          Contact is required
+                        </p>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
               </Fragment>
@@ -284,6 +368,7 @@ const CustomerModal = ({
                 <Button
                   text="Add"
                   className="AddUser-btn"
+                  onClick={addHandler}
                   icon={<i class="icon-users icon-bank-modal"></i>}
                 />
                 <Button

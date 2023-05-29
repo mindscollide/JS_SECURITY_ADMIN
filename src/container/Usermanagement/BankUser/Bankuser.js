@@ -1,14 +1,34 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { PlusLg } from "react-bootstrap-icons";
 import { Paper, TextField, Button } from "../../../components/elements";
+import { useSelector, useDispatch } from "react-redux";
 import BankModal from "../../Pages/Modals/Add-Banker-Modal/Bankuser-Modal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
 import UploadAddModal from "../../Pages/Modals/Upload-AddBank-Modal/UploadAddModal";
 import Select from "react-select";
 import "./Bankuser.css";
-
+import {
+  allUserRole,
+  allUserStatus,
+} from "../../../store/actions/Auth_Actions";
 const Bankuser = () => {
+  const { auth } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  //state for allUserRole List Dropdown
+  const [bankSelectRole, setBankSelectRole] = useState([]);
+  const [bankSelectRoleValue, setBankSelectRoleValue] = useState([]);
+
+  //state for error Message
+  const [errorShow, setErrorShow] = useState(false);
+
+  //state for Bankmodal
+  const [addBankModal, setAddBankModal] = useState(false);
+
+  //state for BankUploadModal
+  const [uplaodModal, setUploadModal] = useState(false);
+
   //state for Add Bank User
   const [addBankUser, setAddBankUser] = useState({
     Name: {
@@ -16,21 +36,26 @@ const Bankuser = () => {
       errorMessage: "",
       errorStatus: false,
     },
-
     Email: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
-
     Contact: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
-
-    userRole: 0,
+    roleID: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
   });
+
+  useEffect(() => {
+    dispatch(allUserRole());
+  }, []);
 
   //add bank user security admin validate handler
   const addBankUserValidateHandler = (e) => {
@@ -112,29 +137,18 @@ const Bankuser = () => {
     }
   };
 
-  //state for Bankmodal
-  const [addBankModal, setAddBankModal] = useState(false);
-
-  //state for BankUploadModal
-  const [uplaodModal, setUploadModal] = useState(false);
-
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  const options = [
-    { value: "Option 1", label: "Option 1" },
-    { value: "Option 2", label: "Option 2" },
-    { value: "Option 3", label: "Option 3" },
-    // ...
-  ];
-
-  const handleInputChange = (newValue) => {
-    // const inputValue = newValue.replace(/\W/g, "");
-    // return inputValue;
+  // onchange handler for edit select role
+  const bankSelectRoleHandler = async (selectedRole) => {
+    console.log(selectedRole, "selectroleselectroleselectrole");
+    setBankSelectRoleValue(selectedRole);
+    setAddBankUser({
+      ...addBankUser,
+      roleID: {
+        value: selectedRole,
+      },
+    });
   };
-
-  const handleOptionChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
-  };
+  console.log("selectRoleValue", bankSelectRoleValue, addBankUser);
 
   //OPEN BANK MODAL
   const openBankModal = () => {
@@ -145,6 +159,35 @@ const Bankuser = () => {
   const openUploadModal = () => {
     setUploadModal(true);
   };
+
+  // show error message When user hit activate btn
+  const activateHandler = () => {
+    if (
+      addBankUser.Name.value !== "" &&
+      addBankUser.roleID.value !== "" &&
+      addBankUser.Email.value !== "" &&
+      addBankUser.Contact.value !== ""
+    ) {
+      setErrorShow(false);
+    } else {
+      setErrorShow(true);
+    }
+  };
+
+  // for userRoles in select drop down
+  useEffect(() => {
+    if (Object.keys(auth.UserRoleList).length > 0) {
+      let tem = [];
+      auth.UserRoleList.map((data, index) => {
+        console.log(data, "datadatadatadata");
+        tem.push({
+          label: data.roleName,
+          value: data.roleID,
+        });
+      });
+      setBankSelectRole(tem);
+    }
+  }, [auth.UserRoleList]);
 
   return (
     <Fragment>
@@ -172,11 +215,25 @@ const Bankuser = () => {
                         onChange={addBankUserValidateHandler}
                         labelClass="d-none"
                       />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addBankUser.Name.value === ""
+                                ? "bankErrorMessage"
+                                : "bankErrorMessage_hidden"
+                            }
+                          >
+                            Name is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
+
                     <Col lg={4} md={4} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-2">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-bank">
                         User Role<span className="aesterick-color">*</span>
@@ -185,10 +242,10 @@ const Bankuser = () => {
                     <Col lg={5} md={5} sm={12}>
                       <span className="span-select">
                         <Select
-                          options={options}
-                          value={selectedOption}
-                          onInputChange={handleInputChange}
-                          onChange={handleOptionChange}
+                          name="roleID"
+                          options={bankSelectRole}
+                          value={bankSelectRoleValue}
+                          onChange={bankSelectRoleHandler}
                           isSearchable={true}
                           className="react-select-field"
                         />
@@ -199,11 +256,25 @@ const Bankuser = () => {
                           <PlusLg />
                         </span>
                       </span>
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addBankUser.roleID.value === ""
+                                ? "bankErrorMessage"
+                                : "bankErrorMessage_hidden"
+                            }
+                          >
+                            Role is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
+
                     <Col lg={4} md={4} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-2">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-bank">
                         Email<span className="aesterick-color">*</span>
@@ -217,11 +288,25 @@ const Bankuser = () => {
                         onBlur={handlerEmail}
                         labelClass="d-none"
                       />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addBankUser.Email.value === ""
+                                ? "bankErrorMessage"
+                                : "bankErrorMessage_hidden"
+                            }
+                          >
+                            Email is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
+
                     <Col lg={4} md={4} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-2">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-bank">
                         Contact<span className="aesterick-color">*</span>
@@ -234,11 +319,25 @@ const Bankuser = () => {
                         onChange={addBankUserValidateHandler}
                         labelClass="d-none"
                       />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addBankUser.Contact.value === ""
+                                ? "bankErrorMessage"
+                                : "bankErrorMessage_hidden"
+                            }
+                          >
+                            Contact is required
+                          </p>
+                        </Col>
+                      </Row>
                     </Col>
+
                     <Col lg={4} md={4} sm={12}></Col>
                   </Row>
 
-                  <Row className="mt-3">
+                  <Row className="mt-2">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-bank">
                         File Upload<span className="aesterick-color">*</span>
@@ -263,6 +362,7 @@ const Bankuser = () => {
                         <Button
                           icon={<i className="icon-check icon-check-space"></i>}
                           text="Activate"
+                          onClick={activateHandler}
                           className="Active-btn"
                         />
                         <Button

@@ -130,7 +130,7 @@ const Sidebar = () => {
                   >
                     <Menu.Item
                       className="menu-items-sidebar"
-                      key="5"
+                      key="8"
                       onClick={navigateToReport}
                     >
                       User Report

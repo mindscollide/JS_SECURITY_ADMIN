@@ -717,6 +717,28 @@ const getRejectUser = (rejectedData) => {
   };
 };
 
+// Create Add Bank User
+const createBankUserInit = () => {
+  return {
+    type: actions.CREATE_BANK_USER_INIT,
+  };
+};
+
+const createBankUserSuccess = (response, message) => {
+  return {
+    type: actions.CREATE_BANK_USER_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const createBankUserFail = (message) => {
+  return {
+    type: actions.CREATE_BANK_USER_FAIL,
+    message: message,
+  };
+};
+
 export {
   getNewUserRequestsCount,
   clearSecurityAdminMessage,

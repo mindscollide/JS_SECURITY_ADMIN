@@ -5,7 +5,7 @@ const initialState = {
   ResponseMessage: "",
   SaveResponse: "",
   Loading: false,
-  EditUserResponse: null,
+  EditUserResponse: "",
   ResponseMessageUserCount: "",
   RejectedUser: "",
   NewUserCountData: 0,
@@ -105,7 +105,7 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
-        EditUserResponse: null,
+        EditUserResponse: "",
         ResponseMessage: action.message,
       };
 

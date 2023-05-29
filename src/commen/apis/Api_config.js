@@ -42,6 +42,10 @@ const rejectUserRequestSecurityAdmin = {
   RequestMethod: "ServiceManager.RejectUserRequest",
 };
 
+const createAddBankUser = {
+  RequestMethod: "ServiceManager.CreateBankUser",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -53,5 +57,6 @@ export {
   getAllUserList,
   allUserRolesList,
   getAllUserStatus,
+  createAddBankUser,
   rejectUserRequestSecurityAdmin,
 };

@@ -3,7 +3,7 @@
   left: 150px;
   height: 370px !important;
   width: 500px !important;
-  background-color: #f2f3f9;
+  background-color: #f2f3f9 !important;
   border-radius: 8px !important;
   display: flex !important;
   /* align-items: center !important; */

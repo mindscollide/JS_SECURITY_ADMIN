@@ -9,7 +9,7 @@ const initialState = {
   UserRoleList: [],
   UserStatus: [],
   SessionExpeireResponseMessage: "",
-  roles: null,
+  roles: [],
   Token: "",
   Refresh: "",
 };
