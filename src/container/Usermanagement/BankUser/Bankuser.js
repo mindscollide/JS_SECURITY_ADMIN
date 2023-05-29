@@ -1,19 +1,21 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { PlusLg } from "react-bootstrap-icons";
-import { Paper, TextField, Button } from "../../../components/elements";
+import { Paper, TextField, Button, Loader } from "../../../components/elements";
 import { useSelector, useDispatch } from "react-redux";
 import BankModal from "../../Pages/Modals/Add-Banker-Modal/Bankuser-Modal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
 import UploadAddModal from "../../Pages/Modals/Upload-AddBank-Modal/UploadAddModal";
 import Select from "react-select";
 import "./Bankuser.css";
+import { createBank } from "../../../store/actions/Security_Admin";
 import {
   allUserRole,
   allUserStatus,
 } from "../../../store/actions/Auth_Actions";
+
 const Bankuser = () => {
-  const { auth } = useSelector((state) => state);
+  const { auth, securitReducer } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   //state for allUserRole List Dropdown
@@ -36,7 +38,7 @@ const Bankuser = () => {
       errorMessage: "",
       errorStatus: false,
     },
-    Email: {
+    email: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -102,22 +104,22 @@ const Bankuser = () => {
       });
     }
 
-    if (name === "Email" && value !== "") {
+    if (name === "email" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
       if (value !== "") {
         setAddBankUser({
           ...addBankUser,
-          Email: {
+          email: {
             value: value.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "Email" && value === "") {
+    } else if (name === "email" && value === "") {
       setAddBankUser({
         ...addBankUser,
-        Email: {
+        email: {
           value: "",
           errorMessage: "",
           errorStatus: true,
@@ -128,8 +130,8 @@ const Bankuser = () => {
 
   //email validation handler
   const handlerEmail = () => {
-    if (addBankUser.Email.value !== "") {
-      if (validateEmail(addBankUser.Email.value)) {
+    if (addBankUser.email.value !== "") {
+      if (validateEmail(addBankUser.email.value)) {
         alert("Email verified");
       } else {
         alert("Email Not Verified");
@@ -144,7 +146,7 @@ const Bankuser = () => {
     setAddBankUser({
       ...addBankUser,
       roleID: {
-        value: selectedRole,
+        value: selectedRole.value,
       },
     });
   };
@@ -165,10 +167,25 @@ const Bankuser = () => {
     if (
       addBankUser.Name.value !== "" &&
       addBankUser.roleID.value !== "" &&
-      addBankUser.Email.value !== "" &&
+      addBankUser.email.value !== "" &&
       addBankUser.Contact.value !== ""
     ) {
       setErrorShow(false);
+      let newData = {
+        User: {
+          FirstName: addBankUser.Name.value,
+          Lastname: addBankUser.Name.value,
+          Email: addBankUser.email.value,
+          ContactNumber: addBankUser.Contact.value,
+          LDAPAccount: `mindscollide.${addBankUser.Name.value.replace(
+            " ",
+            ""
+          )}`,
+          UserRoleID: addBankUser.roleID.value,
+        },
+        BankId: 1,
+      };
+      dispatch(createBank(newData));
     } else {
       setErrorShow(true);
     }
@@ -282,8 +299,8 @@ const Bankuser = () => {
                     </Col>
                     <Col lg={5} md={5} sm={12}>
                       <TextField
-                        name="Email"
-                        value={addBankUser.Email.value}
+                        name="email"
+                        value={addBankUser.email.value}
                         onChange={addBankUserValidateHandler}
                         onBlur={handlerEmail}
                         labelClass="d-none"
@@ -292,7 +309,7 @@ const Bankuser = () => {
                         <Col className="d-flex justify-content-start">
                           <p
                             className={
-                              errorShow && addBankUser.Email.value === ""
+                              errorShow && addBankUser.email.value === ""
                                 ? "bankErrorMessage"
                                 : "bankErrorMessage_hidden"
                             }
@@ -390,6 +407,7 @@ const Bankuser = () => {
           setUploadAddModal={setUploadModal}
         />
       ) : null}
+      {securitReducer.Loading ? <Loader /> : null}
     </Fragment>
   );
 };

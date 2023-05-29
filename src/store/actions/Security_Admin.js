@@ -5,6 +5,7 @@ import {
   editUserSecurityAdmin,
   getAllUserList,
   rejectUserRequestSecurityAdmin,
+  createAddBankUser,
 } from "../../commen/apis/Api_config";
 import * as actions from "../action_types";
 
@@ -739,6 +740,111 @@ const createBankUserFail = (message) => {
   };
 };
 
+const createBank = (newData) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+
+  return (dispatch) => {
+    dispatch(createBankUserInit());
+    let form = new FormData();
+    form.append("RequestMethod", createAddBankUser.RequestMethod);
+    form.append("RequestData", JSON.stringify(newData));
+    axios({
+      method: "post",
+      url: securityAdminApi,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken());
+          dispatch(createBank(newData));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_01".toLowerCase()
+                )
+            ) {
+              dispatch(
+                createBankUserSuccess(
+                  response.data.responseResult.responseMessage,
+                  "user created"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_02".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_03".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("Not a valid role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_04".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_05".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_06".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("User’s Email Already exsists"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_07".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("Not a Valid Role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_08".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("Exception Something Wrong"));
+            }
+          } else {
+            dispatch(createBankUserFail("Something went wrong"));
+          }
+        } else {
+          dispatch(createBankUserFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(createBankUserFail("Something went wrong"));
+      });
+  };
+};
+
 export {
   getNewUserRequestsCount,
   clearSecurityAdminMessage,
@@ -747,4 +853,5 @@ export {
   allUserList,
   editSecurityAdmin,
   getRejectUser,
+  createBank,
 };

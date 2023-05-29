@@ -4,6 +4,7 @@ const initialState = {
   Spinner: false,
   ResponseMessage: "",
   SaveResponse: "",
+  BankUserResponse: "",
   Loading: false,
   EditUserResponse: "",
   ResponseMessageUserCount: "",
@@ -153,6 +154,28 @@ const securitReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         RejectedUser: "",
+        ResponseMessage: action.message,
+      };
+
+    case actions.CREATE_BANK_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.CREATE_BANK_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        BankUserResponse: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.CREATE_BANK_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        BankUserResponse: "",
         ResponseMessage: action.message,
       };
 
