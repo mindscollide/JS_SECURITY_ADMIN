@@ -19,6 +19,11 @@ const CreateModal = ({
 }) => {
   // states for comment field
   const dispatch = useDispatch();
+
+  // Error bar states
+  const [errorShow, setErrorShow] = useState(false);
+
+  // state for comment field state
   const [commentField, setCommentField] = useState({
     commentType: {
       value: "",
@@ -53,15 +58,20 @@ const CreateModal = ({
     setModalReject(false);
   };
   const handleRejectUserRequest = () => {
-    console.log(rejectUserData, "rejectUserDatarejectUserDatarejectUserData");
-    let Data = {
-      UserRegistrationRequestID: rejectUserData.userRegistrationRequestID,
-      Comments: commentField.commentType.value,
-      UserID: rejectUserData.fK_UserID,
-    };
-    dispatch(getRejectUser(Data));
-    setModalReject(false);
-    console.log(Data, "rejectUserDatarejectUserDatarejectUserData");
+    if (commentField.commentType.value !== "") {
+      setErrorShow(false);
+      console.log(rejectUserData, "rejectUserDatarejectUserDatarejectUserData");
+      let Data = {
+        UserRegistrationRequestID: rejectUserData.userRegistrationRequestID,
+        Comments: commentField.commentType.value,
+        UserID: rejectUserData.fK_UserID,
+      };
+      dispatch(getRejectUser(navigate, Data));
+      setModalReject(false);
+      console.log(Data, "rejectUserDatarejectUserDatarejectUserData");
+    } else {
+      setErrorShow(true);
+    }
   };
   return (
     <Fragment>
@@ -120,6 +130,19 @@ const CreateModal = ({
                       className="textfield-Reject-modal"
                     />
                   </Col>
+                  <Row>
+                    <Col className="d-flex justify-content-start">
+                      <p
+                        className={
+                          errorShow && commentField.commentType.value === ""
+                            ? "errorMessage"
+                            : "errorMessage_hidden"
+                        }
+                      >
+                        Comment is required
+                      </p>
+                    </Col>
+                  </Row>
                 </Row>
               </Fragment>
             ) : null}

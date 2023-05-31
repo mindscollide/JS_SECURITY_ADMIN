@@ -5,6 +5,9 @@ import {
   editUserSecurityAdmin,
   getAllUserList,
   rejectUserRequestSecurityAdmin,
+  createAddBankUser,
+  createCorporateUserSecurityAdmin,
+  createNewCorporateSecurityAdmin,
 } from "../../commen/apis/Api_config";
 import * as actions from "../action_types";
 
@@ -34,7 +37,7 @@ const getNewUserRequestCountFail = (message) => {
   };
 };
 
-const getNewUserRequestsCount = (roleID) => {
+const getNewUserRequestsCount = (navigate, roleID) => {
   // let userID = localStorage.getItem("userID");
   // let email = localStorage.getItem("UserEmail");
   // let data = { UserID: JSON.parse(userID), Email: email };
@@ -58,8 +61,8 @@ const getNewUserRequestsCount = (roleID) => {
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
-          await dispatch(RefreshToken());
-          dispatch(getNewUserRequestsCount());
+          await dispatch(RefreshToken(navigate));
+          dispatch(getNewUserRequestsCount(navigate, roleID));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -140,7 +143,7 @@ const getUserRequestFail = (message) => {
 };
 
 //get new User Request
-const getNewUserRequest = (userRoleID) => {
+const getNewUserRequest = (navigate, userRoleID) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let Data = {
     RoleID: userRoleID,
@@ -160,8 +163,8 @@ const getNewUserRequest = (userRoleID) => {
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
-          await dispatch(RefreshToken());
-          dispatch(getNewUserRequest());
+          await dispatch(RefreshToken(navigate));
+          dispatch(getNewUserRequest(navigate, userRoleID));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -241,7 +244,7 @@ const saveUserFail = (message) => {
   };
 };
 
-const saveSecurityAdmin = (Data) => {
+const saveSecurityAdmin = (navigate, Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let roleID = JSON.parse(localStorage.getItem("roleID"));
   return (dispatch) => {
@@ -259,8 +262,8 @@ const saveSecurityAdmin = (Data) => {
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
-          await dispatch(RefreshToken());
-          dispatch(saveSecurityAdmin());
+          await dispatch(RefreshToken(navigate));
+          dispatch(saveSecurityAdmin(navigate));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -343,8 +346,8 @@ const saveSecurityAdmin = (Data) => {
                   "User Request Accepted and User Created Successfully"
                 )
               );
-              dispatch(getNewUserRequest(roleID));
-              dispatch(getNewUserRequestsCount(roleID));
+              dispatch(getNewUserRequest(navigate, roleID));
+              dispatch(getNewUserRequestsCount(navigate, roleID));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -413,7 +416,12 @@ const editUserFail = (message) => {
   };
 };
 
-const editSecurityAdmin = (Data, setEditModalSecurity, setUpdateModal) => {
+const editSecurityAdmin = (
+  navigate,
+  Data,
+  setEditModalSecurity,
+  setUpdateModal
+) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let data = {
     FirstName: "",
@@ -439,8 +447,8 @@ const editSecurityAdmin = (Data, setEditModalSecurity, setUpdateModal) => {
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
-          await dispatch(RefreshToken());
-          dispatch(editSecurityAdmin(Data));
+          await dispatch(RefreshToken(navigate));
+          dispatch(editSecurityAdmin(navigate, Data));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -458,7 +466,7 @@ const editSecurityAdmin = (Data, setEditModalSecurity, setUpdateModal) => {
               );
               setEditModalSecurity(false);
               setUpdateModal(false);
-              dispatch(allUserList(data));
+              dispatch(allUserList(navigate, data));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -537,7 +545,7 @@ const allUserFail = (message) => {
   };
 };
 
-const allUserList = (Data) => {
+const allUserList = (navigate, Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
   // console.log(token, "token");
 
@@ -556,8 +564,8 @@ const allUserList = (Data) => {
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
-          await dispatch(RefreshToken());
-          dispatch(allUserList(Data));
+          await dispatch(RefreshToken(navigate));
+          dispatch(allUserList(navigate, Data));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -634,7 +642,7 @@ const rejectedUserFail = (message) => {
   };
 };
 
-const getRejectUser = (rejectedData) => {
+const getRejectUser = (navigate, rejectedData) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let roleID = JSON.parse(localStorage.getItem("roleID"));
   return (dispatch) => {
@@ -652,8 +660,8 @@ const getRejectUser = (rejectedData) => {
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
-          await dispatch(RefreshToken());
-          dispatch(getRejectUser());
+          await dispatch(RefreshToken(navigate));
+          dispatch(getRejectUser(navigate));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -677,8 +685,8 @@ const getRejectUser = (rejectedData) => {
                   "user rejected"
                 )
               );
-              dispatch(getNewUserRequest(roleID));
-              dispatch(getNewUserRequestsCount(roleID));
+              dispatch(getNewUserRequest(navigate, roleID));
+              dispatch(getNewUserRequestsCount(navigate, roleID));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -717,6 +725,372 @@ const getRejectUser = (rejectedData) => {
   };
 };
 
+// Create Add Bank User
+const createBankUserInit = () => {
+  return {
+    type: actions.CREATE_BANK_USER_INIT,
+  };
+};
+
+const createBankUserSuccess = (response, message) => {
+  return {
+    type: actions.CREATE_BANK_USER_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const createBankUserFail = (message) => {
+  return {
+    type: actions.CREATE_BANK_USER_FAIL,
+    message: message,
+  };
+};
+
+const createBank = (navigate, newData) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+
+  return (dispatch) => {
+    dispatch(createBankUserInit());
+    let form = new FormData();
+    form.append("RequestMethod", createAddBankUser.RequestMethod);
+    form.append("RequestData", JSON.stringify(newData));
+    axios({
+      method: "post",
+      url: securityAdminApi,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(createBank(navigate, newData));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_01".toLowerCase()
+                )
+            ) {
+              dispatch(
+                createBankUserSuccess(
+                  response.data.responseResult.responseMessage,
+                  "user created"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_02".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_03".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("Not a valid role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_04".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_05".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_06".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("User’s Email Already exsists"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_07".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("Not a Valid Role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateBankUser_08".toLowerCase()
+                )
+            ) {
+              dispatch(createBankUserFail("Exception Something Wrong"));
+            }
+          } else {
+            dispatch(createBankUserFail("Something went wrong"));
+          }
+        } else {
+          dispatch(createBankUserFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(createBankUserFail("Something went wrong"));
+      });
+  };
+};
+
+//Create Corporate User in security admin
+const createCorporateInit = () => {
+  return {
+    type: actions.CREATE_CORPORATE_USER_INIT,
+  };
+};
+
+const createCorporateSuccess = (response, message) => {
+  return {
+    type: actions.CREATE_CORPORATE_USER_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const createCorporateFail = (message) => {
+  return {
+    type: actions.CREATE_CORPORATE_USER_FAIL,
+    message: message,
+  };
+};
+
+const corporateCreate = (navigate, corporateData) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(createCorporateInit());
+    let form = new FormData();
+    form.append(
+      "RequestMethod",
+      createCorporateUserSecurityAdmin.RequestMethod
+    );
+    form.append("RequestData", JSON.stringify(corporateData));
+    axios({
+      method: "post",
+      url: securityAdminApi,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(corporateCreate(navigate, corporateData));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_01".toLowerCase()
+                )
+            ) {
+              dispatch(
+                createCorporateSuccess(
+                  response.data.responseResult.responseMessage,
+                  "user created"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_02".toLowerCase()
+                )
+            ) {
+              dispatch(createCorporateFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_03".toLowerCase()
+                )
+            ) {
+              dispatch(createCorporateFail("Not a valid role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_04".toLowerCase()
+                )
+            ) {
+              dispatch(createCorporateFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_05".toLowerCase()
+                )
+            ) {
+              dispatch(createCorporateFail("user not created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_06".toLowerCase()
+                )
+            ) {
+              dispatch(createCorporateFail("User’s Email Already exsists"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_07".toLowerCase()
+                )
+            ) {
+              dispatch(createCorporateFail("Not a Valid Role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateCorporateUser_08".toLowerCase()
+                )
+            ) {
+              dispatch(createCorporateFail("Exception Something Wrong"));
+            }
+          } else {
+            dispatch(createCorporateFail("Something went wrong"));
+          }
+        } else {
+          dispatch(createCorporateFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(createCorporateFail("Something went wrong"));
+      });
+  };
+};
+
+//Create New Corporate in Security Admin
+const newCorporateInit = () => {
+  return {
+    type: actions.NEW_CORPORATE_CREATE_INIT,
+  };
+};
+
+const newCorporateSuccess = (response, message) => {
+  return {
+    type: actions.NEW_CORPORATE_CREATE_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const newCorporateFail = (message) => {
+  return {
+    type: actions.NEW_CORPORATE_CREATE_FAIL,
+    message: message,
+  };
+};
+
+const newCorporateCreated = (navigate) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(newCorporateInit());
+    let form = new FormData();
+    form.append("RequestMethod", createNewCorporateSecurityAdmin.RequestMethod);
+    form.append("RequestData", JSON.stringify());
+    axios({
+      method: "post",
+      url: securityAdminApi,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(newCorporateCreated(navigate));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateNewCorporate_01".toLowerCase()
+                )
+            ) {
+              dispatch(
+                newCorporateSuccess(
+                  response.data.responseResult.responseMessage,
+                  "Corporate Created"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateNewCorporate_02".toLowerCase()
+                )
+            ) {
+              dispatch(newCorporateFail("No Corporate Created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateNewCorporate_03".toLowerCase()
+                )
+            ) {
+              dispatch(newCorporateFail("No Corporate Created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateNewCorporate_04".toLowerCase()
+                )
+            ) {
+              dispatch(newCorporateFail("No Corporate Created"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateNewCorporate_05".toLowerCase()
+                )
+            ) {
+              dispatch(newCorporateFail("Not a Valid Role"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_CreateNewCorporate_06".toLowerCase()
+                )
+            ) {
+              dispatch(newCorporateFail("Exception Something is Wrong"));
+            }
+          } else {
+            dispatch(newCorporateFail("Something went wrong"));
+          }
+        } else {
+          dispatch(newCorporateFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(newCorporateFail("Something went wrong"));
+      });
+  };
+};
+
 export {
   getNewUserRequestsCount,
   clearSecurityAdminMessage,
@@ -725,4 +1099,7 @@ export {
   allUserList,
   editSecurityAdmin,
   getRejectUser,
+  createBank,
+  corporateCreate,
+  newCorporateCreated,
 };

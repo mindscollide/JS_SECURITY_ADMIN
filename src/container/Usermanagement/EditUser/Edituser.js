@@ -15,6 +15,7 @@ import {
   editSecurityAdmin,
   allUserList,
 } from "../../../store/actions/Security_Admin";
+import { validateEmail } from "../../../commen/functions/emailValidation";
 import {
   allUserRole,
   allUserStatus,
@@ -50,7 +51,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
 
   // state for edit user
   const [editUser, setEditUser] = useState({
-    loginID: {
+    email: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -105,22 +106,26 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name === "loginID" && value !== "") {
-      let valueCheck = value.replace(/[^\d]/g, "");
-      if (valueCheck !== "") {
+    if (name === "email" && value !== "") {
+      console.log("valuevalueemailvaluevalueemail", value);
+      if (value !== "") {
         setEditUser({
           ...editUser,
-          loginID: {
-            value: valueCheck.trimStart(),
+          email: {
+            value: value.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "loginID" && value === "") {
+    } else if (name === "email" && value === "") {
       setEditUser({
         ...editUser,
-        loginID: { value: "", errorMessage: "", errorStatus: false },
+        email: {
+          value: "",
+          errorMessage: "",
+          errorStatus: true,
+        },
       });
     }
 
@@ -163,6 +168,17 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
     }
   };
 
+  //email validation handler
+  const handlerEmail = () => {
+    if (editUser.email.value !== "") {
+      if (validateEmail(editUser.email.value)) {
+        alert("Email verified");
+      } else {
+        alert("Email Not Verified");
+      }
+    }
+  };
+
   // onchange handler for edit select role
   const selectRoleHandler = async (selectedRole) => {
     console.log(selectedRole, "selectroleselectroleselectrole");
@@ -193,7 +209,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
   const resetHandler = () => {
     setEditUser({
       ...editUser,
-      loginID: {
+      email: {
         value: "",
       },
 
@@ -225,7 +241,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       UserStatusID: 0,
       RequestingUserID: 0,
     };
-    dispatch(allUserList(data));
+    dispatch(allUserList(navigate, data));
   };
 
   // open Update modal
@@ -465,12 +481,12 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       FirstName: editUser.firstName.value,
       LastName: editUser.lastName.value,
       UserLDAPAccount: "",
-      Email: editUser.loginID.value,
+      Email: editUser.email.value,
       UserRoleID: editUser.roleID.value,
       UserStatusID: editUser.statusID.value,
       RequestingUserID: 0,
     };
-    dispatch(allUserList(data));
+    dispatch(allUserList(navigate, data));
   };
 
   // for userRoles in select drop down
@@ -527,7 +543,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       UserStatusID: 0,
       RequestingUserID: 0,
     };
-    dispatch(allUserList(data));
+    dispatch(allUserList(navigate, data));
   }, []);
 
   const UpdateBtnHandle = () => {
@@ -541,7 +557,9 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       UserStatusID: modalEditState.selectStatus.value,
       UserIdToEdit: modalEditState.userID,
     };
-    dispatch(editSecurityAdmin(Data, setEditModalSecurity, setUpdateModal));
+    dispatch(
+      editSecurityAdmin(navigate, Data, setEditModalSecurity, setUpdateModal)
+    );
   };
 
   //onChange for modaledit role state passing props in modal on bottom
@@ -588,11 +606,12 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
           <Row className="mt-3">
             <Col lg={12} md={12} sm={12} className="text-field-column">
               <TextField
-                name="loginID"
+                name="email"
                 className="text-fields-edituser"
                 placeholder="Login ID"
+                onBlur={handlerEmail}
                 maxLength={100}
-                value={editUser.loginID.value}
+                value={editUser.email.value}
                 onChange={editUserValidateHandler}
               />
               <TextField

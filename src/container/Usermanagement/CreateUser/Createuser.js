@@ -41,6 +41,11 @@ const Createuser = () => {
     setAcceptModal(true);
   };
 
+  useEffect(() => {
+    let roleID = JSON.parse(localStorage.getItem("roleID"));
+    dispatch(getNewUserRequest(navigate, roleID));
+  }, []);
+
   // open modal reject
   const openRejectModal = async (userRejectData) => {
     console.log("userRejectData", userRejectData);
@@ -63,14 +68,9 @@ const Createuser = () => {
       UserRegistrationRequestID: data.userRegistrationRequestID,
       UserID: data.fK_UserID,
     };
-    dispatch(saveSecurityAdmin(Data));
+    dispatch(saveSecurityAdmin(navigate, Data));
     setAcceptModal(false);
   };
-
-  useEffect(() => {
-    let roleID = JSON.parse(localStorage.getItem("roleID"));
-    dispatch(getNewUserRequest(roleID));
-  }, []);
 
   // column of create user
   const columnsCreate = [

@@ -4,8 +4,10 @@ const initialState = {
   Spinner: false,
   ResponseMessage: "",
   SaveResponse: "",
+  BankUserResponse: "",
+  CreateCorporateResponse: "",
   Loading: false,
-  EditUserResponse: null,
+  EditUserResponse: "",
   ResponseMessageUserCount: "",
   RejectedUser: "",
   NewUserCountData: 0,
@@ -105,7 +107,7 @@ const securitReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
-        EditUserResponse: null,
+        EditUserResponse: "",
         ResponseMessage: action.message,
       };
 
@@ -153,6 +155,49 @@ const securitReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         RejectedUser: "",
+        ResponseMessage: action.message,
+      };
+
+    case actions.CREATE_BANK_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.CREATE_BANK_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        BankUserResponse: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.CREATE_BANK_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        BankUserResponse: "",
+        ResponseMessage: action.message,
+      };
+
+    case actions.CREATE_CORPORATE_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.CREATE_CORPORATE_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        createCorporateFail: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.CREATE_CORPORATE_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
         ResponseMessage: action.message,
       };
 

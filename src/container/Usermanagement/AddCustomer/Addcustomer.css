@@ -13,6 +13,14 @@
   background-color: #ffffff !important;
 }
 
+.Customer-add-user-label {
+  display: flex;
+  justify-content: start;
+  font-size: 18px;
+  color: #004990;
+  font-weight: 600;
+}
+
 .labels-add-Customer {
   font-size: 12px !important;
   color: #004990 !important;
@@ -33,7 +41,8 @@
   max-height: 38px;
   width: 45px;
   font-size: 20px !important;
-  background-color: #ccc !important;
+  background-color: #e9ecef !important;
+  border: 1px solid #ced4da !important;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -86,4 +95,36 @@
 .Cancel-btn-Add-Customer:hover {
   border: none;
   background: linear-gradient(to bottom, #5b67cd 0%, #2a38af 100%) !important;
+}
+
+.addCustomerErrorMessage {
+  height: 0px;
+  margin-top: 0px !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  color: #f16b6b;
+  visibility: visible !important;
+}
+
+.addCustomerErrorMessage_hidden {
+  visibility: hidden;
+  margin: 0;
+  height: 16px;
+  color: #f16b6b !important;
+}
+
+.react-select-customer-field {
+  width: 100% !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.react-select-customer-field .css-13cymwt-control {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.disabled-fields {
+  background-color: #dbdde7 !important;
+  cursor: default;
 }

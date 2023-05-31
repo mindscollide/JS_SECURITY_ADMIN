@@ -8,8 +8,9 @@ const initialState = {
   isSignUp: false,
   UserRoleList: [],
   UserStatus: [],
+  allCorporates: [],
   SessionExpeireResponseMessage: "",
-  roles: null,
+  roles: [],
   Token: "",
   Refresh: "",
 };
@@ -97,6 +98,28 @@ const authReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         UserStatus: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_CORPORATES_CATEGORY_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_CORPORATES_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        allCorporates: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_CORPORATES_CATEGORY_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        allCorporates: [],
         ResponseMessage: action.message,
       };
 
