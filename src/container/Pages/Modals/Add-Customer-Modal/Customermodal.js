@@ -1,12 +1,21 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import {
   TextField,
   Button,
   Table,
   Modal,
+  Loader,
 } from "../../../../components/elements";
 import { validateEmail } from "../../../../commen/functions/emailValidation";
+import {
+  getAllCorporateCategoryApi,
+  getAllNature,
+  getAssetType,
+} from "../../../../store/actions/Auth_Actions";
+import { useNavigate } from "react-router-dom";
+import { newCorporateCreated } from "../../../../store/actions/Security_Admin";
+import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import "./Customermodal.css";
 
@@ -16,32 +25,56 @@ const CustomerModal = ({
   setCustomerModal,
   acceptHandler,
 }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { auth } = useSelector((state) => state);
+  console.log(auth, "authauth");
   const [selectedOption, setSelectedOption] = useState(null);
+
+  // select for category in customer add modal
+  const [customerModalSelect, setCustomerModalSelect] = useState([]);
+  const [customerModalSelectValue, setCustomerModalSelectValue] = useState([]);
+
+  // select for nature of client in customer add modal
+  const [natureBusinessSelect, setNatureBusinessSelect] = useState([]);
+  const [natureBusinessSelectValue, setNatureBusinessSelectValue] = useState(
+    []
+  );
+
+  // select for get all assets type in customer add modal
+  const [assetTypeSelect, setAssetTypeSelect] = useState([]);
+  const [assetTypeSelectValue, setAssetTypeSelectValue] = useState([]);
 
   // state for addCompanyModal errorMessage handler
   const [errorShow, setErrorShow] = useState(false);
 
   // add bank modal states
   const [addCustomerModal, setAddCustomerModal] = useState({
-    Name: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-
     companyName: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
 
-    Email: {
+    corporateCategoryID: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
 
-    Contact: {
+    rfqTimer: {
+      value: 0,
+      errorMessage: "",
+      errorStatus: false,
+    },
+
+    pK_NatureOfBusiness: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+
+    assetTypes: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -50,15 +83,49 @@ const CustomerModal = ({
     userRole: 0,
   });
 
-  const options = [
-    { value: "Option 1", label: "Option 1" },
-    { value: "Option 2", label: "Option 2" },
-    { value: "Option 3", label: "Option 3" },
-    // ...
-  ];
+  // dispatch getAll corporate select dropdown Api
+  useEffect(() => {
+    dispatch(getAllCorporateCategoryApi(navigate));
+    dispatch(getAllNature(navigate));
+    dispatch(getAssetType(navigate));
+  }, []);
 
-  const handleOptionChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
+  //onchange handler of category select handler
+  const selectNewCorporateChangeHandler = async (selectedOption) => {
+    console.log(selectedOption, "selectedOptionselectedOption");
+    setCustomerModalSelectValue(selectedOption);
+    setAddCustomerModal({
+      ...addCustomerModal,
+      corporateCategoryID: {
+        value: selectedOption.value,
+        label: selectedOption.label,
+      },
+    });
+  };
+
+  //onchange handler for nature of business
+  const selectNatureOfBusinessHandler = async (selectedNature) => {
+    console.log("checkcheck", selectedNature);
+    setNatureBusinessSelectValue(selectedNature);
+    setAddCustomerModal({
+      ...addCustomerModal,
+      pK_NatureOfBusiness: {
+        value: selectedNature.value,
+        label: selectedNature.label,
+      },
+    });
+  };
+
+  //onChange handler for get all assets type
+  const selectAllAssetsTypeHandler = async (selectedAssets) => {
+    setAssetTypeSelectValue(selectedAssets);
+    setAddCustomerModal({
+      ...addCustomerModal,
+      assetTypes: {
+        value: selectedAssets.value,
+        label: selectedAssets.label,
+      },
+    });
   };
 
   //add bank user security admin validate handler
@@ -66,23 +133,23 @@ const CustomerModal = ({
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name === "Name" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+    if (name === "rfqTimer" && value !== "") {
+      let valueCheck = value.replace(/[^\d]/g, "");
       console.log("valueCheckvalueCheck", valueCheck);
       if (valueCheck !== "") {
         setAddCustomerModal({
           ...addCustomerModal,
-          Name: {
+          rfqTimer: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "Name" && value === "") {
+    } else if (name === "rfqTimer" && value === "") {
       setAddCustomerModal({
         ...addCustomerModal,
-        Name: { value: "", errorMessage: "", errorStatus: false },
+        rfqTimer: { value: "", errorMessage: "", errorStatus: false },
       });
     }
 
@@ -106,46 +173,23 @@ const CustomerModal = ({
       });
     }
 
-    if (name === "Contact" && value !== "") {
-      let valueCheck = value.replace(/[^\d]/g, "");
+    if (name === "natureClient" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
       console.log("valueCheckvalueCheck", valueCheck);
       if (valueCheck !== "") {
         setAddCustomerModal({
           ...addCustomerModal,
-          Contact: {
+          natureClient: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "Contact" && value === "") {
+    } else if (name === "natureClient" && value === "") {
       setAddCustomerModal({
         ...addCustomerModal,
-        Contact: { value: "", errorMessage: "", errorStatus: false },
-      });
-    }
-
-    if (name === "Email" && value !== "") {
-      console.log("valuevalueemailvaluevalueemail", value);
-      if (value !== "") {
-        setAddCustomerModal({
-          ...addCustomerModal,
-          Email: {
-            value: value.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "Email" && value === "") {
-      setAddCustomerModal({
-        ...addCustomerModal,
-        Email: {
-          value: "",
-          errorMessage: "",
-          errorStatus: true,
-        },
+        natureClient: { value: "", errorMessage: "", errorStatus: false },
       });
     }
   };
@@ -161,20 +205,94 @@ const CustomerModal = ({
     }
   };
 
+  // reset Handler for addComapny modal
+  const handleAddCancelReset = () => {
+    setAddCustomerModal({
+      ...addCustomerModal,
+      companyName: {
+        value: "",
+      },
+
+      rfqTimer: {
+        value: "",
+      },
+    });
+    setAssetTypeSelectValue([]);
+    setNatureBusinessSelectValue([]);
+    setCustomerModalSelectValue([]);
+  };
+
   //error show on input field when user hit Add btn
   const addHandler = () => {
+    let userId = localStorage.getItem("userID");
     if (
-      addCustomerModal.Name.value !== "" &&
+      addCustomerModal.rfqTimer.value !== "" &&
       addCustomerModal.companyName.value !== "" &&
-      addCustomerModal.userRole !== 0 &&
-      addCustomerModal.Email.value !== "" &&
-      addCustomerModal.Contact.value
+      addCustomerModal.pK_NatureOfBusiness.value !== "" &&
+      addCustomerModal.corporateCategoryID.value !== "" &&
+      addCustomerModal.assetTypes.value !== ""
     ) {
       setErrorShow(false);
+      let corporateNew = {
+        FK_AssetTypeID: addCustomerModal.assetTypes.value,
+        RFQExpiryTimer: JSON.parse(addCustomerModal.rfqTimer.value),
+        CorporateName: addCustomerModal.companyName.value,
+        NatureOfBusinessID: addCustomerModal.pK_NatureOfBusiness.value,
+        FK_CorporateCategoryID: addCustomerModal.corporateCategoryID.value,
+        BankId: 1,
+        UserID: JSON.parse(userId),
+      };
+      console.log(corporateNew);
+      dispatch(newCorporateCreated(navigate, corporateNew));
     } else {
       setErrorShow(true);
     }
   };
+
+  // for category Corporate modal in select drop down
+  useEffect(() => {
+    if (Object.keys(auth.getAllCategoryCorporate).length > 0) {
+      let tem = [];
+      auth.getAllCategoryCorporate.map((data, index) => {
+        console.log(data, "datadatadatadatassssss");
+        tem.push({
+          label: data.category,
+          value: data.corporateCategoryID,
+        });
+      });
+      setCustomerModalSelect(tem);
+    }
+  }, [auth.getAllCategoryCorporate]);
+
+  // for nature of business modal in select drop down
+  useEffect(() => {
+    if (Object.keys(auth.natureOfBusiness).length > 0) {
+      let tem = [];
+      auth.natureOfBusiness.map((data, index) => {
+        console.log(data, "datadatadatadatassssss");
+        tem.push({
+          label: data.name,
+          value: data.pK_NatureOfBusiness,
+        });
+      });
+      setNatureBusinessSelect(tem);
+    }
+  }, [auth.natureOfBusiness]);
+
+  // for all Asset type modal in select drop down
+  useEffect(() => {
+    if (Object.keys(auth.allAssetType).length > 0) {
+      let tem = [];
+      auth.allAssetType.map((data, index) => {
+        console.log(data, "datadatadatadatassssss");
+        tem.push({
+          label: data.assetName,
+          value: data.assetTypeID,
+        });
+      });
+      setAssetTypeSelect(tem);
+    }
+  }, [auth.allAssetType]);
 
   // for close modal handler
   const customerCloseModal = () => {
@@ -194,7 +312,7 @@ const CustomerModal = ({
           <Fragment>
             {customerModal ? (
               <Fragment>
-                <Row className="mt-2">
+                <Row className="mt-1">
                   <Col
                     lg={12}
                     md={12}
@@ -205,36 +323,7 @@ const CustomerModal = ({
                   </Col>
                 </Row>
 
-                <Row>
-                  <Col lg={4} md={4} sm={12}>
-                    <span className="labels-bank-modal">
-                      Name<span className="aesterick-color">*</span>
-                    </span>
-                  </Col>
-                  <Col lg={8} md={8} sm={12}>
-                    <TextField
-                      name="Name"
-                      value={addCustomerModal.Name.value}
-                      onChange={addCustomerModalValidateHandler}
-                      labelClass="d-none"
-                    />
-                    <Row>
-                      <Col className="d-flex justify-content-start">
-                        <p
-                          className={
-                            errorShow && addCustomerModal.Name.value === ""
-                              ? "customerModalErrorMessage"
-                              : "customerModalErrorMessage_hidden"
-                          }
-                        >
-                          Name is required
-                        </p>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-
-                <Row className="mt-1">
+                <Row className="mt-0">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
                       Company Name<span className="aesterick-color">*</span>
@@ -272,9 +361,10 @@ const CustomerModal = ({
                   </Col>
                   <Col lg={8} md={8} sm={12}>
                     <Select
-                      options={options}
-                      value={selectedOption}
-                      onChange={handleOptionChange}
+                      name="corporateCategoryID"
+                      options={customerModalSelect}
+                      value={customerModalSelectValue}
+                      onChange={selectNewCorporateChangeHandler}
                       isSearchable={true}
                       labelClass="d-none"
                     />
@@ -282,7 +372,8 @@ const CustomerModal = ({
                       <Col className="d-flex justify-content-start">
                         <p
                           className={
-                            errorShow && addCustomerModal.userRole === 0
+                            errorShow &&
+                            addCustomerModal.corporateCategoryID.value === ""
                               ? "customerModalErrorMessage"
                               : "customerModalErrorMessage_hidden"
                           }
@@ -297,27 +388,26 @@ const CustomerModal = ({
                 <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
-                      Email<span className="aesterick-color">*</span>
+                      RFQ Timer<span className="aesterick-color">*</span>
                     </span>
                   </Col>
                   <Col lg={8} md={8} sm={12}>
                     <TextField
-                      name="Email"
-                      value={addCustomerModal.Email.value}
+                      name="rfqTimer"
+                      value={addCustomerModal.rfqTimer.value}
                       onChange={addCustomerModalValidateHandler}
-                      onBlur={handlerEmail}
                       labelClass="d-none"
                     />
                     <Row>
                       <Col className="d-flex justify-content-start">
                         <p
                           className={
-                            errorShow && addCustomerModal.Email.value === ""
+                            errorShow && addCustomerModal.rfqTimer.value === ""
                               ? "customerModalErrorMessage"
                               : "customerModalErrorMessage_hidden"
                           }
                         >
-                          Email is required
+                          rfqTimer is required
                         </p>
                       </Col>
                     </Row>
@@ -327,26 +417,61 @@ const CustomerModal = ({
                 <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
-                      Contact<span className="aesterick-color">*</span>
+                      Asset Type<span className="aesterick-color">*</span>
                     </span>
                   </Col>
                   <Col lg={8} md={8} sm={12}>
-                    <TextField
-                      name="Contact"
-                      value={addCustomerModal.Contact.value}
-                      onChange={addCustomerModalValidateHandler}
+                    <Select
+                      name="assetTypes"
+                      options={assetTypeSelect}
+                      value={assetTypeSelectValue}
+                      onChange={selectAllAssetsTypeHandler}
+                      isSearchable={true}
                       labelClass="d-none"
                     />
                     <Row>
                       <Col className="d-flex justify-content-start">
                         <p
                           className={
-                            errorShow && addCustomerModal.Contact.value === ""
+                            errorShow &&
+                            addCustomerModal.assetTypes.value === ""
                               ? "customerModalErrorMessage"
                               : "customerModalErrorMessage_hidden"
                           }
                         >
-                          Contact is required
+                          Asset Type is required
+                        </p>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+
+                <Row className="mt-1">
+                  <Col lg={4} md={4} sm={12}>
+                    <span className="labels-bank-modal">
+                      Nature of Client<span className="aesterick-color">*</span>
+                    </span>
+                  </Col>
+                  <Col lg={8} md={8} sm={12}>
+                    <Select
+                      name="pK_NatureOfBusiness"
+                      options={natureBusinessSelect}
+                      value={natureBusinessSelectValue}
+                      onChange={selectNatureOfBusinessHandler}
+                      isSearchable={true}
+                      labelClass="d-none"
+                    />
+                    <Row>
+                      <Col className="d-flex justify-content-start">
+                        <p
+                          className={
+                            errorShow &&
+                            addCustomerModal.pK_NatureOfBusiness.value === ""
+                              ? "customerModalErrorMessage"
+                              : "customerModalErrorMessage_hidden"
+                          }
+                        >
+                          Category is required
                         </p>
                       </Col>
                     </Row>
@@ -373,7 +498,8 @@ const CustomerModal = ({
                 />
                 <Button
                   text="Cancel"
-                  className="Cancel-btn "
+                  className="Cancel-btn"
+                  onClick={handleAddCancelReset}
                   icon={<i class="icon-close icon-bank-modal"></i>}
                 />
               </Col>
@@ -381,6 +507,7 @@ const CustomerModal = ({
           </Fragment>
         }
       />
+      {auth.Loading ? <Loader /> : null}
     </Fragment>
   );
 };
