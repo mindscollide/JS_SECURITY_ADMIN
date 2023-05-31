@@ -26,6 +26,11 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // For Api hit on refresh page
+  useEffect(() => {
+    dispatch(getNewUserRequestsCount(navigate, roleID));
+  }, []);
+
   useEffect(() => {
     if (
       securitReducer.NewUserCountData !== undefined &&
@@ -40,10 +45,6 @@ const Header = () => {
     navigate("/JS/Admin/createUser");
   };
 
-  // For Api hit on refresh page
-  useEffect(() => {
-    dispatch(getNewUserRequestsCount(roleID));
-  }, []);
   return (
     <>
       <Container fluid className="container-header">

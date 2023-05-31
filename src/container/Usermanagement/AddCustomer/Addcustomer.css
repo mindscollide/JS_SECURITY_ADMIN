@@ -13,6 +13,14 @@
   background-color: #ffffff !important;
 }
 
+.Customer-add-user-label {
+  display: flex;
+  justify-content: start;
+  font-size: 18px;
+  color: #004990;
+  font-weight: 600;
+}
+
 .labels-add-Customer {
   font-size: 12px !important;
   color: #004990 !important;
@@ -103,4 +111,20 @@
   margin: 0;
   height: 16px;
   color: #f16b6b !important;
+}
+
+.react-select-customer-field {
+  width: 100% !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.react-select-customer-field .css-13cymwt-control {
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.disabled-fields {
+  background-color: #dbdde7 !important;
+  cursor: default;
 }

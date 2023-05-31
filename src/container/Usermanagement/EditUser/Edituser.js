@@ -241,7 +241,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       UserStatusID: 0,
       RequestingUserID: 0,
     };
-    dispatch(allUserList(data));
+    dispatch(allUserList(navigate, data));
   };
 
   // open Update modal
@@ -486,7 +486,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       UserStatusID: editUser.statusID.value,
       RequestingUserID: 0,
     };
-    dispatch(allUserList(data));
+    dispatch(allUserList(navigate, data));
   };
 
   // for userRoles in select drop down
@@ -543,7 +543,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       UserStatusID: 0,
       RequestingUserID: 0,
     };
-    dispatch(allUserList(data));
+    dispatch(allUserList(navigate, data));
   }, []);
 
   const UpdateBtnHandle = () => {
@@ -557,7 +557,9 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       UserStatusID: modalEditState.selectStatus.value,
       UserIdToEdit: modalEditState.userID,
     };
-    dispatch(editSecurityAdmin(Data, setEditModalSecurity, setUpdateModal));
+    dispatch(
+      editSecurityAdmin(navigate, Data, setEditModalSecurity, setUpdateModal)
+    );
   };
 
   //onChange for modaledit role state passing props in modal on bottom

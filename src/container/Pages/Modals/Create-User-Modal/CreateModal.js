@@ -66,7 +66,7 @@ const CreateModal = ({
         Comments: commentField.commentType.value,
         UserID: rejectUserData.fK_UserID,
       };
-      dispatch(getRejectUser(Data));
+      dispatch(getRejectUser(navigate, Data));
       setModalReject(false);
       console.log(Data, "rejectUserDatarejectUserDatarejectUserData");
     } else {

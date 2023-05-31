@@ -3,6 +3,7 @@ import { Container, Row, Col, Form } from "react-bootstrap";
 import { PlusLg } from "react-bootstrap-icons";
 import { Paper, TextField, Button, Loader } from "../../../components/elements";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import BankModal from "../../Pages/Modals/Add-Banker-Modal/Bankuser-Modal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
 import UploadAddModal from "../../Pages/Modals/Upload-AddBank-Modal/UploadAddModal";
@@ -17,6 +18,7 @@ import {
 const Bankuser = () => {
   const { auth, securitReducer } = useSelector((state) => state);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //state for allUserRole List Dropdown
   const [bankSelectRole, setBankSelectRole] = useState([]);
@@ -162,6 +164,28 @@ const Bankuser = () => {
     setUploadModal(true);
   };
 
+  const createResetHandler = () => {
+    setAddBankUser({
+      ...addBankUser,
+      Name: {
+        value: "",
+      },
+
+      roleID: {
+        value: "",
+      },
+
+      email: {
+        value: "",
+      },
+
+      Contact: {
+        value: "",
+      },
+    });
+    setBankSelectRoleValue([]);
+  };
+
   // show error message When user hit activate btn
   const activateHandler = () => {
     if (
@@ -185,7 +209,7 @@ const Bankuser = () => {
         },
         BankId: 1,
       };
-      dispatch(createBank(newData));
+      dispatch(createBank(navigate, newData));
     } else {
       setErrorShow(true);
     }
@@ -385,6 +409,7 @@ const Bankuser = () => {
                         <Button
                           icon={<i className="icon-close icon-check-space"></i>}
                           text="Cancel"
+                          onClick={createResetHandler}
                           className="Cancel-btn"
                         />
                       </Col>

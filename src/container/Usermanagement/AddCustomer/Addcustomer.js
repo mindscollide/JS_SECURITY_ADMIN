@@ -1,14 +1,22 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { PlusLg } from "react-bootstrap-icons";
-import { Paper, TextField, Button } from "../../../components/elements";
+import { Paper, TextField, Button, Loader } from "../../../components/elements";
+import { useSelector, useDispatch } from "react-redux";
 import CustomerModal from "../../Pages/Modals/Add-Customer-Modal/Customermodal";
 import UploadCustomerModal from "../../Pages/Modals/Upload-Customer-Modal/UploadCustomerModal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
+import { useNavigate } from "react-router-dom";
+import { getAllCorporate } from "../../../store/actions/Auth_Actions";
+import { corporateCreate } from "../../../store/actions/Security_Admin";
 import "./Addcustomer.css";
 import Select from "react-select";
 
 const Addcustomer = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { auth, securitReducer } = useSelector((state) => state);
+  console.log(auth, "auth");
   // customer modal States
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
 
@@ -18,6 +26,17 @@ const Addcustomer = () => {
   // Upload Customer modal states
   const [customerUpload, setCustomerUpload] = useState(false);
 
+  // states For Corporates Category select Dropdown
+  const [selectCorporate, setSelectCorporate] = useState([]);
+  const [selectCorporateValue, setSelectCorporateValue] = useState([]);
+  const [corporateValue, setCorporateValue] = useState({
+    label: "",
+    value: 0,
+  });
+  console.log(
+    corporateValue,
+    "corporateValuecorporateValuecorporateValuecorporateValue"
+  );
   const [addCustomerState, setAddCustomerState] = useState({
     Name: {
       value: "",
@@ -25,13 +44,13 @@ const Addcustomer = () => {
       errorStatus: false,
     },
 
-    companyName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
+    // companyName: {
+    //   value: "",
+    //   errorMessage: "",
+    //   errorStatus: false,
+    // },
 
-    Email: {
+    email: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -49,9 +68,28 @@ const Addcustomer = () => {
       errorStatus: false,
     },
 
-    Category: 0,
-    rfqTimer: 0,
+    Category: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+
+    corporateID: {
+      value: "",
+      label: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    rfqTimer: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
   });
+
+  useEffect(() => {
+    dispatch(getAllCorporate(navigate));
+  }, []);
 
   const addCustomerValidationHandler = (e) => {
     let name = e.target.name;
@@ -117,22 +155,22 @@ const Addcustomer = () => {
       });
     }
 
-    if (name === "Email" && value !== "") {
+    if (name === "email" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
       if (value !== "") {
         setAddCustomerState({
           ...addCustomerState,
-          Email: {
+          email: {
             value: value.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "Email" && value === "") {
+    } else if (name === "email" && value === "") {
       setAddCustomerState({
         ...addCustomerState,
-        Email: {
+        email: {
           value: "",
           errorMessage: "",
           errorStatus: true,
@@ -143,24 +181,112 @@ const Addcustomer = () => {
 
   //email validation handler
   const handlerEmail = () => {
-    if (addCustomerState.Email.value !== "") {
-      if (validateEmail(addCustomerState.Email.value)) {
-        alert("Email verified");
+    if (addCustomerState.email.value !== "") {
+      if (validateEmail(addCustomerState.email.value)) {
+        alert("email verified");
       } else {
-        alert("Email Not Verified");
+        alert("email Not Verified");
       }
     }
   };
+
+  //reset handler for Activate in Add a Customer user
+  const customerActivateResetHandler = () => {
+    setAddCustomerState({
+      ...addCustomerState,
+      Name: {
+        value: "",
+      },
+
+      email: {
+        value: "",
+      },
+
+      Contact: {
+        value: "",
+      },
+      natureClient: {
+        value: "",
+      },
+      Category: {
+        value: "",
+      },
+
+      rfqTimer: {
+        value: "",
+      },
+    });
+    setSelectCorporateValue([]);
+  };
+
+  // onchange handler for corporate category select
+  const selectCorporateHandler = async (selectedCategory) => {
+    console.log(selectedCategory, "selectedCategoryselectedCategory");
+    setSelectCorporateValue(selectedCategory);
+    setCorporateValue({
+      label: selectedCategory.label,
+      value: selectedCategory.value,
+    });
+    setAddCustomerState({
+      ...addCustomerState,
+      corporateID: {
+        value: selectedCategory.value,
+        label: selectedCategory.label,
+      },
+    });
+    let coperateDataApi = auth.allCorporates;
+    try {
+      if (
+        Object.keys(coperateDataApi).length > 0 &&
+        coperateDataApi !== undefined &&
+        coperateDataApi !== null
+      ) {
+        coperateDataApi.map((corporateData, index) => {
+          if (selectedCategory.label === corporateData.corporateName) {
+            setAddCustomerState({
+              ...addCustomerState,
+              natureClient: {
+                value: corporateData.natureofBusiness.name,
+              },
+              Category: {
+                value: corporateData.corporateCategory.category,
+              },
+              rfqTimer: {
+                value: corporateData.rfqTimers[0].rfqTimer,
+              },
+            });
+          }
+        });
+      }
+    } catch {
+      console.log("error on selecting company Name");
+    }
+  };
+  console.log("selectRoleValue", selectCorporateValue, addCustomerState);
 
   // Activate Button Handler when user hit button then error messages shown on field
   const activateCustomerHandler = () => {
     if (
       addCustomerState.Name.value !== "" &&
-      addCustomerState.companyName.value !== "" &&
-      addCustomerState.Email.value !== "" &&
+      // addCustomerState.companyName.value !== "" &&
+      // addCustomerState.corporateID.value !== "" &&
+      addCustomerState.email.value !== "" &&
       addCustomerState.Contact.value !== ""
     ) {
       setErrorShow(false);
+      let corporateData = {
+        User: {
+          FirstName: addCustomerState.Name.value,
+          Lastname: addCustomerState.Name.value,
+          Email: addCustomerState.email.value,
+          ContactNumber: addCustomerState.Contact.value,
+          LDAPAccount: "mindscollide.aun",
+          UserRoleID: 2,
+        },
+        CorporateID: corporateValue.value,
+      };
+      console.log(corporateData);
+      dispatch(corporateCreate(navigate, corporateData));
     } else {
       setErrorShow(true);
     }
@@ -176,6 +302,21 @@ const Addcustomer = () => {
     setCustomerUpload(true);
   };
 
+  // for category Corporate in select drop down
+  useEffect(() => {
+    if (Object.keys(auth.allCorporates).length > 0) {
+      let tem = [];
+      auth.allCorporates.map((data, index) => {
+        console.log(data, "datadatadatadatassssss");
+        tem.push({
+          label: data.corporateName,
+          value: data.corporateID,
+        });
+      });
+      setSelectCorporate(tem);
+    }
+  }, [auth.allCorporates]);
+
   return (
     <Fragment>
       <Container className="addCustomer-user-container">
@@ -183,10 +324,12 @@ const Addcustomer = () => {
           <Col>
             <Row>
               <Col lg={12} md={12} sm={12}>
-                <span>Add a Bank user</span>
+                <span className="Customer-add-user-label">
+                  Add a Customer user
+                </span>
               </Col>
             </Row>
-            <Row className="mt-3">
+            <Row className="mt-2">
               <Col lg={11} md={11} sm={12}>
                 <Paper className="addCustomer-paper">
                   <Row className="mt-3">
@@ -229,12 +372,12 @@ const Addcustomer = () => {
                     </Col>
                     <Col lg={5} md={5} sm={12}>
                       <span className="span-field">
-                        <TextField
-                          name="companyName"
-                          value={addCustomerState.companyName.value}
-                          onChange={addCustomerValidationHandler}
-                          labelClass="d-none"
-                          className="Text-field-with-icon"
+                        <Select
+                          name="corporateID"
+                          options={selectCorporate}
+                          onChange={selectCorporateHandler}
+                          value={selectCorporateValue}
+                          className="react-select-customer-field"
                         />
                         <span
                           className="field-clickable-icon"
@@ -248,7 +391,7 @@ const Addcustomer = () => {
                           <p
                             className={
                               errorShow &&
-                              addCustomerState.companyName.value === ""
+                              addCustomerState.corporateID.value === ""
                                 ? "addCustomerErrorMessage"
                                 : "addCustomerErrorMessage_hidden"
                             }
@@ -269,10 +412,12 @@ const Addcustomer = () => {
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
-                      <Select
+                      <TextField
                         name="Category"
+                        value={addCustomerState.Category.value}
                         labelClass="d-none"
-                        isDisabled={true}
+                        disable={true}
+                        className="disabled-fields"
                       />
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
@@ -287,8 +432,8 @@ const Addcustomer = () => {
                     </Col>
                     <Col lg={5} md={5} sm={12}>
                       <TextField
-                        name="Email"
-                        value={addCustomerState.Email.value}
+                        name="email"
+                        value={addCustomerState.email.value}
                         onChange={addCustomerValidationHandler}
                         onBlur={handlerEmail}
                         labelClass="d-none"
@@ -297,7 +442,7 @@ const Addcustomer = () => {
                         <Col className="d-flex justify-content-start">
                           <p
                             className={
-                              errorShow && addCustomerState.Email.value === ""
+                              errorShow && addCustomerState.email.value === ""
                                 ? "addCustomerErrorMessage"
                                 : "addCustomerErrorMessage_hidden"
                             }
@@ -350,14 +495,11 @@ const Addcustomer = () => {
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
-                      <Select
-                        name="Category"
+                      <TextField
                         labelClass="d-none"
-                        isDisabled={
-                          true
-                            ? "isDisable-select-field"
-                            : "nonedisable-select-field"
-                        }
+                        value={addCustomerState.rfqTimer.value}
+                        disable={true}
+                        className="disabled-fields"
                       />
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
@@ -371,7 +513,12 @@ const Addcustomer = () => {
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
-                      <TextField disable={true} labelClass="d-none" />
+                      <TextField
+                        disable={true}
+                        labelClass="d-none"
+                        className="disabled-fields"
+                        value={addCustomerState.natureClient.value}
+                      />
                     </Col>
                     <Col lg={5} md={5} sm={12}></Col>
                   </Row>
@@ -408,6 +555,7 @@ const Addcustomer = () => {
                         <Button
                           icon={<i className="icon-close icon-check-space"></i>}
                           text="Cancel"
+                          onClick={customerActivateResetHandler}
                           className="Cancel-btn-Add-Customer"
                         />
                       </Col>
@@ -437,6 +585,8 @@ const Addcustomer = () => {
           />
         </>
       ) : null}
+
+      {securitReducer.Loading ? <Loader /> : null}
     </Fragment>
   );
 };

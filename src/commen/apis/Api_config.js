@@ -46,6 +46,21 @@ const createAddBankUser = {
   RequestMethod: "ServiceManager.CreateBankUser",
 };
 
+//get all corporate in company dropdown
+const getAllCorporates = {
+  RequestMethod: "ServiceManager.GetAllCorporates",
+};
+
+// create Corporate User in securityAdmin
+const createCorporateUserSecurityAdmin = {
+  RequestMethod: "ServiceManager.CreateCorporateUser",
+};
+
+// create New Corporate in Security Admin
+const createNewCorporateSecurityAdmin = {
+  RequestMethod: "ServiceManager.CreateNewCorporate",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -59,4 +74,7 @@ export {
   getAllUserStatus,
   createAddBankUser,
   rejectUserRequestSecurityAdmin,
+  getAllCorporates,
+  createCorporateUserSecurityAdmin,
+  createNewCorporateSecurityAdmin,
 };

@@ -63,7 +63,7 @@ const SecurityLogin = () => {
       securityCredentials.UserName !== "" &&
       securityCredentials.Password !== ""
     ) {
-      dispatch(logIn(securityCredentials, navigate));
+      dispatch(logIn(navigate, securityCredentials));
     } else {
       setOpen({
         ...open,

@@ -6,9 +6,11 @@ import {
   authenticationSignUp,
   allUserRolesList,
   getAllUserStatus,
+  getAllCorporates,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
 import { getNewUserRequestsCount, allUserList } from "./Security_Admin";
+import { message } from "antd";
 
 const logininit = () => {
   return {
@@ -69,7 +71,7 @@ const signOut = (navigate, message) => {
 };
 
 //signIn API Function
-const logIn = (UserData, navigate) => {
+const logIn = (navigate, UserData) => {
   console.log("logincredentials", UserData);
   var min = 10000;
   var max = 90000;
@@ -147,7 +149,10 @@ const logIn = (UserData, navigate) => {
                   JSON.stringify(response.data.responseResult.refreshToken)
                 );
                 dispatch(
-                  getNewUserRequestsCount(response.data.responseResult.roleID)
+                  getNewUserRequestsCount(
+                    navigate,
+                    response.data.responseResult.roleID
+                  )
                 );
                 navigate("/JS/Admin");
                 dispatch(
@@ -156,7 +161,7 @@ const logIn = (UserData, navigate) => {
                     "Successfully Logged In"
                   )
                 );
-                dispatch(allUserList(dataForEditUser));
+                dispatch(allUserList(navigate, dataForEditUser));
               } else {
                 dispatch(
                   loginfail("This user is not authorise for this domain")
@@ -416,9 +421,9 @@ const refreshtokenSuccess = (response, message) => {
   };
 };
 // API
-const RefreshToken = (props, navigate) => {
+const RefreshToken = (navigate) => {
   let Token = JSON.parse(localStorage.getItem("token"));
-  let RefreshToken = JSON.parse(localStorage.getItem("RefreshToken"));
+  let RefreshToken = JSON.parse(localStorage.getItem("refreshToken"));
   console.log("RefreshToken", Token, RefreshToken);
   let Data = {
     Token: Token,
@@ -619,4 +624,98 @@ const allUserStatus = () => {
   };
 };
 
-export { logIn, signUp, signOut, RefreshToken, allUserRole, allUserStatus };
+// For Get All Corporate Api
+const categoryInit = () => {
+  return {
+    type: actions.GET_ALL_CORPORATES_CATEGORY_INIT,
+  };
+};
+
+const categorySuccess = (response, message) => {
+  return {
+    type: actions.GET_ALL_CORPORATES_CATEGORY_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const categoryFail = (message) => {
+  return {
+    type: actions.GET_ALL_CORPORATES_CATEGORY_FAIL,
+    message: message,
+  };
+};
+
+const getAllCorporate = (navigate) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(categoryInit());
+    let form = new FormData();
+    form.append("RequestMethod", getAllCorporates.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("CorporateCategoryCorporateCategory", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(getAllCorporate(navigate));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_GetAllCorporates_01".toLowerCase()
+            ) {
+              console.log("UserRoleListUserRoleList", response);
+              dispatch(
+                categorySuccess(
+                  response.data.responseResult.corporates,
+                  "Record found"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllCorporates_02".toLowerCase()
+                )
+            ) {
+              dispatch(categoryFail("No Record Found"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllCorporates_03".toLowerCase()
+                )
+            ) {
+              dispatch(categoryFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(categoryFail("Something went wrong"));
+            console.log("There's no corporates category");
+          }
+        } else {
+          dispatch(categoryFail("Something went wrong"));
+          console.log("There's no corporates category");
+        }
+      })
+      .catch((response) => {
+        dispatch(categoryFail("something went wrong"));
+      });
+  };
+};
+
+export {
+  logIn,
+  signUp,
+  signOut,
+  RefreshToken,
+  allUserRole,
+  allUserStatus,
+  getAllCorporate,
+};
