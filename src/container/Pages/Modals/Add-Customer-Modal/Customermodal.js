@@ -63,7 +63,7 @@ const CustomerModal = ({
     },
 
     rfqTimer: {
-      value: 0,
+      value: "",
       errorMessage: "",
       errorStatus: false,
     },

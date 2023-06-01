@@ -268,7 +268,7 @@ const Addcustomer = () => {
   const activateCustomerHandler = () => {
     if (
       addCustomerState.Name.value !== "" &&
-      addCustomerState.companyName.value !== "" &&
+      // addCustomerState.companyName.value !== "" &&
       // addCustomerState.corporateID.value !== "" &&
       addCustomerState.email.value !== "" &&
       addCustomerState.Contact.value !== ""
