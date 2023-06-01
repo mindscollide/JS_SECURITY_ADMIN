@@ -304,6 +304,7 @@ const Addcustomer = () => {
 
   // for category Corporate in select drop down
   useEffect(() => {
+    console.log(auth, "authauthauth");
     if (Object.keys(auth.allCorporates).length > 0) {
       let tem = [];
       auth.allCorporates.map((data, index) => {
@@ -375,8 +376,8 @@ const Addcustomer = () => {
                         <Select
                           name="corporateID"
                           options={selectCorporate}
-                          onChange={selectCorporateHandler}
                           value={selectCorporateValue}
+                          onChange={selectCorporateHandler}
                           className="react-select-customer-field"
                         />
                         <span
