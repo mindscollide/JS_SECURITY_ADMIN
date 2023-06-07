@@ -21,10 +21,10 @@ import {
   allUserStatus,
 } from "../../../store/actions/Auth_Actions";
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
-import "./Edituser.css";
+import "./AllUsers.css";
 import { ColumnsGap } from "react-bootstrap-icons";
 
-const Edituser = ({ show, setShow, ModalTitle }) => {
+const Alluser = ({ show, setShow, ModalTitle }) => {
   const { auth, securitReducer } = useSelector((state) => state);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -598,7 +598,7 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
       <Container className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
-            <label className="edit-user-label">Edit User</label>
+            <label className="edit-user-label">All User</label>
           </Col>
         </Row>
 
@@ -750,4 +750,4 @@ const Edituser = ({ show, setShow, ModalTitle }) => {
   );
 };
 
-export default Edituser;
+export default Alluser;

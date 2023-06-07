@@ -40,12 +40,28 @@ const Bankuser = () => {
       errorMessage: "",
       errorStatus: false,
     },
+    firstName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    lastName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+
     email: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
     Contact: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    ldapAccount: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -66,23 +82,63 @@ const Bankuser = () => {
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name === "Name" && value !== "") {
+    if (name === "firstName" && value !== "") {
       let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
       console.log("valueCheckvalueCheck", valueCheck);
       if (valueCheck !== "") {
         setAddBankUser({
           ...addBankUser,
-          Name: {
+          firstName: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "Name" && value === "") {
+    } else if (name === "firstName" && value === "") {
       setAddBankUser({
         ...addBankUser,
-        Name: { value: "", errorMessage: "", errorStatus: false },
+        firstName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "lastName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      console.log("valueCheckvalueCheck", valueCheck);
+      if (valueCheck !== "") {
+        setAddBankUser({
+          ...addBankUser,
+          lastName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "lastName" && value === "") {
+      setAddBankUser({
+        ...addBankUser,
+        lastName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "ldapAccount" && value !== "") {
+      // let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      // console.log("valueCheckvalueCheck", valueCheck);
+      if (value !== "") {
+        setAddBankUser({
+          ...addBankUser,
+          ldapAccount: {
+            value: value.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "ldapAccount" && value === "") {
+      setAddBankUser({
+        ...addBankUser,
+        ldapAccount: { value: "", errorMessage: "", errorStatus: false },
       });
     }
 
@@ -167,11 +223,19 @@ const Bankuser = () => {
   const createResetHandler = () => {
     setAddBankUser({
       ...addBankUser,
-      Name: {
+      firstName: {
+        value: "",
+      },
+
+      lastName: {
         value: "",
       },
 
       roleID: {
+        value: "",
+      },
+
+      ldapAccount: {
         value: "",
       },
 
@@ -189,22 +253,25 @@ const Bankuser = () => {
   // show error message When user hit activate btn
   const activateHandler = () => {
     if (
-      addBankUser.Name.value !== "" &&
+      addBankUser.firstName.value !== "" &&
+      addBankUser.lastName.value !== "" &&
       addBankUser.roleID.value !== "" &&
+      addBankUser.ldapAccount.value !== "" &&
       addBankUser.email.value !== "" &&
       addBankUser.Contact.value !== ""
     ) {
       setErrorShow(false);
       let newData = {
         User: {
-          FirstName: addBankUser.Name.value,
-          Lastname: addBankUser.Name.value,
+          FirstName: addBankUser.firstName.value,
+          Lastname: addBankUser.lastName.value,
           Email: addBankUser.email.value,
           ContactNumber: addBankUser.Contact.value,
-          LDAPAccount: `mindscollide.${addBankUser.Name.value.replace(
-            " ",
-            ""
-          )}`,
+          LDAPAccount: addBankUser.ldapAccount.value,
+          // LDAPAccount: `mindscollide.${addBankUser.Name.value.replace(
+          //   " ",
+          //   ""
+          // )}`,
           UserRoleID: addBankUser.roleID.value,
         },
         BankId: 1,
@@ -246,13 +313,13 @@ const Bankuser = () => {
                   <Row className="mt-3">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-bank">
-                        Name<span className="aesterick-color">*</span>
+                        First Name<span className="aesterick-color">*</span>
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
                       <TextField
-                        name={"Name"}
-                        value={addBankUser.Name.value}
+                        name={"firstName"}
+                        value={addBankUser.firstName.value}
                         onChange={addBankUserValidateHandler}
                         labelClass="d-none"
                       />
@@ -260,12 +327,74 @@ const Bankuser = () => {
                         <Col className="d-flex justify-content-start">
                           <p
                             className={
-                              errorShow && addBankUser.Name.value === ""
+                              errorShow && addBankUser.firstName.value === ""
                                 ? "bankErrorMessage"
                                 : "bankErrorMessage_hidden"
                             }
                           >
-                            Name is required
+                            First Name is required
+                          </p>
+                        </Col>
+                      </Row>
+                    </Col>
+
+                    <Col lg={4} md={4} sm={12}></Col>
+                  </Row>
+
+                  <Row className="mt-3">
+                    <Col lg={2} md={2} sm={12}>
+                      <span className="labels-add-bank">
+                        Last Name<span className="aesterick-color">*</span>
+                      </span>
+                    </Col>
+                    <Col lg={5} md={5} sm={12}>
+                      <TextField
+                        name={"lastName"}
+                        value={addBankUser.lastName.value}
+                        onChange={addBankUserValidateHandler}
+                        labelClass="d-none"
+                      />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addBankUser.lastName.value === ""
+                                ? "bankErrorMessage"
+                                : "bankErrorMessage_hidden"
+                            }
+                          >
+                            Last Name is required
+                          </p>
+                        </Col>
+                      </Row>
+                    </Col>
+
+                    <Col lg={4} md={4} sm={12}></Col>
+                  </Row>
+
+                  <Row className="mt-3">
+                    <Col lg={2} md={2} sm={12}>
+                      <span className="labels-add-bank">
+                        LDAP Account<span className="aesterick-color">*</span>
+                      </span>
+                    </Col>
+                    <Col lg={5} md={5} sm={12}>
+                      <TextField
+                        name={"ldapAccount"}
+                        value={addBankUser.ldapAccount.value}
+                        onChange={addBankUserValidateHandler}
+                        labelClass="d-none"
+                      />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow && addBankUser.ldapAccount.value === ""
+                                ? "bankErrorMessage"
+                                : "bankErrorMessage_hidden"
+                            }
+                          >
+                            LDAP Account is required
                           </p>
                         </Col>
                       </Row>
@@ -281,22 +410,22 @@ const Bankuser = () => {
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
-                      <span className="span-select">
-                        <Select
-                          name="roleID"
-                          options={bankSelectRole}
-                          value={bankSelectRoleValue}
-                          onChange={bankSelectRoleHandler}
-                          isSearchable={true}
-                          className="react-select-field"
-                        />
-                        <span
+                      {/* <span className="span-select"> */}
+                      <Select
+                        name="roleID"
+                        options={bankSelectRole}
+                        value={bankSelectRoleValue}
+                        onChange={bankSelectRoleHandler}
+                        isSearchable={true}
+                        className="react-select-field"
+                      />
+                      {/* <span
                           className="select-clickable-icon"
                           onClick={openBankModal}
                         >
                           <PlusLg />
-                        </span>
-                      </span>
+                        </span> */}
+                      {/* </span> */}
                       <Row>
                         <Col className="d-flex justify-content-start">
                           <p
@@ -384,14 +513,25 @@ const Bankuser = () => {
                         File Upload<span className="aesterick-color">*</span>
                       </span>
                     </Col>
-                    <Col lg={5} md={5} sm={12}>
+                    <Col lg={2} md={2} sm={12}>
                       <Button
                         text="Upload your contacts"
                         className="upload-btn"
                         onClick={openUploadModal}
                       />
                     </Col>
-                    <Col lg={4} md={4} sm={12}></Col>
+                    <Col
+                      lg={3}
+                      md={3}
+                      sm={12}
+                      className="d-flex justify-content-end"
+                    >
+                      <Button
+                        text={"download excel format"}
+                        className="upload-btn"
+                      />
+                    </Col>
+                    <Col lg={7} md={7} sm={12} />
 
                     <Row className="mt-3">
                       <Col

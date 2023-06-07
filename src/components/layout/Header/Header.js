@@ -40,9 +40,9 @@ const Header = () => {
     }
   }, [securitReducer.NewUserCountData]);
 
-  // navigate to create User page
+  // navigate to pending Request page
   const navigateToCreatePage = () => {
-    navigate("/JS/Admin/createUser");
+    navigate("/JS/Admin/pendingRequest");
   };
 
   return (

@@ -127,6 +127,8 @@ const logIn = (navigate, UserData) => {
                   "userID",
                   response.data.responseResult.userID
                 );
+                localStorage.setItem("defaultOpenKey ", "sub1");
+                localStorage.setItem("defaultSelectedKey", "3");
                 localStorage.setItem(
                   "firstName",
                   response.data.responseResult.firstName
