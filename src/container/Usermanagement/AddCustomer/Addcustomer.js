@@ -38,7 +38,12 @@ const Addcustomer = () => {
     "corporateValuecorporateValuecorporateValuecorporateValue"
   );
   const [addCustomerState, setAddCustomerState] = useState({
-    Name: {
+    firstName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    lastName: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -95,23 +100,43 @@ const Addcustomer = () => {
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name === "Name" && value !== "") {
+    if (name === "firstName" && value !== "") {
       let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
       console.log("valueCheckvalueCheck", valueCheck);
       if (valueCheck !== "") {
         setAddCustomerState({
           ...addCustomerState,
-          Name: {
+          firstName: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "Name" && value === "") {
+    } else if (name === "firstName" && value === "") {
       setAddCustomerState({
         ...addCustomerState,
-        Name: { value: "", errorMessage: "", errorStatus: false },
+        firstName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "lastName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      console.log("valueCheckvalueCheck", valueCheck);
+      if (valueCheck !== "") {
+        setAddCustomerState({
+          ...addCustomerState,
+          lastName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "lastName" && value === "") {
+      setAddCustomerState({
+        ...addCustomerState,
+        lastName: { value: "", errorMessage: "", errorStatus: false },
       });
     }
 
@@ -194,7 +219,11 @@ const Addcustomer = () => {
   const customerActivateResetHandler = () => {
     setAddCustomerState({
       ...addCustomerState,
-      Name: {
+      firstName: {
+        value: "",
+      },
+
+      lastName: {
         value: "",
       },
 
@@ -267,7 +296,8 @@ const Addcustomer = () => {
   // Activate Button Handler when user hit button then error messages shown on field
   const activateCustomerHandler = () => {
     if (
-      addCustomerState.Name.value !== "" &&
+      addCustomerState.firstName.value !== "" &&
+      addCustomerState.lastName.value !== "" &&
       // addCustomerState.companyName.value !== "" &&
       // addCustomerState.corporateID.value !== "" &&
       addCustomerState.email.value !== "" &&
@@ -276,8 +306,8 @@ const Addcustomer = () => {
       setErrorShow(false);
       let corporateData = {
         User: {
-          FirstName: addCustomerState.Name.value,
-          Lastname: addCustomerState.Name.value,
+          FirstName: addCustomerState.firstName.value,
+          Lastname: addCustomerState.lastName.value,
           Email: addCustomerState.email.value,
           ContactNumber: addCustomerState.Contact.value,
           LDAPAccount: "mindscollide.aun",
@@ -330,20 +360,20 @@ const Addcustomer = () => {
                 </span>
               </Col>
             </Row>
-            <Row className="mt-2">
+            <Row>
               <Col lg={11} md={11} sm={12}>
                 <Paper className="addCustomer-paper">
                   <Row className="mt-3">
                     <Col lg={2} md={2} sm={12}>
                       <span className="labels-add-Customer">
-                        Name
+                        First Name
                         <span className="addCustomer-aesterick-color">*</span>
                       </span>
                     </Col>
                     <Col lg={5} md={5} sm={12}>
                       <TextField
-                        name="Name"
-                        value={addCustomerState.Name.value}
+                        name="firstName"
+                        value={addCustomerState.firstName.value}
                         onChange={addCustomerValidationHandler}
                         labelClass="d-none"
                       />
@@ -351,12 +381,45 @@ const Addcustomer = () => {
                         <Col className="d-flex justify-content-start">
                           <p
                             className={
-                              errorShow && addCustomerState.Name.value === ""
+                              errorShow &&
+                              addCustomerState.firstName.value === ""
                                 ? "addCustomerErrorMessage"
                                 : "addCustomerErrorMessage_hidden"
                             }
                           >
-                            Name is required
+                            First Name is required
+                          </p>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col lg={5} md={5} sm={12}></Col>
+                  </Row>
+
+                  <Row className="mt-1">
+                    <Col lg={2} md={2} sm={12}>
+                      <span className="labels-add-Customer">
+                        Last Name
+                        <span className="addCustomer-aesterick-color">*</span>
+                      </span>
+                    </Col>
+                    <Col lg={5} md={5} sm={12}>
+                      <TextField
+                        name="lastName"
+                        value={addCustomerState.lastName.value}
+                        onChange={addCustomerValidationHandler}
+                        labelClass="d-none"
+                      />
+                      <Row>
+                        <Col className="d-flex justify-content-start">
+                          <p
+                            className={
+                              errorShow &&
+                              addCustomerState.lastName.value === ""
+                                ? "addCustomerErrorMessage"
+                                : "addCustomerErrorMessage_hidden"
+                            }
+                          >
+                            Last Name is required
                           </p>
                         </Col>
                       </Row>
@@ -531,14 +594,25 @@ const Addcustomer = () => {
                         <span className="addCustomer-aesterick-color">*</span>
                       </span>
                     </Col>
-                    <Col lg={5} md={5} sm={12}>
+                    <Col lg={2} md={2} sm={12}>
                       <Button
-                        className="upload-btn"
+                        className="upload-btn-addCustomer"
                         onClick={openUploadCustomerModal}
                         text="Upload your contacts"
                       />
                     </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
+                    <Col
+                      lg={3}
+                      md={3}
+                      sm={12}
+                      className="d-flex justify-content-end"
+                    >
+                      <Button
+                        className="upload-btn-addCustomer"
+                        text="Download Excel Format"
+                      />
+                    </Col>
+                    <Col lg={7} md={7} sm={12} />
 
                     <Row className="mt-3">
                       <Col

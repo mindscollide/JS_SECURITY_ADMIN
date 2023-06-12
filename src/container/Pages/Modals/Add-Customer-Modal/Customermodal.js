@@ -74,11 +74,11 @@ const CustomerModal = ({
       errorStatus: false,
     },
 
-    assetTypes: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
+    // assetTypes: {
+    //   value: "",
+    //   errorMessage: "",
+    //   errorStatus: false,
+    // },
 
     userRole: 0,
   });
@@ -87,7 +87,7 @@ const CustomerModal = ({
   useEffect(() => {
     dispatch(getAllCorporateCategoryApi(navigate));
     dispatch(getAllNature(navigate));
-    dispatch(getAssetType(navigate));
+    // dispatch(getAssetType(navigate));
   }, []);
 
   //onchange handler of category select handler
@@ -229,12 +229,12 @@ const CustomerModal = ({
       addCustomerModal.rfqTimer.value !== "" &&
       addCustomerModal.companyName.value !== "" &&
       addCustomerModal.pK_NatureOfBusiness.value !== "" &&
-      addCustomerModal.corporateCategoryID.value !== "" &&
-      addCustomerModal.assetTypes.value !== ""
+      addCustomerModal.corporateCategoryID.value !== ""
+      // addCustomerModal.assetTypes.value !== ""
     ) {
       setErrorShow(false);
       let corporateNew = {
-        FK_AssetTypeID: addCustomerModal.assetTypes.value,
+        FK_AssetTypeID: 1,
         RFQExpiryTimer: JSON.parse(addCustomerModal.rfqTimer.value),
         CorporateName: addCustomerModal.companyName.value,
         NatureOfBusinessID: addCustomerModal.pK_NatureOfBusiness.value,
@@ -243,7 +243,7 @@ const CustomerModal = ({
         UserID: JSON.parse(userId),
       };
       console.log(corporateNew);
-      dispatch(newCorporateCreated(navigate, corporateNew));
+      dispatch(newCorporateCreated(navigate, corporateNew, setCustomerModal));
     } else {
       setErrorShow(true);
     }
@@ -280,19 +280,19 @@ const CustomerModal = ({
   }, [auth.natureOfBusiness]);
 
   // for all Asset type modal in select drop down
-  useEffect(() => {
-    if (Object.keys(auth.allAssetType).length > 0) {
-      let tem = [];
-      auth.allAssetType.map((data, index) => {
-        console.log(data, "datadatadatadatassssss");
-        tem.push({
-          label: data.assetName,
-          value: data.assetTypeID,
-        });
-      });
-      setAssetTypeSelect(tem);
-    }
-  }, [auth.allAssetType]);
+  // useEffect(() => {
+  //   if (Object.keys(auth.allAssetType).length > 0) {
+  //     let tem = [];
+  //     auth.allAssetType.map((data, index) => {
+  //       console.log(data, "datadatadatadatassssss");
+  //       tem.push({
+  //         label: data.assetName,
+  //         value: data.assetTypeID,
+  //       });
+  //     });
+  //     setAssetTypeSelect(tem);
+  //   }
+  // }, [auth.allAssetType]);
 
   // for close modal handler
   const customerCloseModal = () => {
@@ -414,7 +414,7 @@ const CustomerModal = ({
                   </Col>
                 </Row>
 
-                <Row className="mt-1">
+                {/* <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>
                     <span className="labels-bank-modal">
                       Asset Type<span className="aesterick-color">*</span>
@@ -444,7 +444,7 @@ const CustomerModal = ({
                       </Col>
                     </Row>
                   </Col>
-                </Row>
+                </Row> */}
 
                 <Row className="mt-1">
                   <Col lg={4} md={4} sm={12}>

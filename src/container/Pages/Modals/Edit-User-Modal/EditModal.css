@@ -2,7 +2,7 @@
   position: relative;
   top: 0px !important;
   left: 100px;
-  height: 350px !important;
+  height: 470px !important;
   width: 650px !important;
   background-color: #f2f3f9;
   border-radius: 8px !important;
@@ -22,7 +22,7 @@
   color: #002650 !important;
 }
 
-.modal-col-title{
+.modal-col-title {
   width: 100% !important;
   display: contents;
 }
@@ -39,6 +39,10 @@
   height: 37px !important;
   font-size: 14px;
   color: #45494d;
+}
+.textfield-fname-lname {
+  height: 37px !important;
+  font-size: 14px;
 }
 
 .email-heading {
