@@ -17,7 +17,7 @@ import {
   getRejectUser,
 } from "../../../store/actions/Security_Admin";
 import { useNavigate } from "react-router-dom";
-import "./Create.css";
+import "./PendingUser.css";
 
 const Createuser = () => {
   const navigate = useNavigate();
@@ -192,7 +192,7 @@ const Createuser = () => {
       <Container className="create-user-container">
         <Row>
           <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
-            <label className="create-user-label">Create User</label>
+            <label className="create-user-label">Pending User Request</label>
           </Col>
         </Row>
 

@@ -61,6 +61,21 @@ const createNewCorporateSecurityAdmin = {
   RequestMethod: "ServiceManager.CreateNewCorporate",
 };
 
+// get allCorporate Categories in ERM Auth
+const getAllCorporateCategoriesERM = {
+  RequestMethod: "ServiceManager.GetAllCorporateCategories",
+};
+
+// get All Nature of business API in ERM Auth
+const getAllNatureBusinessERM = {
+  RequestMethod: "ServiceManager.GetAllNatureOfBussiness",
+};
+
+// get All Asset Type API in ERM Auth
+const getAllAssetsTypeERM = {
+  RequestMethod: "ServiceManager.GetAllAssetTypes",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -77,4 +92,7 @@ export {
   getAllCorporates,
   createCorporateUserSecurityAdmin,
   createNewCorporateSecurityAdmin,
+  getAllCorporateCategoriesERM,
+  getAllNatureBusinessERM,
+  getAllAssetsTypeERM,
 };

@@ -20,6 +20,7 @@ const EditModal = ({
   UpdateButtonOnClick,
   SelectRoleChangeHandler,
   SelectStatusChangeHandler,
+  onChangeTextFieldHandler,
 }) => {
   // for close modal handler
   const closeEditModal = async () => {
@@ -70,14 +71,51 @@ const EditModal = ({
                 <Row>
                   <Col lg={12} md={12} sm={12}>
                     <TextField
-                      value={modalEditState.Email}
+                      name="Email"
+                      value={modalEditState.Email.value}
                       label={<small className="email-heading">Email</small>}
+                      onChange={onChangeTextFieldHandler}
                       className="textfield-edit-modal"
+                      // disable={true}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={12} md={12} sm={12}>
+                    <TextField
+                      value={modalEditState.ldapAccount}
+                      label={
+                        <small className="email-heading">LDAP Account</small>
+                      }
+                      className="textfield-fname-lname"
                       disable={true}
                     />
                   </Col>
                 </Row>
-
+                <Row className="mt-3">
+                  <Col lg={6} md={6} sm={12}>
+                    <TextField
+                      name="FirstName"
+                      placeholder="First Name"
+                      className="textfield-fname-lname"
+                      onChange={onChangeTextFieldHandler}
+                      label={
+                        <small className="email-heading">First Name</small>
+                      }
+                      value={modalEditState.FirstName.value}
+                    />
+                  </Col>
+                  <Col lg={6} md={6} sm={12}>
+                    <TextField
+                      name="LastName"
+                      placeholder="Last Name"
+                      className="textfield-fname-lname"
+                      onChange={onChangeTextFieldHandler}
+                      label={<small className="email-heading">Last Name</small>}
+                      value={modalEditState.LastName.value}
+                    />
+                  </Col>
+                </Row>
                 <Row className="mt-3">
                   <Col lg={6} md={6} sm={12}>
                     <label className="select-labels">Select Role</label>

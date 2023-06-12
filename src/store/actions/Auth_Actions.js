@@ -7,6 +7,9 @@ import {
   allUserRolesList,
   getAllUserStatus,
   getAllCorporates,
+  getAllCorporateCategoriesERM,
+  getAllNatureBusinessERM,
+  getAllAssetsTypeERM,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
 import { getNewUserRequestsCount, allUserList } from "./Security_Admin";
@@ -124,6 +127,8 @@ const logIn = (navigate, UserData) => {
                   "userID",
                   response.data.responseResult.userID
                 );
+                localStorage.setItem("defaultOpenKey ", "sub1");
+                localStorage.setItem("defaultSelectedKey", "3");
                 localStorage.setItem(
                   "firstName",
                   response.data.responseResult.firstName
@@ -627,13 +632,13 @@ const allUserStatus = () => {
 // For Get All Corporate Api
 const categoryInit = () => {
   return {
-    type: actions.GET_ALL_CORPORATES_CATEGORY_INIT,
+    type: actions.GET_ALL_CORPORATES_INIT,
   };
 };
 
 const categorySuccess = (response, message) => {
   return {
-    type: actions.GET_ALL_CORPORATES_CATEGORY_SUCCESS,
+    type: actions.GET_ALL_CORPORATES_SUCCESS,
     response: response,
     message: message,
   };
@@ -641,7 +646,7 @@ const categorySuccess = (response, message) => {
 
 const categoryFail = (message) => {
   return {
-    type: actions.GET_ALL_CORPORATES_CATEGORY_FAIL,
+    type: actions.GET_ALL_CORPORATES_FAIL,
     message: message,
   };
 };
@@ -710,6 +715,279 @@ const getAllCorporate = (navigate) => {
   };
 };
 
+// for get All Corporate Categories Api
+const getAllCategoryInit = () => {
+  return {
+    type: actions.GET_ALL_CORPORATES_CATEGORY_INIT,
+  };
+};
+
+const getAllCategorySuccess = (response, message) => {
+  console.log(
+    response,
+    message,
+    "getAllCategorySuccessgetAllCategorySuccessgetAllCategorySuccess"
+  );
+  return {
+    type: actions.GET_ALL_CORPORATES_CATEGORY_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const getAllCategoryFail = (message) => {
+  return {
+    type: actions.GET_ALL_CORPORATES_CATEGORY_FAIL,
+    message: message,
+  };
+};
+
+const getAllCorporateCategoryApi = (navigate) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(getAllCategoryInit());
+    let form = new FormData();
+    form.append("RequestMethod", getAllCorporateCategoriesERM.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("CorporateCategoryCorporateCategory", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(getAllCorporateCategoryApi(navigate));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_GetAllCorporateCategories_01".toLowerCase()
+            ) {
+              console.log(
+                "UserRoleListUserRoleList",
+                response.data.responseResult.corporateCategories
+              );
+              dispatch(
+                getAllCategorySuccess(
+                  response.data.responseResult.corporateCategories,
+                  "Record found"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllCorporateCategories_02".toLowerCase()
+                )
+            ) {
+              dispatch(getAllCategoryFail("No Record Found"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllCorporateCategories_03".toLowerCase()
+                )
+            ) {
+              dispatch(getAllCategoryFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(getAllCategoryFail("Something went wrong"));
+            console.log("There's no corporates category");
+          }
+        } else {
+          dispatch(getAllCategoryFail("Something went wrong"));
+          console.log("There's no corporates category");
+        }
+      })
+      .catch((response) => {
+        dispatch(getAllCategoryFail("something went wrong"));
+      });
+  };
+};
+
+// for get All nature of business API
+const natureBusinessInit = () => {
+  return {
+    type: actions.GET_ALL_NATURE_BUSINESS_INIT,
+  };
+};
+
+const natureBusinessSuccess = (response, message) => {
+  return {
+    type: actions.GET_ALL_NATURE_BUSINESS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const natureBusinessFail = (message) => {
+  return {
+    type: actions.GET_ALL_NATURE_BUSINESS_FAIL,
+    message: message,
+  };
+};
+
+const getAllNature = (navigate) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(natureBusinessInit());
+    let form = new FormData();
+    form.append("RequestMethod", getAllNatureBusinessERM.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("getAllNaturegetAllNaturegetAllNature", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(getAllNature(navigate));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_GetAllNatureOfBussiness_01".toLowerCase()
+            ) {
+              console.log(
+                "UserRoleListUserRoleList",
+                response.data.responseResult.natureofBusinesses
+              );
+              dispatch(
+                natureBusinessSuccess(
+                  response.data.responseResult.natureofBusinesses,
+                  "Record found"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllNatureOfBussiness_02".toLowerCase()
+                )
+            ) {
+              dispatch(natureBusinessFail("No Record Found"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllNatureOfBussiness_03".toLowerCase()
+                )
+            ) {
+              dispatch(natureBusinessFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(natureBusinessFail("Something went wrong"));
+            console.log("There's no corporates category");
+          }
+        } else {
+          dispatch(natureBusinessFail("Something went wrong"));
+          console.log("There's no corporates category");
+        }
+      })
+      .catch((response) => {
+        dispatch(natureBusinessFail("something went wrong"));
+      });
+  };
+};
+
+// For get All assets type API
+
+const assetTypeInit = () => {
+  return {
+    type: actions.GET_ALL_ASSETS_TYPE_INIT,
+  };
+};
+
+const assetTypeSuccess = (response, message) => {
+  return {
+    type: actions.GET_ALL_ASSETS_TYPE_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const assetTypeFail = (message) => {
+  return {
+    type: actions.GET_ALL_ASSETS_TYPE_SUCCESS,
+    message: message,
+  };
+};
+
+const getAssetType = (navigate) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(assetTypeInit());
+    let form = new FormData();
+    form.append("RequestMethod", getAllAssetsTypeERM.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("getAllAssetsTypeERMgetAllAssetsTypeERM", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(getAssetType(navigate));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_GetAllAssetTypes_01".toLowerCase()
+            ) {
+              console.log(
+                "assetTypesassetTypes",
+                response.data.responseResult.assetTypes
+              );
+              dispatch(
+                assetTypeSuccess(
+                  response.data.responseResult.assetTypes,
+                  "Record found"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllAssetTypes_02".toLowerCase()
+                )
+            ) {
+              dispatch(assetTypeFail("No Record Found"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllAssetTypes_03".toLowerCase()
+                )
+            ) {
+              dispatch(assetTypeFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(assetTypeFail("Something went wrong"));
+            console.log("There's no corporates category");
+          }
+        } else {
+          dispatch(assetTypeFail("Something went wrong"));
+          console.log("There's no corporates category");
+        }
+      })
+      .catch((response) => {
+        dispatch(assetTypeFail("something went wrong"));
+      });
+  };
+};
+
 export {
   logIn,
   signUp,
@@ -718,4 +996,7 @@ export {
   allUserRole,
   allUserStatus,
   getAllCorporate,
+  getAllCorporateCategoryApi,
+  getAllNature,
+  getAssetType,
 };

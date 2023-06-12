@@ -30,35 +30,53 @@ const Sidebar = () => {
   const { SubMenu } = Menu;
   const { Sider } = Layout;
   const navigate = useNavigate();
+  let defaultOpenKey = localStorage.getItem("defaultOpenKey ");
+  let defaultSelectedKey = localStorage.getItem("defaultSelectedKey");
 
-  const navigateToCreateUser = () => {
-    navigate("/Js/Admin/createUser");
-  };
+  console.log("defaultOpenKey", defaultOpenKey);
+  console.log("defaultSelectedKey", defaultSelectedKey);
 
-  const navigateToEdit = () => {
-    navigate("/Js/Admin/editUser");
-  };
-
-  const navigateToBankUser = () => {
+  const navigateToBankUsers = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "3");
     navigate("/Js/Admin/bankUser");
+  };
+  //Create User Page Name is Pending User Requests
+  const navigateToPendingRequest = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "4");
+    navigate("/Js/Admin/pendingRequest");
+  };
+
+  const navigateToAllUsers = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "5");
+    navigate("/Js/Admin/allUser");
   };
 
   const navigateToCustomer = () => {
+    localStorage.setItem("defaultOpenKey ", "sub2");
+    localStorage.setItem("defaultSelectedKey", "6");
     navigate("/Js/Admin/addCustomer");
   };
 
+  const navigateToUserList = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "7");
+    navigate("/Js/Admin/userList");
+  };
+
   const navigateToReport = () => {
+    localStorage.setItem("defaultOpenKey ", "sub3");
+    localStorage.setItem("defaultSelectedKey", "8");
     navigate("/Js/Admin/userReport");
   };
 
-  const navigateToCustomerList = () => {
-    navigate("/Js/Admin/customerList");
+  const navigateToNatureOfBusiness = () => {
+    localStorage.setItem("defaultOpenKey ", "sub4");
+    localStorage.setItem("defaultSelectedKey", "9");
+    navigate("/Js/Admin/natureofBusiness");
   };
-
-  // when user refresh the page it's goes to the specific route
-  useEffect(() => {
-    navigate("/Js/Admin/editUser");
-  }, []);
 
   return (
     <Fragment>
@@ -74,8 +92,8 @@ const Sidebar = () => {
               <span className="SecurityMenu">
                 <Menu
                   theme="light"
-                  defaultOpenKeys={["sub1"]}
-                  defaultSelectedKeys={["3"]}
+                  defaultOpenKeys={[defaultOpenKey]}
+                  defaultSelectedKeys={[defaultSelectedKey]}
                   mode="inline"
                   className="Menu-sidebar-class"
                 >
@@ -88,24 +106,32 @@ const Sidebar = () => {
                     <Menu.Item
                       className="menu-items-sidebar"
                       key="3"
-                      onClick={navigateToEdit}
+                      onClick={navigateToBankUsers}
                     >
-                      Edit User
+                      Add a Bank User
                     </Menu.Item>
+
                     <Menu.Item
                       className="menu-items-sidebar"
                       key="4"
-                      onClick={navigateToCreateUser}
+                      onClick={navigateToPendingRequest}
                     >
-                      Create User
+                      Pending user requests
                     </Menu.Item>
                     <Menu.Item
                       className="menu-items-sidebar"
                       key="5"
-                      onClick={navigateToBankUser}
+                      onClick={navigateToAllUsers}
                     >
-                      Add a Bank User
+                      All User
                     </Menu.Item>
+                  </SubMenu>
+                  <SubMenu
+                    key="sub2"
+                    icon={<i className="icon-user menu-icons"></i>}
+                    title="Customer Management"
+                    className="submenu-sidebar-icons"
+                  >
                     <Menu.Item
                       className="menu-items-sidebar"
                       key="6"
@@ -113,17 +139,16 @@ const Sidebar = () => {
                     >
                       Add a Customer
                     </Menu.Item>
-
                     <Menu.Item
                       className="menu-items-sidebar"
                       key="7"
-                      onClick={navigateToCustomerList}
+                      onClick={navigateToUserList}
                     >
-                      Customer List
+                      Users List
                     </Menu.Item>
                   </SubMenu>
                   <SubMenu
-                    key="sub2"
+                    key="sub3"
                     icon={<i className="icon-user menu-icons"></i>}
                     title="Report"
                     className="submenu-sidebar-icons"
@@ -134,6 +159,20 @@ const Sidebar = () => {
                       onClick={navigateToReport}
                     >
                       User Report
+                    </Menu.Item>
+                  </SubMenu>
+                  <SubMenu
+                    key="sub4"
+                    icon={<i className="icon-user menu-icons"></i>}
+                    title="SetUp"
+                    className="submenu-sidebar-icons"
+                  >
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="9"
+                      onClick={navigateToNatureOfBusiness}
+                    >
+                      Nature Of Business
                     </Menu.Item>
                   </SubMenu>
                 </Menu>

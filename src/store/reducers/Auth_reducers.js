@@ -9,6 +9,9 @@ const initialState = {
   UserRoleList: [],
   UserStatus: [],
   allCorporates: [],
+  getAllCategoryCorporate: [],
+  natureOfBusiness: [],
+  allAssetType: [],
   SessionExpeireResponseMessage: "",
   roles: [],
   Token: "",
@@ -16,6 +19,7 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
+  console.log(action, "GET_ALL_CORPORATES_CATEGORY_SUCCESS");
   switch (action.type) {
     case actions.LOG_IN_INIT:
       return { ...state, Loading: true };
@@ -101,13 +105,13 @@ const authReducer = (state = initialState, action) => {
         ResponseMessage: action.message,
       };
 
-    case actions.GET_ALL_CORPORATES_CATEGORY_INIT:
+    case actions.GET_ALL_CORPORATES_INIT:
       return {
         ...state,
         Loading: true,
       };
 
-    case actions.GET_ALL_CORPORATES_CATEGORY_SUCCESS:
+    case actions.GET_ALL_CORPORATES_SUCCESS:
       return {
         ...state,
         Loading: false,
@@ -115,11 +119,80 @@ const authReducer = (state = initialState, action) => {
         ResponseMessage: action.message,
       };
 
-    case actions.GET_ALL_CORPORATES_CATEGORY_FAIL:
+    case actions.GET_ALL_CORPORATES_FAIL:
       return {
         ...state,
         Loading: false,
         allCorporates: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_CORPORATES_CATEGORY_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_CORPORATES_CATEGORY_SUCCESS:
+      console.log(action, "GET_ALL_CORPORATES_CATEGORY_SUCCESS");
+      return {
+        ...state,
+        Loading: false,
+        getAllCategoryCorporate: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_CORPORATES_CATEGORY_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        getAllCategoryCorporate: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_NATURE_BUSINESS_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_NATURE_BUSINESS_SUCCESS:
+      console.log(action, "GET_ALL_NATURE_BUSINESS_SUCCESS");
+      return {
+        ...state,
+        Loading: false,
+        natureOfBusiness: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_NATURE_BUSINESS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        natureOfBusiness: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_ASSETS_TYPE_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_ASSETS_TYPE_SUCCESS:
+      console.log(action, "GET_ALL_NATURE_BUSINESS_SUCCESS");
+      return {
+        ...state,
+        Loading: false,
+        allAssetType: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_ASSETS_TYPE_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        allAssetType: [],
         ResponseMessage: action.message,
       };
 

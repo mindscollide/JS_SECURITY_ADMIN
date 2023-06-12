@@ -8,6 +8,7 @@ import {
 } from "../../../../components/elements";
 import { Select } from "antd";
 import "./CreateModal.css";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getRejectUser } from "../../../../store/actions/Security_Admin";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,7 @@ const CreateModal = ({
   // states for comment field
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   // Error bar states
   const [errorShow, setErrorShow] = useState(false);
 
