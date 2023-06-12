@@ -10,7 +10,7 @@ import { Select } from "antd";
 import "./CreateModal.css";
 import { useDispatch } from "react-redux";
 import { getRejectUser } from "../../../../store/actions/Security_Admin";
-
+import { useNavigate } from "react-router-dom";
 const CreateModal = ({
   ModalTitle,
   modalReject,
@@ -19,7 +19,7 @@ const CreateModal = ({
 }) => {
   // states for comment field
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   // Error bar states
   const [errorShow, setErrorShow] = useState(false);
 

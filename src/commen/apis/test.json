@@ -1,0 +1,89 @@
+{
+    "responseMessage": "Success",
+    "responseCode": 200,
+    "responseType": "ServiceManager.GetAllCorporateDetails",
+    "responseResult": {
+        "corporates": [
+            {
+                "corporateID": 1,
+                "corporateName": "ENGRO",
+                "corporateUsers": [
+                    {
+                        "userID": 10,
+                        "corporateId": 1,
+                        "firstName": "Saif Ul",
+                        "lastName": "Isalm",
+                        "email": "Jawad@hotmail.com"
+                    },
+                    {
+                        "userID": 12,
+                        "corporateId": 1,
+                        "firstName": "Aun",
+                        "lastName": "Naqvi",
+                        "email": "aun.naqvi@hotmail.com"
+                    },
+                    {
+                        "userID": 41,
+                        "corporateId": 1,
+                        "firstName": "AunKazmi",
+                        "lastName": "AunKazmi",
+                        "email": "aunnaqvi456@gmail.com"
+                    },
+                    {
+                        "userID": 42,
+                        "corporateId": 1,
+                        "firstName": "AunRazaNaqvi",
+                        "lastName": "AunRazaNaqvi",
+                        "email": "aunnaqvi16@gmail.com"
+                    },
+                    {
+                        "userID": 43,
+                        "corporateId": 1,
+                        "firstName": "AunKazmi",
+                        "lastName": "AunKazmi",
+                        "email": "aunnaqvi26@gmail.com"
+                    },
+                    {
+                        "userID": 45,
+                        "corporateId": 1,
+                        "firstName": "AunRazarr",
+                        "lastName": "AunRazarr",
+                        "email": "aunnaqvi496@gmail.com"
+                    }
+                ]
+            },
+            {
+                "corporateID": 2,
+                "corporateName": "Uniliver pvt",
+                "corporateUsers": []
+            },
+            {
+                "corporateID": 3,
+                "corporateName": "Amreli Steels pvt",
+                "corporateUsers": []
+            },
+            {
+                "corporateID": 4,
+                "corporateName": "Platinum Steels pvt ltd",
+                "corporateUsers": []
+            },
+            {
+                "corporateID": 5,
+                "corporateName": "Platinum Steels pvt ltd",
+                "corporateUsers": []
+            },
+            {
+                "corporateID": 6,
+                "corporateName": "Minds Collide pvt ltd",
+                "corporateUsers": []
+            },
+            {
+                "corporateID": 7,
+                "corporateName": "Tresmark pvt ltd",
+                "corporateUsers": []
+            }
+        ],
+        "responseMessage": "SystemAdmin_SystemAdminManager_GetAllCorporateDetails_01",
+        "isExecuted": true
+    }
+}
