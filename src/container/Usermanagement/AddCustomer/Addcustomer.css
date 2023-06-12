@@ -4,7 +4,8 @@
   width: 100% !important;
   left: 260px !important;
   justify-content: center !important;
-  position: fixed !important;
+  position: absolute !important;
+  /* position: fixed !important; */
 }
 
 .addCustomer-paper {

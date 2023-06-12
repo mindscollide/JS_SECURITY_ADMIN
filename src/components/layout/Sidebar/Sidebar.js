@@ -55,7 +55,7 @@ const Sidebar = () => {
   };
 
   const navigateToCustomer = () => {
-    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultOpenKey ", "sub2");
     localStorage.setItem("defaultSelectedKey", "6");
     navigate("/Js/Admin/addCustomer");
   };
@@ -67,9 +67,15 @@ const Sidebar = () => {
   };
 
   const navigateToReport = () => {
-    localStorage.setItem("defaultOpenKey ", "sub2");
+    localStorage.setItem("defaultOpenKey ", "sub3");
     localStorage.setItem("defaultSelectedKey", "8");
     navigate("/Js/Admin/userReport");
+  };
+
+  const navigateToNatureOfBusiness = () => {
+    localStorage.setItem("defaultOpenKey ", "sub4");
+    localStorage.setItem("defaultSelectedKey", "9");
+    navigate("/Js/Admin/natureofBusiness");
   };
 
   return (
@@ -119,7 +125,13 @@ const Sidebar = () => {
                     >
                       All User
                     </Menu.Item>
-
+                  </SubMenu>
+                  <SubMenu
+                    key="sub2"
+                    icon={<i className="icon-user menu-icons"></i>}
+                    title="Customer Management"
+                    className="submenu-sidebar-icons"
+                  >
                     <Menu.Item
                       className="menu-items-sidebar"
                       key="6"
@@ -127,7 +139,6 @@ const Sidebar = () => {
                     >
                       Add a Customer
                     </Menu.Item>
-
                     <Menu.Item
                       className="menu-items-sidebar"
                       key="7"
@@ -137,7 +148,7 @@ const Sidebar = () => {
                     </Menu.Item>
                   </SubMenu>
                   <SubMenu
-                    key="sub2"
+                    key="sub3"
                     icon={<i className="icon-user menu-icons"></i>}
                     title="Report"
                     className="submenu-sidebar-icons"
@@ -148,6 +159,20 @@ const Sidebar = () => {
                       onClick={navigateToReport}
                     >
                       User Report
+                    </Menu.Item>
+                  </SubMenu>
+                  <SubMenu
+                    key="sub4"
+                    icon={<i className="icon-user menu-icons"></i>}
+                    title="SetUp"
+                    className="submenu-sidebar-icons"
+                  >
+                    <Menu.Item
+                      className="menu-items-sidebar"
+                      key="9"
+                      onClick={navigateToNatureOfBusiness}
+                    >
+                      Nature Of Business
                     </Menu.Item>
                   </SubMenu>
                 </Menu>

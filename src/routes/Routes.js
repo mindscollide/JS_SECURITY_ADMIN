@@ -14,6 +14,7 @@ import PrivateRoutes from "./PrivateRoute";
 import Bankuser from "../container/Usermanagement/BankUser/Bankuser";
 import Addcustomer from "../container/Usermanagement/AddCustomer/Addcustomer";
 import Userlist from "../container/Usermanagement/Userlist/UserList";
+import NatureofBus from "../container/Setup/NatureofBus";
 export const router = createHashRouter(
   createRoutesFromElements(
     <>
@@ -28,6 +29,7 @@ export const router = createHashRouter(
           <Route path="allUser" element={<Alluser />} />
           <Route path="addCustomer" element={<Addcustomer />} />
           <Route path="userList" element={<Userlist />} />
+          <Route path="natureofBusiness" element={<NatureofBus />} />
         </Route>
       </Route>
     </>

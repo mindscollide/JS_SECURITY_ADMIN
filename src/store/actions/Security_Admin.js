@@ -1003,7 +1003,7 @@ const newCorporateFail = (message) => {
   };
 };
 
-const newCorporateCreated = (navigate, corporateNew) => {
+const newCorporateCreated = (navigate, corporateNew, setCustomerModal) => {
   let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(newCorporateInit());
@@ -1037,6 +1037,7 @@ const newCorporateCreated = (navigate, corporateNew) => {
                   "Corporate Created"
                 )
               );
+              setCustomerModal(false);
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

@@ -51,6 +51,11 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
 
   // state for edit user
   const [editUser, setEditUser] = useState({
+    userLdapAccount: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
     email: {
       value: "",
       errorMessage: "",
@@ -79,7 +84,23 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   });
 
   const [modalEditState, setModalEditState] = useState({
-    Email: "",
+    Email: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    FirstName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    LastName: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    ldapAccount: "",
+
     selectRole: {
       value: 0,
       label: "",
@@ -96,6 +117,74 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   });
   console.log("modalEditState", modalEditState);
 
+  const onchangeModalTextFieldsHandler = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    if (name === "Email" && value !== "") {
+      console.log("valuevalueemailvaluevalueemail", value);
+      if (value !== "") {
+        setModalEditState({
+          ...modalEditState,
+          Email: {
+            value: value.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "Email" && value === "") {
+      setModalEditState({
+        ...modalEditState,
+        Email: {
+          value: "",
+          errorMessage: "",
+          errorStatus: true,
+        },
+      });
+    }
+
+    if (name === "FirstName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      console.log("valueCheckvalueCheck", valueCheck);
+      if (valueCheck !== "") {
+        setModalEditState({
+          ...modalEditState,
+          FirstName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "FirstName" && value === "") {
+      setModalEditState({
+        ...modalEditState,
+        FirstName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+
+    if (name === "LastName" && value !== "") {
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+      console.log("valueCheckvalueCheck", valueCheck);
+      if (valueCheck !== "") {
+        setModalEditState({
+          ...modalEditState,
+          LastName: {
+            value: valueCheck.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "LastName" && value === "") {
+      setModalEditState({
+        ...modalEditState,
+        LastName: { value: "", errorMessage: "", errorStatus: false },
+      });
+    }
+  };
+
   useEffect(() => {
     dispatch(allUserRole());
     dispatch(allUserStatus());
@@ -106,6 +195,28 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     let name = e.target.name;
     let value = e.target.value;
 
+    if (name === "userLdapAccount" && value !== "") {
+      console.log("valuevalueemailvaluevalueemail", value);
+      if (value !== "") {
+        setEditUser({
+          ...editUser,
+          userLdapAccount: {
+            value: value.trimStart(),
+            errorMessage: "",
+            errorStatus: false,
+          },
+        });
+      }
+    } else if (name === "userLdapAccount" && value === "") {
+      setEditUser({
+        ...editUser,
+        userLdapAccount: {
+          value: "",
+          errorMessage: "",
+          errorStatus: true,
+        },
+      });
+    }
     if (name === "email" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
       if (value !== "") {
@@ -212,6 +323,9 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       email: {
         value: "",
       },
+      userLdapAccount: {
+        value: "",
+      },
 
       firstName: {
         value: "",
@@ -283,9 +397,25 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
 
     try {
       if (Object.keys(roleNew && statusNew).length > 0) {
+        console.log(roleNew && statusNew, record, "newnewnewnewnewnew");
         await setModalEditState({
           ...modalEditState,
-          Email: record.email,
+          Email: {
+            value: record.email,
+            errorMessage: "",
+            errorStatus: false,
+          },
+          ldapAccount: record.userLDAPAccount,
+          FirstName: {
+            value: record.firstName,
+            errorMessage: "",
+            errorStatus: false,
+          },
+          LastName: {
+            value: record.lastName,
+            errorMessage: "",
+            errorStatus: false,
+          },
           selectRole: {
             value: roleNew.value,
             label: roleNew.label,
@@ -317,23 +447,30 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   const columns = [
     {
       title: <label className="bottom-table-header">LoginID</label>,
+      dataIndex: "userLDAPAccount",
+      key: "userLDAPAccount",
+      width: "250px",
+      render: (text) => <label className="issue-date-column">{text}</label>,
+    },
+    {
+      title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "200px",
+      width: "300px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
       dataIndex: "firstName",
       key: "firstName",
-      width: "100px",
+      width: "150px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Last Name</label>,
       dataIndex: "lastName",
       key: "lastName",
-      width: "100px",
+      width: "150px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -480,7 +617,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     let data = {
       FirstName: editUser.firstName.value,
       LastName: editUser.lastName.value,
-      UserLDAPAccount: "",
+      UserLDAPAccount: editUser.userLdapAccount.value,
       Email: editUser.email.value,
       UserRoleID: editUser.roleID.value,
       UserStatusID: editUser.statusID.value,
@@ -606,12 +743,11 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
           <Row className="mt-3">
             <Col lg={12} md={12} sm={12} className="text-field-column">
               <TextField
-                name="email"
+                name="userLdapAccount"
                 className="text-fields-edituser"
                 placeholder="Login ID"
-                onBlur={handlerEmail}
                 maxLength={100}
-                value={editUser.email.value}
+                value={editUser.userLdapAccount.value}
                 onChange={editUserValidateHandler}
               />
               <TextField
@@ -644,15 +780,28 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
           </Row>
 
           <Row>
-            <Col lg={12} md={12} sm={12}>
+            <Col lg={3} md={3} sm={12}>
               <Select
                 name="statusID"
-                className="select-field-edit"
+                className="edit-user-select-status"
                 placeholder="Select Status"
                 options={editSelectStatus}
                 onChange={selectStatusHandler}
                 value={editSelectStatusValue}
               />
+            </Col>
+            <Col lg={3} md={3} sm={12}>
+              <TextField
+                name="email"
+                className="edit-user-loginID-Textfield"
+                placeholder="Email"
+                onBlur={handlerEmail}
+                maxLength={100}
+                value={editUser.email.value}
+                onChange={editUserValidateHandler}
+              />
+            </Col>
+            <Col lg={6} md={6} sm={12}>
               <Button
                 icon={<i className="icon-search icon-search-space"></i>}
                 text="Search"
@@ -678,6 +827,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                 <Table
                   column={columns}
                   rows={rows}
+                  scroll={{ x: true }}
                   className="Edituser-table"
                   pagination={false}
                 />
@@ -742,6 +892,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
           UpdateButtonOnClick={UpdateBtnHandle}
           SelectRoleChangeHandler={SelectRoleEditModalChangeHandler}
           SelectStatusChangeHandler={SelectStatusEditModalChangeHandler}
+          onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
 

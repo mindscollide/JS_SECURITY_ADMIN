@@ -87,7 +87,7 @@ const CustomerModal = ({
   useEffect(() => {
     dispatch(getAllCorporateCategoryApi(navigate));
     dispatch(getAllNature(navigate));
-    dispatch(getAssetType(navigate));
+    // dispatch(getAssetType(navigate));
   }, []);
 
   //onchange handler of category select handler
@@ -243,7 +243,7 @@ const CustomerModal = ({
         UserID: JSON.parse(userId),
       };
       console.log(corporateNew);
-      dispatch(newCorporateCreated(navigate, corporateNew));
+      dispatch(newCorporateCreated(navigate, corporateNew, setCustomerModal));
     } else {
       setErrorShow(true);
     }
@@ -280,19 +280,19 @@ const CustomerModal = ({
   }, [auth.natureOfBusiness]);
 
   // for all Asset type modal in select drop down
-  useEffect(() => {
-    if (Object.keys(auth.allAssetType).length > 0) {
-      let tem = [];
-      auth.allAssetType.map((data, index) => {
-        console.log(data, "datadatadatadatassssss");
-        tem.push({
-          label: data.assetName,
-          value: data.assetTypeID,
-        });
-      });
-      setAssetTypeSelect(tem);
-    }
-  }, [auth.allAssetType]);
+  // useEffect(() => {
+  //   if (Object.keys(auth.allAssetType).length > 0) {
+  //     let tem = [];
+  //     auth.allAssetType.map((data, index) => {
+  //       console.log(data, "datadatadatadatassssss");
+  //       tem.push({
+  //         label: data.assetName,
+  //         value: data.assetTypeID,
+  //       });
+  //     });
+  //     setAssetTypeSelect(tem);
+  //   }
+  // }, [auth.allAssetType]);
 
   // for close modal handler
   const customerCloseModal = () => {
