@@ -76,6 +76,12 @@ const getAllAssetsTypeERM = {
   RequestMethod: "ServiceManager.GetAllAssetTypes",
 };
 
+//BankUsersBulkList
+
+const BankBulkUserList = {
+  RequestMethod: "ServiceManager.BankUsersBulkList",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -95,4 +101,5 @@ export {
   getAllCorporateCategoriesERM,
   getAllNatureBusinessERM,
   getAllAssetsTypeERM,
+  BankBulkUserList,
 };

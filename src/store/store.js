@@ -2,13 +2,14 @@ import { applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import { authReducer, securitReducer } from "./reducers";
+import { authReducer, securitReducer, uploadReducer } from "./reducers";
 import { configureStore } from "@reduxjs/toolkit";
 import * as actions from "./action_types";
 
 const AppReducer = combineReducers({
   auth: authReducer,
   securitReducer: securitReducer,
+  uploadReducer: uploadReducer,
 });
 
 const rootReducer = (state, action) => {

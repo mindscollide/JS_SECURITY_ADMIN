@@ -1,7 +1,14 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { PlusLg } from "react-bootstrap-icons";
-import { Paper, TextField, Button, Loader } from "../../../components/elements";
+import {
+  Paper,
+  TextField,
+  Button,
+  Loader,
+  CustomUpload,
+} from "../../../components/elements";
+import { Button as upload } from "react-bootstrap/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import BankModal from "../../Pages/Modals/Add-Banker-Modal/Bankuser-Modal";
@@ -14,11 +21,16 @@ import {
   allUserRole,
   allUserStatus,
 } from "../../../store/actions/Auth_Actions";
+import { FileBulkUpload } from "../../../store/actions/Upload_Action";
 
 const Bankuser = () => {
   const { auth, securitReducer } = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [tasksAttachments, setTasksAttachments] = useState({
+    TasksAttachments: [],
+  });
 
   //state for allUserRole List Dropdown
   const [bankSelectRole, setBankSelectRole] = useState([]);
@@ -296,6 +308,20 @@ const Bankuser = () => {
       setBankSelectRole(tem);
     }
   }, [auth.UserRoleList]);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const HandleFileUpload = (data) => {
+    const UploadFile = data.target.value;
+    const uploadedFile = data.target.files[0];
+    console.log("UploadFileUploadFile", UploadFile);
+    console.log("uploadedFileuploadedFile", uploadedFile);
+    var ext = uploadedFile.name.split(".").pop();
+    if (ext === "xls" || ext === "xlsx") {
+      dispatch(FileBulkUpload(navigate, uploadedFile));
+    } else {
+      alert("Invalid type");
+    }
+  };
 
   return (
     <Fragment>
@@ -514,9 +540,8 @@ const Bankuser = () => {
                       </span>
                     </Col>
                     <Col lg={2} md={2} sm={12}>
-                      <Button
-                        text="Upload your contacts"
-                        className="upload-btn"
+                      <CustomUpload
+                        change={HandleFileUpload}
                         onClick={openUploadModal}
                       />
                     </Col>
