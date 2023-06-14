@@ -11,7 +11,6 @@ import "./CreateModal.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getRejectUser } from "../../../../store/actions/Security_Admin";
-import { useNavigate } from "react-router-dom";
 const CreateModal = ({
   ModalTitle,
   modalReject,
