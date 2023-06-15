@@ -100,7 +100,7 @@ const Sidebar = () => {
                   <SubMenu
                     key="sub1"
                     icon={<i className="icon-user menu-icons"></i>}
-                    title="User Management"
+                    title="Bank Management"
                     className="submenu-sidebar-icons"
                   >
                     <Menu.Item
@@ -144,7 +144,7 @@ const Sidebar = () => {
                       key="7"
                       onClick={navigateToUserList}
                     >
-                      Users List
+                      Customer Users List
                     </Menu.Item>
                   </SubMenu>
                   <SubMenu

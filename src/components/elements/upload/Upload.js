@@ -36,7 +36,7 @@ const CustomUpload = ({
         htmlFor="contained-button-file"
         className={styles["ButtonForUpload"]}
       >
-        Upload Document
+        Upload your Contacts
       </label>
       {/* <label htmlFor="contained-button-file">
         <img className="cursor-pointer" src={AttachmentIcon}></img>

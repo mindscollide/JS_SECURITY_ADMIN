@@ -18,10 +18,10 @@ const bulFileUploadSuccess = (response, message) => {
   };
 };
 
-const bulkFileUploadFail = (response) => {
+const bulkFileUploadFail = (message) => {
   return {
     type: actions.GET_ALL_BULK_USER_FAIL,
-    response: response,
+    message: message,
   };
 };
 
@@ -32,7 +32,7 @@ const ResetAllFileBulkUpload = () => {
   };
 };
 
-const FileBulkUpload = (navigate, data) => {
+const FileBulkUpload = (navigate, data, setUploadModal, setCustomerUpload) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let form = new FormData();
   form.append("RequestMethod", BankBulkUserList.RequestMethod);
@@ -73,8 +73,13 @@ const FileBulkUpload = (navigate, data) => {
                 )
             ) {
               await dispatch(
-                bulFileUploadSuccess("File Uploaded Successfully")
+                bulFileUploadSuccess(
+                  response.data.responseResult,
+                  "File Uploaded Successfully"
+                )
               );
+              setUploadModal(true);
+              setCustomerUpload(true);
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

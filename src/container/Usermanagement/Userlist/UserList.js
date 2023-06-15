@@ -222,7 +222,7 @@ const Userlist = () => {
           <Col>
             <Row>
               <Col lg={12} md={12} sm={12}>
-                <span className="user-List-label">User List</span>
+                <span className="user-List-label">Customer User List</span>
               </Col>
             </Row>
             <Row className="mt-3">

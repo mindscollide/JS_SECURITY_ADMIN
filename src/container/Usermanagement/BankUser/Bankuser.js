@@ -8,8 +8,7 @@ import {
   Loader,
   CustomUpload,
 } from "../../../components/elements";
-import { Button as upload } from "react-bootstrap/Button";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import BankModal from "../../Pages/Modals/Add-Banker-Modal/Bankuser-Modal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
@@ -317,7 +316,7 @@ const Bankuser = () => {
     console.log("uploadedFileuploadedFile", uploadedFile);
     var ext = uploadedFile.name.split(".").pop();
     if (ext === "xls" || ext === "xlsx") {
-      dispatch(FileBulkUpload(navigate, uploadedFile));
+      dispatch(FileBulkUpload(navigate, uploadedFile, setUploadModal));
     } else {
       alert("Invalid type");
     }
@@ -540,10 +539,7 @@ const Bankuser = () => {
                       </span>
                     </Col>
                     <Col lg={2} md={2} sm={12}>
-                      <CustomUpload
-                        change={HandleFileUpload}
-                        onClick={openUploadModal}
-                      />
+                      <CustomUpload change={HandleFileUpload} />
                     </Col>
                     <Col
                       lg={3}
