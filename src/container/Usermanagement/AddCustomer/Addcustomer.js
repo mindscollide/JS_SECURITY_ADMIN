@@ -369,8 +369,8 @@ const Addcustomer = () => {
   }, [auth.allCorporates]);
 
   return (
-    <Fragment>
-      <Container className="addCustomer-user-container">
+    <>
+      <section className="addCustomer-user-container">
         <Row>
           <Col>
             <Row>
@@ -381,7 +381,7 @@ const Addcustomer = () => {
               </Col>
             </Row>
             <Row>
-              <Col lg={11} md={11} sm={12}>
+              <Col lg={12} md={12} sm={12}>
                 <Paper className="addCustomer-paper">
                   <Row className="mt-3">
                     <Col lg={2} md={2} sm={12}>
@@ -657,7 +657,7 @@ const Addcustomer = () => {
             </Row>
           </Col>
         </Row>
-      </Container>
+      </section>
 
       {modalAddCustomer ? (
         <>
@@ -678,7 +678,7 @@ const Addcustomer = () => {
       ) : null}
 
       {securitReducer.Loading ? <Loader /> : null}
-    </Fragment>
+    </>
   );
 };
 

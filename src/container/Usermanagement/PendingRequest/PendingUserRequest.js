@@ -189,7 +189,7 @@ const Createuser = () => {
 
   return (
     <>
-      <Container className="create-user-container">
+      <section className="create-user-container">
         <Row>
           <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
             <label className="create-user-label">Pending User Request</label>
@@ -208,7 +208,7 @@ const Createuser = () => {
                   column={columnsCreate}
                   rows={requestUserRows}
                   className="Createuser-table"
-                  pagination={false}
+                  pagination={true}
                 />
               )}
             </Col>
@@ -216,7 +216,7 @@ const Createuser = () => {
         </Row>
 
         {securitReducer.Loading ? <Loader /> : null}
-      </Container>
+      </section>
 
       {createRejectModal ? (
         <CreateModal

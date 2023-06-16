@@ -294,8 +294,8 @@ const Userlist = () => {
   ];
 
   return (
-    <Fragment>
-      <Container className="user-List-container">
+    <>
+      <section className="user-List-container">
         <Row>
           <Col>
             <Row>
@@ -304,7 +304,7 @@ const Userlist = () => {
               </Col>
             </Row>
             <Row className="mt-3">
-              <Col lg={11} md={11} sm={12}>
+              <Col lg={12} md={12} sm={12}>
                 <Paper className="user-List-paper">
                   <Row className="mt-3">
                     <Col lg={2} md={2} sm={12}>
@@ -394,10 +394,10 @@ const Userlist = () => {
             </Row>
           </Col>
         </Row>
-      </Container>
+      </section>
       {CorporateReducer.Loading ? <Loader /> : null}
       {SearchReducer.Loading ? <Loader /> : null}
-    </Fragment>
+    </>
   );
 };
 

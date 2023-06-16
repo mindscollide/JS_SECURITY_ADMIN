@@ -180,122 +180,167 @@ const Userreport = () => {
 
   return (
     <>
-      <Container className="report-user-container">
+      <section className="report-user-container">
         <Row>
           <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
             <label className="report-user-label">User Reports</label>
           </Col>
         </Row>
 
-        <Paper className="span-user-color">
-          <Row className="mb-2">
-            <Col lg={8} md={8} sm={12} className="report-text-field-column">
-              <TextField
-                name="loginID"
-                maxLength={100}
-                value={userReport.loginID.value}
-                onChange={userReportHandler}
-                className="text-fields-report"
-                placeholder="Login ID"
-              />
-              <Select
-                name="roleID"
-                options={selectRoleReport}
-                onChange={reportSelectRoleHandler}
-                className="report-select-field-edit"
-                placeholder="Select Role"
-                value={selectRoleValueReport}
-              />
-              <TextField
-                maxLength={100}
-                name="firstName"
-                value={userReport.firstName.value}
-                onChange={userReportHandler}
-                className="text-fields-report"
-                placeholder="First Name"
-              />
-              <TextField
-                maxLength={100}
-                name="lastName"
-                value={userReport.lastName.value}
-                onChange={userReportHandler}
-                className="text-fields-report"
-                placeholder="Last Name"
-              />
-            </Col>
+        <Row className="mt-3">
+          <Col lg={12} md={12} sm={12}>
+            <Paper className="span-user-color">
+              <Row className="mb-2">
+                <Col lg={12} md={12} sm={12}>
+                  <Row>
+                    <Col lg={9} md={9} sm={12}>
+                      <Row>
+                        <Col lg={3} md={3} sm={3}>
+                          <TextField
+                            name="loginID"
+                            maxLength={100}
+                            value={userReport.loginID.value}
+                            onChange={userReportHandler}
+                            className="text-fields-report"
+                            placeholder="Login ID"
+                          />
+                        </Col>
+                        <Col lg={3} md={3} sm={3}>
+                          <Select
+                            name="roleID"
+                            options={selectRoleReport}
+                            onChange={reportSelectRoleHandler}
+                            className="report-select-field-edit"
+                            placeholder="Select Role"
+                            value={selectRoleValueReport}
+                          />
+                        </Col>
+                        <Col lg={3} md={3} sm={3}>
+                          <TextField
+                            maxLength={100}
+                            name="firstName"
+                            value={userReport.firstName.value}
+                            onChange={userReportHandler}
+                            className="text-fields-report"
+                            placeholder="First Name"
+                          />
+                        </Col>
+                        <Col lg={3} md={3} sm={3}>
+                          <TextField
+                            maxLength={100}
+                            name="lastName"
+                            value={userReport.lastName.value}
+                            onChange={userReportHandler}
+                            className="text-fields-report"
+                            placeholder="Last Name"
+                          />
+                        </Col>
+                      </Row>
+                    </Col>
 
-            <Col lg={4} md={4} sm={12} className="JS-Security-Datepicker">
-              <DatePicker
-                // value={value}
-                // onChange={setValue}
-                {...startDateProps}
-                onPropsChange={setStartDateProps}
-                showOtherDays={true}
-                inputClass="date-picker-left"
-                placeholder="Start Date"
-              />
-              <label className="date-to">to</label>
+                    <Col
+                      lg={3}
+                      md={4}
+                      sm={12}
+                      className="JS-Security-Datepicker"
+                    >
+                      <DatePicker
+                        // value={value}
+                        // onChange={setValue}
+                        {...startDateProps}
+                        onPropsChange={setStartDateProps}
+                        showOtherDays={true}
+                        inputClass="date-picker-left"
+                        placeholder="Start Date"
+                      />
+                      <label className="date-to">to</label>
 
-              <DatePicker
-                {...endDateProps}
-                onPropsChange={setEndDateProps}
-                showOtherDays={true}
-                inputClass="date-picker-right"
-                placeholder="End Date"
-              />
-            </Col>
-          </Row>
+                      <DatePicker
+                        {...endDateProps}
+                        onPropsChange={setEndDateProps}
+                        showOtherDays={true}
+                        inputClass="date-picker-right"
+                        placeholder="End Date"
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
 
-          <Row className="mb-2">
-            <Col
-              lg={12}
-              md={12}
-              sm={12}
-              className="d-flex justify-content-center mt-3"
-            >
-              <Button
-                icon={<i className="icon-refresh user-reset"></i>}
-                text="Reset"
-                onClick={resetHandler}
-                className="user-report-reset"
-              />
-            </Col>
-          </Row>
-        </Paper>
+              <Row className="mb-2">
+                <Col
+                  lg={12}
+                  md={12}
+                  sm={12}
+                  className="d-flex justify-content-center mt-3"
+                >
+                  <Button
+                    icon={<i className="icon-refresh user-reset"></i>}
+                    text="Reset"
+                    onClick={resetHandler}
+                    className="user-report-reset"
+                  />
+                </Col>
+              </Row>
+            </Paper>
+          </Col>
+        </Row>
 
-        <Paper className="status-user-panel">
-          <Row className="mt-3">
-            <Col lg={12} md={12} sm={12}>
-              <label className="user-status-heading">Status</label>
-            </Col>
-          </Row>
+        <Row className="mt-2">
+          <Col lg={12} md={12} sm={12}>
+            <Paper className="status-user-panel">
+              <Row className="mt-3">
+                <Col lg={12} md={12} sm={12}>
+                  <label className="user-status-heading">Status</label>
+                </Col>
+              </Row>
 
-          <Row className="mt-3 mb-3">
-            <Col lg={12} md={12} sm={12} className="report-btm-button-col">
-              <Button
-                icon={<i className="icon-download download-btn-icons"></i>}
-                text="Access Detail"
-                className="report-btm-buttons"
-              />
-              <Button
-                icon={<i className="icon-download download-btn-icons"></i>}
-                text="Login History"
-                className="report-btm-buttons"
-              />
-              <Button
-                icon={<i className="icon-download download-btn-icons"></i>}
-                text="Status Wise"
-                className="report-btm-buttons"
-              />
-              <Button
-                icon={<i className="icon-download download-btn-icons"></i>}
-                text="Last Login"
-                className="report-btm-buttons"
-              />
-            </Col>
-          </Row>
-        </Paper>
-      </Container>
+              <Row className="mt-3 mb-3">
+                <Col lg={12} md={12} sm={12}>
+                  <Row>
+                    <Col lg={3} md={3} sm={3}>
+                      <Button
+                        icon={
+                          <i className="icon-download download-btn-icons"></i>
+                        }
+                        text="Access Detail"
+                        className="report-btm-buttons"
+                      />
+                    </Col>
+                    <Col lg={3} md={3} sm={3}>
+                      <Button
+                        icon={
+                          <i className="icon-download download-btn-icons"></i>
+                        }
+                        text="Login History"
+                        className="report-btm-buttons"
+                      />
+                    </Col>
+                    <Col lg={3} md={3} sm={3}>
+                      <Button
+                        icon={
+                          <i className="icon-download download-btn-icons"></i>
+                        }
+                        text="Status Wise"
+                        className="report-btm-buttons"
+                      />
+                    </Col>
+                    <Col lg={3} md={3} sm={3}>
+                      <Button
+                        icon={
+                          <i className="icon-download download-btn-icons"></i>
+                        }
+                        text="Last Login"
+                        className="report-btm-buttons"
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Paper>
+          </Col>
+        </Row>
+      </section>
     </>
   );
 };
