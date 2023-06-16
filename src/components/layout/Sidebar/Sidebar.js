@@ -79,109 +79,100 @@ const Sidebar = () => {
   };
 
   return (
-    <Fragment>
-      <Row className="sidebar-row">
-        <Col sm={4} className="js-sidebar">
-          <Layout>
-            <Sider
-              width={250}
-              style={{
-                background: "#000000",
-              }}
+    <Row>
+      <Col lg={12} md={12} sm={12}>
+        <Layout>
+          <Sider width={250}>
+            <Menu
+              theme="light"
+              defaultOpenKeys={[defaultOpenKey]}
+              defaultSelectedKeys={[defaultSelectedKey]}
+              mode="inline"
+              className="Menu-sidebar-class"
             >
-              <span className="SecurityMenu">
-                <Menu
-                  theme="light"
-                  defaultOpenKeys={[defaultOpenKey]}
-                  defaultSelectedKeys={[defaultSelectedKey]}
-                  mode="inline"
-                  className="Menu-sidebar-class"
+              <SubMenu
+                key="sub1"
+                icon={<i className="icon-user menu-icons"></i>}
+                title="Bank Management"
+                className="submenu-sidebar-icons"
+              >
+                <Menu.Item
+                  className="menu-items-sidebar"
+                  key="3"
+                  onClick={navigateToBankUsers}
                 >
-                  <SubMenu
-                    key="sub1"
-                    icon={<i className="icon-user menu-icons"></i>}
-                    title="Bank Management"
-                    className="submenu-sidebar-icons"
-                  >
-                    <Menu.Item
-                      className="menu-items-sidebar"
-                      key="3"
-                      onClick={navigateToBankUsers}
-                    >
-                      Add a Bank User
-                    </Menu.Item>
+                  Add a Bank User
+                </Menu.Item>
 
-                    <Menu.Item
-                      className="menu-items-sidebar"
-                      key="4"
-                      onClick={navigateToPendingRequest}
-                    >
-                      Pending user requests
-                    </Menu.Item>
-                    <Menu.Item
-                      className="menu-items-sidebar"
-                      key="5"
-                      onClick={navigateToAllUsers}
-                    >
-                      All User
-                    </Menu.Item>
-                  </SubMenu>
-                  <SubMenu
-                    key="sub2"
-                    icon={<i className="icon-user menu-icons"></i>}
-                    title="Customer Management"
-                    className="submenu-sidebar-icons"
-                  >
-                    <Menu.Item
-                      className="menu-items-sidebar"
-                      key="6"
-                      onClick={navigateToCustomer}
-                    >
-                      Add a Customer
-                    </Menu.Item>
-                    <Menu.Item
-                      className="menu-items-sidebar"
-                      key="7"
-                      onClick={navigateToUserList}
-                    >
-                      Customer Users List
-                    </Menu.Item>
-                  </SubMenu>
-                  <SubMenu
-                    key="sub3"
-                    icon={<i className="icon-user menu-icons"></i>}
-                    title="Report"
-                    className="submenu-sidebar-icons"
-                  >
-                    <Menu.Item
-                      className="menu-items-sidebar"
-                      key="8"
-                      onClick={navigateToReport}
-                    >
-                      User Report
-                    </Menu.Item>
-                  </SubMenu>
-                  <SubMenu
-                    key="sub4"
-                    icon={<i className="icon-user menu-icons"></i>}
-                    title="SetUp"
-                    className="submenu-sidebar-icons"
-                  >
-                    <Menu.Item
-                      className="menu-items-sidebar"
-                      key="9"
-                      onClick={navigateToNatureOfBusiness}
-                    >
-                      Nature Of Business
-                    </Menu.Item>
-                  </SubMenu>
-                </Menu>
-              </span>
-            </Sider>
-          </Layout>
-        </Col>
-      </Row>
-    </Fragment>
+                <Menu.Item
+                  className="menu-items-sidebar"
+                  key="4"
+                  onClick={navigateToPendingRequest}
+                >
+                  Pending user requests
+                </Menu.Item>
+                <Menu.Item
+                  className="menu-items-sidebar"
+                  key="5"
+                  onClick={navigateToAllUsers}
+                >
+                  Bank User List
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="sub2"
+                icon={<i className="icon-user menu-icons"></i>}
+                title="Customer Management"
+                className="submenu-sidebar-icons"
+              >
+                <Menu.Item
+                  className="menu-items-sidebar"
+                  key="6"
+                  onClick={navigateToCustomer}
+                >
+                  Add a Customer
+                </Menu.Item>
+                <Menu.Item
+                  className="menu-items-sidebar"
+                  key="7"
+                  onClick={navigateToUserList}
+                >
+                  Customer Users List
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="sub3"
+                icon={<i className="icon-user menu-icons"></i>}
+                title="Report"
+                className="submenu-sidebar-icons"
+              >
+                <Menu.Item
+                  className="menu-items-sidebar"
+                  key="8"
+                  onClick={navigateToReport}
+                >
+                  User Report
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="sub4"
+                icon={<i className="icon-user menu-icons"></i>}
+                title="SetUp"
+                className="submenu-sidebar-icons"
+              >
+                <Menu.Item
+                  className="menu-items-sidebar"
+                  key="9"
+                  onClick={navigateToNatureOfBusiness}
+                >
+                  Nature Of Business
+                </Menu.Item>
+              </SubMenu>
+            </Menu>
+          </Sider>
+        </Layout>
+      </Col>
+    </Row>
   );
 };
 

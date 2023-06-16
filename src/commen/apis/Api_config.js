@@ -82,6 +82,18 @@ const BankBulkUserList = {
   RequestMethod: "ServiceManager.BankUsersBulkList",
 };
 
+//GetAllCorporateUserList
+
+const CorporateUserList = {
+  RequestMethod: "ServiceManager.GetAllCorporateUsers",
+};
+
+//SearchUserApi
+
+const SearchApiCorporate = {
+  RequestMethod: "ServiceManager.SearchCorporateUsers",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -102,4 +114,6 @@ export {
   getAllNatureBusinessERM,
   getAllAssetsTypeERM,
   BankBulkUserList,
+  CorporateUserList,
+  SearchApiCorporate,
 };

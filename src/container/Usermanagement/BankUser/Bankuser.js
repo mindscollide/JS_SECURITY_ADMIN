@@ -323,270 +323,283 @@ const Bankuser = () => {
   };
 
   return (
-    <Fragment>
-      <Container className="bank-user-container">
-        <Row>
-          <Col>
-            <Row>
-              <Col lg={12} md={12} sm={12}>
-                <span className="bank-user-label">Add a Bank user</span>
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col lg={11} md={11} sm={12}>
-                <Paper className="bankuser-paper">
-                  <Row className="mt-3">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-bank">
-                        First Name<span className="aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name={"firstName"}
-                        value={addBankUser.firstName.value}
-                        onChange={addBankUserValidateHandler}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addBankUser.firstName.value === ""
-                                ? "bankErrorMessage"
-                                : "bankErrorMessage_hidden"
-                            }
+    <section className="Container_bank_user">
+      <Row>
+        <Col lg={12} md={12} sm={12}>
+          <Row>
+            <Col
+              lg={12}
+              md={12}
+              sm={12}
+              className="d-flex justify-content-start m-0 p-0"
+            >
+              <span className="bank-user-label">Add a Bank user</span>
+            </Col>
+          </Row>
+          <Row className="mt-1">
+            <Col lg={12} md={12} sm={12} className="m-0 p-0">
+              <Paper className="bankuser-paper">
+                <Row>
+                  <Col lg={12} md={12} sm={12}>
+                    <Row className="mt-3">
+                      <Col lg={2} md={2} sm={12}>
+                        <span className="labels-add-bank">
+                          First Name<span className="aesterick-color">*</span>
+                        </span>
+                      </Col>
+                      <Col lg={5} md={5} sm={12}>
+                        <TextField
+                          name={"firstName"}
+                          value={addBankUser.firstName.value}
+                          onChange={addBankUserValidateHandler}
+                          labelClass="d-none"
+                        />
+                        <Row>
+                          <Col
+                            lg={12}
+                            md={12}
+                            sm={12}
+                            className="d-flex justify-content-start"
                           >
-                            First Name is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
+                            <p
+                              className={
+                                errorShow && addBankUser.firstName.value === ""
+                                  ? "bankErrorMessage"
+                                  : "bankErrorMessage_hidden"
+                              }
+                            >
+                              First Name is required
+                            </p>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
 
-                    <Col lg={4} md={4} sm={12}></Col>
-                  </Row>
+                    <Row className="mt-3">
+                      <Col lg={2} md={2} sm={12}>
+                        <span className="labels-add-bank">
+                          Last Name<span className="aesterick-color">*</span>
+                        </span>
+                      </Col>
+                      <Col lg={5} md={5} sm={12}>
+                        <TextField
+                          name={"lastName"}
+                          value={addBankUser.lastName.value}
+                          onChange={addBankUserValidateHandler}
+                          labelClass="d-none"
+                        />
+                        <Row>
+                          <Col className="d-flex justify-content-start">
+                            <p
+                              className={
+                                errorShow && addBankUser.lastName.value === ""
+                                  ? "bankErrorMessage"
+                                  : "bankErrorMessage_hidden"
+                              }
+                            >
+                              Last Name is required
+                            </p>
+                          </Col>
+                        </Row>
+                      </Col>
 
-                  <Row className="mt-3">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-bank">
-                        Last Name<span className="aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name={"lastName"}
-                        value={addBankUser.lastName.value}
-                        onChange={addBankUserValidateHandler}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addBankUser.lastName.value === ""
-                                ? "bankErrorMessage"
-                                : "bankErrorMessage_hidden"
-                            }
-                          >
-                            Last Name is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
+                      <Col lg={4} md={4} sm={12}></Col>
+                    </Row>
 
-                    <Col lg={4} md={4} sm={12}></Col>
-                  </Row>
+                    <Row className="mt-3">
+                      <Col lg={2} md={2} sm={12}>
+                        <span className="labels-add-bank">
+                          LDAP Account<span className="aesterick-color">*</span>
+                        </span>
+                      </Col>
+                      <Col lg={5} md={5} sm={12}>
+                        <TextField
+                          name={"ldapAccount"}
+                          value={addBankUser.ldapAccount.value}
+                          onChange={addBankUserValidateHandler}
+                          labelClass="d-none"
+                        />
+                        <Row>
+                          <Col className="d-flex justify-content-start">
+                            <p
+                              className={
+                                errorShow &&
+                                addBankUser.ldapAccount.value === ""
+                                  ? "bankErrorMessage"
+                                  : "bankErrorMessage_hidden"
+                              }
+                            >
+                              LDAP Account is required
+                            </p>
+                          </Col>
+                        </Row>
+                      </Col>
 
-                  <Row className="mt-3">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-bank">
-                        LDAP Account<span className="aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name={"ldapAccount"}
-                        value={addBankUser.ldapAccount.value}
-                        onChange={addBankUserValidateHandler}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addBankUser.ldapAccount.value === ""
-                                ? "bankErrorMessage"
-                                : "bankErrorMessage_hidden"
-                            }
-                          >
-                            LDAP Account is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
+                      <Col lg={4} md={4} sm={12}></Col>
+                    </Row>
 
-                    <Col lg={4} md={4} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-2">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-bank">
-                        User Role<span className="aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      {/* <span className="span-select"> */}
-                      <Select
-                        name="roleID"
-                        options={bankSelectRole}
-                        value={bankSelectRoleValue}
-                        onChange={bankSelectRoleHandler}
-                        isSearchable={true}
-                        className="react-select-field"
-                      />
-                      {/* <span
+                    <Row className="mt-2">
+                      <Col lg={2} md={2} sm={12}>
+                        <span className="labels-add-bank">
+                          User Role<span className="aesterick-color">*</span>
+                        </span>
+                      </Col>
+                      <Col lg={5} md={5} sm={12}>
+                        {/* <span className="span-select"> */}
+                        <Select
+                          name="roleID"
+                          options={bankSelectRole}
+                          value={bankSelectRoleValue}
+                          onChange={bankSelectRoleHandler}
+                          isSearchable={true}
+                          className="react-select-field"
+                        />
+                        {/* <span
                           className="select-clickable-icon"
                           onClick={openBankModal}
                         >
                           <PlusLg />
                         </span> */}
-                      {/* </span> */}
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addBankUser.roleID.value === ""
-                                ? "bankErrorMessage"
-                                : "bankErrorMessage_hidden"
-                            }
-                          >
-                            Role is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
+                        {/* </span> */}
+                        <Row>
+                          <Col className="d-flex justify-content-start">
+                            <p
+                              className={
+                                errorShow && addBankUser.roleID.value === ""
+                                  ? "bankErrorMessage"
+                                  : "bankErrorMessage_hidden"
+                              }
+                            >
+                              Role is required
+                            </p>
+                          </Col>
+                        </Row>
+                      </Col>
 
-                    <Col lg={4} md={4} sm={12}></Col>
-                  </Row>
+                      <Col lg={4} md={4} sm={12}></Col>
+                    </Row>
 
-                  <Row className="mt-2">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-bank">
-                        Email<span className="aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name="email"
-                        value={addBankUser.email.value}
-                        onChange={addBankUserValidateHandler}
-                        onBlur={handlerEmail}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addBankUser.email.value === ""
-                                ? "bankErrorMessage"
-                                : "bankErrorMessage_hidden"
-                            }
-                          >
-                            Email is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
+                    <Row className="mt-2">
+                      <Col lg={2} md={2} sm={12}>
+                        <span className="labels-add-bank">
+                          Email<span className="aesterick-color">*</span>
+                        </span>
+                      </Col>
+                      <Col lg={5} md={5} sm={12}>
+                        <TextField
+                          name="email"
+                          value={addBankUser.email.value}
+                          onChange={addBankUserValidateHandler}
+                          onBlur={handlerEmail}
+                          labelClass="d-none"
+                        />
+                        <Row>
+                          <Col className="d-flex justify-content-start">
+                            <p
+                              className={
+                                errorShow && addBankUser.email.value === ""
+                                  ? "bankErrorMessage"
+                                  : "bankErrorMessage_hidden"
+                              }
+                            >
+                              Email is required
+                            </p>
+                          </Col>
+                        </Row>
+                      </Col>
 
-                    <Col lg={4} md={4} sm={12}></Col>
-                  </Row>
+                      <Col lg={4} md={4} sm={12}></Col>
+                    </Row>
 
-                  <Row className="mt-2">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-bank">
-                        Contact<span className="aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name={"Contact"}
-                        value={addBankUser.Contact.value}
-                        onChange={addBankUserValidateHandler}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addBankUser.Contact.value === ""
-                                ? "bankErrorMessage"
-                                : "bankErrorMessage_hidden"
-                            }
-                          >
-                            Contact is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
+                    <Row className="mt-2">
+                      <Col lg={2} md={2} sm={12}>
+                        <span className="labels-add-bank">
+                          Contact<span className="aesterick-color">*</span>
+                        </span>
+                      </Col>
+                      <Col lg={5} md={5} sm={12}>
+                        <TextField
+                          name={"Contact"}
+                          value={addBankUser.Contact.value}
+                          onChange={addBankUserValidateHandler}
+                          labelClass="d-none"
+                        />
+                        <Row>
+                          <Col className="d-flex justify-content-start">
+                            <p
+                              className={
+                                errorShow && addBankUser.Contact.value === ""
+                                  ? "bankErrorMessage"
+                                  : "bankErrorMessage_hidden"
+                              }
+                            >
+                              Contact is required
+                            </p>
+                          </Col>
+                        </Row>
+                      </Col>
 
-                    <Col lg={4} md={4} sm={12}></Col>
-                  </Row>
+                      <Col lg={4} md={4} sm={12}></Col>
+                    </Row>
 
-                  <Row className="mt-2">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-bank">
-                        File Upload<span className="aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={2} md={2} sm={12}>
-                      <CustomUpload change={HandleFileUpload} />
-                    </Col>
-                    <Col
-                      lg={3}
-                      md={3}
-                      sm={12}
-                      className="d-flex justify-content-end"
-                    >
-                      <Button
-                        text={"download excel format"}
-                        className="upload-btn"
-                      />
-                    </Col>
-                    <Col lg={7} md={7} sm={12} />
-
-                    <Row className="mt-3">
+                    <Row className="mt-2">
+                      <Col lg={2} md={2} sm={12}>
+                        <span className="labels-add-bank">
+                          File Upload<span className="aesterick-color">*</span>
+                        </span>
+                      </Col>
+                      <Col lg={2} md={2} sm={12}>
+                        <CustomUpload change={HandleFileUpload} />
+                      </Col>
                       <Col
-                        lg={9}
-                        md={9}
+                        lg={3}
+                        md={3}
                         sm={12}
-                        className="active-cancel-btn-col"
+                        className="d-flex justify-content-end"
                       >
                         <Button
-                          icon={<i className="icon-check icon-check-space"></i>}
-                          text="Activate"
-                          onClick={activateHandler}
-                          className="Active-btn"
-                        />
-                        <Button
-                          icon={<i className="icon-close icon-check-space"></i>}
-                          text="Cancel"
-                          onClick={createResetHandler}
-                          className="Cancel-btn"
+                          text={"download excel format"}
+                          className="upload-btn"
                         />
                       </Col>
-                    </Row>
-                  </Row>
-                </Paper>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+                      <Col lg={7} md={7} sm={12} />
 
+                      <Row className="mt-3">
+                        <Col
+                          lg={9}
+                          md={9}
+                          sm={12}
+                          className="active-cancel-btn-col"
+                        >
+                          <Button
+                            icon={
+                              <i className="icon-check icon-check-space"></i>
+                            }
+                            text="Activate"
+                            onClick={activateHandler}
+                            className="Active-btn"
+                          />
+                          <Button
+                            icon={
+                              <i className="icon-close icon-check-space"></i>
+                            }
+                            text="Cancel"
+                            onClick={createResetHandler}
+                            className="Cancel-btn"
+                          />
+                        </Col>
+                      </Row>
+                    </Row>
+                  </Col>
+                </Row>
+              </Paper>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
       {addBankModal ? (
         <BankModal bankModal={addBankModal} setBankModal={setAddBankModal} />
       ) : null}
-
       {uplaodModal ? (
         <UploadAddModal
           uploadAddModal={uplaodModal}
@@ -594,7 +607,7 @@ const Bankuser = () => {
         />
       ) : null}
       {securitReducer.Loading ? <Loader /> : null}
-    </Fragment>
+    </section>
   );
 };
 

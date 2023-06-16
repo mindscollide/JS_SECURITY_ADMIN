@@ -1,15 +1,4 @@
-.bank-user-container {
-  align-items: top !important;
-  height: 350px !important;
-  width: 100% !important;
-  left: 260px !important;
-  justify-content: center !important;
-  position: fixed !important;
-}
-
 .bank-user-label {
-  display: flex;
-  justify-content: start;
   font-size: 18px;
   color: #004990;
   font-weight: 600;
@@ -17,7 +6,9 @@
 
 .bankuser-paper {
   border-radius: 4px;
-  padding: 3px 10px !important;
+  padding: 3px 6px !important;
+  width: 100% !important;
+  overflow: hidden !important;
   background-color: #ffffff !important;
 }
 
@@ -26,6 +17,11 @@
   justify-content: center !important;
   gap: 5px !important;
   margin-bottom: 10px;
+}
+
+.Container_bank_user {
+  width: 83% !important;
+  margin: 0 50px 0 0 !important;
 }
 
 .Active-btn {

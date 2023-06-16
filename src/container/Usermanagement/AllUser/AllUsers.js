@@ -829,7 +829,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                   rows={rows}
                   scroll={{ x: true }}
                   className="Edituser-table"
-                  pagination={false}
+                  pagination={true}
                 />
               )}
             </Col>

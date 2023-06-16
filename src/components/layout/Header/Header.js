@@ -47,7 +47,7 @@ const Header = () => {
 
   return (
     <>
-      <Container fluid className="container-header">
+      <Container fluid>
         <Navbar collapseOnSelect expand="lg">
           <Container fluid>
             <Navbar.Brand>
