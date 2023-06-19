@@ -1,13 +1,20 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { PlusLg } from "react-bootstrap-icons";
-import { Paper, TextField, Button, Loader } from "../../../components/elements";
+import {
+  Paper,
+  TextField,
+  Button,
+  Loader,
+  CustomUpload,
+} from "../../../components/elements";
 import { useSelector, useDispatch } from "react-redux";
 import CustomerModal from "../../Pages/Modals/Add-Customer-Modal/Customermodal";
 import UploadCustomerModal from "../../Pages/Modals/Upload-Customer-Modal/UploadCustomerModal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
 import { useNavigate } from "react-router-dom";
 import { getAllCorporate } from "../../../store/actions/Auth_Actions";
+import { FileBulkUpload } from "../../../store/actions/Upload_Action";
 import { corporateCreate } from "../../../store/actions/Security_Admin";
 import "./Addcustomer.css";
 import Select from "react-select";
@@ -91,6 +98,19 @@ const Addcustomer = () => {
       errorStatus: false,
     },
   });
+
+  const HandleFileUpload = (data) => {
+    const UploadFile = data.target.value;
+    const uploadedFile = data.target.files[0];
+    console.log("UploadFileUploadFile", UploadFile);
+    console.log("uploadedFileuploadedFile", uploadedFile);
+    var ext = uploadedFile.name.split(".").pop();
+    if (ext === "xls" || ext === "xlsx") {
+      dispatch(FileBulkUpload(navigate, uploadedFile, setCustomerUpload));
+    } else {
+      alert("Invalid type");
+    }
+  };
 
   useEffect(() => {
     dispatch(getAllCorporate(navigate));
@@ -349,8 +369,8 @@ const Addcustomer = () => {
   }, [auth.allCorporates]);
 
   return (
-    <Fragment>
-      <Container className="addCustomer-user-container">
+    <>
+      <section className="addCustomer-user-container">
         <Row>
           <Col>
             <Row>
@@ -361,7 +381,7 @@ const Addcustomer = () => {
               </Col>
             </Row>
             <Row>
-              <Col lg={11} md={11} sm={12}>
+              <Col lg={12} md={12} sm={12}>
                 <Paper className="addCustomer-paper">
                   <Row className="mt-3">
                     <Col lg={2} md={2} sm={12}>
@@ -595,11 +615,7 @@ const Addcustomer = () => {
                       </span>
                     </Col>
                     <Col lg={2} md={2} sm={12}>
-                      <Button
-                        className="upload-btn-addCustomer"
-                        onClick={openUploadCustomerModal}
-                        text="Upload your contacts"
-                      />
+                      <CustomUpload change={HandleFileUpload} />
                     </Col>
                     <Col
                       lg={3}
@@ -641,7 +657,7 @@ const Addcustomer = () => {
             </Row>
           </Col>
         </Row>
-      </Container>
+      </section>
 
       {modalAddCustomer ? (
         <>
@@ -662,7 +678,7 @@ const Addcustomer = () => {
       ) : null}
 
       {securitReducer.Loading ? <Loader /> : null}
-    </Fragment>
+    </>
   );
 };
 

@@ -1,10 +1,6 @@
 .Nature-Business-container {
-  align-items: top !important;
-  height: 350px !important;
-  width: 100% !important;
-  left: 260px !important;
-  justify-content: center !important;
-  position: absolute !important;
+  width: 100%;
+  margin: 0px 50px 0 0;
 }
 
 .Nature-Business-label {
@@ -17,7 +13,9 @@
 
 .Nature-Business-paper {
   border-radius: 4px;
-  padding: 3px 10px !important;
+  padding: 3px 6px !important;
+  width: 100% !important;
+  overflow: hidden !important;
   background-color: #ffffff !important;
 }
 
