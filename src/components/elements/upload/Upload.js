@@ -32,11 +32,8 @@ const CustomUpload = ({
         maxfilesize={10000000}
         disabled={disable}
       />
-      <label
-        htmlFor="contained-button-file"
-        className={styles["ButtonForUpload"]}
-      >
-        Upload your Contacts
+      <label htmlFor="contained-button-file">
+        <span className={styles["ButtonForUpload"]}>Upload your Contacts</span>
       </label>
       {/* <label htmlFor="contained-button-file">
         <img className="cursor-pointer" src={AttachmentIcon}></img>

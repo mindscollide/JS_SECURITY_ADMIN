@@ -449,28 +449,28 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "userLDAPAccount",
       key: "userLDAPAccount",
-      width: "250px",
+      width: "200px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "300px",
+      width: "150px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
       dataIndex: "firstName",
       key: "firstName",
-      width: "150px",
+      width: "100px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Last Name</label>,
       dataIndex: "lastName",
       key: "lastName",
-      width: "150px",
+      width: "100px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -478,7 +478,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
-      width: "200px",
+      width: "120px",
       render: (text, record) => {
         if (record.userRoleID === 1) {
           return (
@@ -523,7 +523,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
-      width: "120px",
+      width: "60px",
       align: "center",
       render: (text, record) => {
         if (record.userStatusID === 1) {
@@ -596,7 +596,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
-      width: "100px",
+      width: "70px",
       align: "center",
       render: (text, record) => {
         console.log("recordrecordrecord");
