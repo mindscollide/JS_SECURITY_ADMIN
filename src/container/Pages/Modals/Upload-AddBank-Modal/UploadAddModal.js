@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -7,20 +7,41 @@ import {
   Modal,
 } from "../../../../components/elements";
 import "./UploadAddModal.css";
+import { useDispatch, useSelector } from "react-redux";
 
 const UploadAddModal = ({ ModalTitle, uploadAddModal, setUploadAddModal }) => {
+  const { uploadReducer } = useSelector((state) => state);
+  console.log("statestatestate", uploadReducer);
   // for close modal handler
   const closeUploadModal = () => {
     setUploadAddModal(false);
   };
 
+  const [excelData, setexcelData] = useState([]);
+  console.log(excelData, "excelDataexcelData");
+  useEffect(() => {
+    if (
+      Object.keys(uploadReducer.uploadDocumentsList.invalidUsers).length > 0
+    ) {
+      let temp = [];
+      uploadReducer.uploadDocumentsList.invalidUsers.map((data, index) => {
+        console.log("datadatadata", data);
+        temp.push(data);
+      });
+      setexcelData(temp);
+      console.log("excelDataexcelDataexcelData", excelData);
+    }
+  }, []);
+
   const columns = [
     {
       title: <label className="bottom-table-header">Name</label>,
-      dataIndex: "Name",
-      key: "Name",
+      dataIndex: "firstName",
+      key: "firstName",
       width: "100px",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      render: (text, record) => (
+        <label className="issue-date-column">{`${record.firstName} ${record.lastName}`}</label>
+      ),
     },
     {
       title: <label className="bottom-table-header">User Role</label>,
@@ -39,8 +60,8 @@ const UploadAddModal = ({ ModalTitle, uploadAddModal, setUploadAddModal }) => {
     },
     {
       title: <label className="bottom-table-header">Contact</label>,
-      dataIndex: "contact",
-      key: "contact",
+      dataIndex: "contactnumber",
+      key: "contactnumber",
       width: "100px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
@@ -88,7 +109,11 @@ const UploadAddModal = ({ ModalTitle, uploadAddModal, setUploadAddModal }) => {
 
                     <Row>
                       <Col lg={12} md={12} sm={12}>
-                        <Table column={columns} className="UploadModal-table" />
+                        <Table
+                          column={columns}
+                          rows={excelData}
+                          className="UploadModal-table"
+                        />
                       </Col>
                     </Row>
 

@@ -111,74 +111,68 @@ const NatureofBus = () => {
     },
   ];
   return (
-    <Fragment>
-      <Container className="Nature-Business-container">
-        <Row>
-          <Col>
-            <Row>
-              <Col lg={12} md={12} sm={12}>
-                <span className="Nature-Business-label">
-                  Nature Of Business
-                </span>
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col lg={11} md={11} sm={12}>
-                <Paper className="Nature-Business-paper">
-                  <Row className="mt-3">
-                    <Col lg={4} md={4} sm={12}>
-                      <label className="nature-label">Nature Of Business</label>
-                    </Col>
-                    <Col lg={6} md={6} sm={12}>
-                      <TextField
-                        placeholder="Nature Of Business"
-                        labelClass="d-none"
-                        name="natureBusiness"
-                        value={natureFields.natureBusiness.value}
-                        onChange={natureBusinessValidation}
-                        className="textfields-Nature-Business-fontsize"
-                      />
-                    </Col>
-                    <Col lg={2} md={2} sm={12} />
-                  </Row>
+    <section className="Nature-Business-container">
+      <Row>
+        <Col>
+          <Row>
+            <Col lg={12} md={12} sm={12}>
+              <span className="Nature-Business-label">Nature Of Business</span>
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col lg={12} md={12} sm={12}>
+              <Paper className="Nature-Business-paper">
+                <Row className="mt-3">
+                  <Col lg={4} md={4} sm={12}>
+                    <label className="nature-label">Nature Of Business</label>
+                  </Col>
+                  <Col lg={6} md={6} sm={12}>
+                    <TextField
+                      placeholder="Nature Of Business"
+                      labelClass="d-none"
+                      name="natureBusiness"
+                      value={natureFields.natureBusiness.value}
+                      onChange={natureBusinessValidation}
+                      className="textfields-Nature-Business-fontsize"
+                    />
+                  </Col>
+                  <Col lg={2} md={2} sm={12} />
+                </Row>
 
-                  <Row className="mt-3">
-                    <Col lg={8} md={8} sm={12} className="Nature-col-fields">
-                      <Button
-                        icon={
-                          <i className="icon-add-circle icon-Nature-space"></i>
-                        }
-                        className="Nature-Add-btn"
-                        text="Add"
-                      />
-                      <Button
-                        icon={
-                          <i className="icon-refresh icon-Nature-space"></i>
-                        }
-                        className="Nature-Reset-btn"
-                        onClick={resetNatureHandler}
-                        text="Reset"
-                      />
-                    </Col>
-                    <Col lg={4} md={4} sm={12} />
-                  </Row>
-                  <Row className="mt-3">
-                    <Col lg={12} md={12} sm={12}>
-                      <Table
-                        column={columns}
-                        rows={natureData}
-                        pagination={false}
-                        className="User-List-table"
-                      />
-                    </Col>
-                  </Row>
-                </Paper>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-    </Fragment>
+                <Row className="mt-3">
+                  <Col lg={8} md={8} sm={12} className="Nature-col-fields">
+                    <Button
+                      icon={
+                        <i className="icon-add-circle icon-Nature-space"></i>
+                      }
+                      className="Nature-Add-btn"
+                      text="Add"
+                    />
+                    <Button
+                      icon={<i className="icon-refresh icon-Nature-space"></i>}
+                      className="Nature-Reset-btn"
+                      onClick={resetNatureHandler}
+                      text="Reset"
+                    />
+                  </Col>
+                  <Col lg={4} md={4} sm={12} />
+                </Row>
+                <Row className="mt-3">
+                  <Col lg={12} md={12} sm={12}>
+                    <Table
+                      column={columns}
+                      rows={natureData}
+                      pagination={false}
+                      className="User-List-table"
+                    />
+                  </Col>
+                </Row>
+              </Paper>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </section>
   );
 };
 

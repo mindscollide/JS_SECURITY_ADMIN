@@ -460,28 +460,28 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "userLDAPAccount",
       key: "userLDAPAccount",
-      width: "250px",
+      width: "200px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "300px",
+      width: "150px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
       dataIndex: "firstName",
       key: "firstName",
-      width: "150px",
+      width: "100px",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Last Name</label>,
       dataIndex: "lastName",
       key: "lastName",
-      width: "150px",
+      width: "100px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -489,7 +489,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
-      width: "200px",
+      width: "120px",
       render: (text, record) => {
         if (record.userRoleID === 1) {
           return (
@@ -534,7 +534,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
-      width: "120px",
+      width: "60px",
       align: "center",
       render: (text, record) => {
         if (record.userStatusID === 1) {
@@ -607,7 +607,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
-      width: "100px",
+      width: "70px",
       align: "center",
       render: (text, record) => {
         console.log("recordrecordrecord");
@@ -767,124 +767,134 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
 
   return (
     <>
-      <Container className="edit-user-container">
+      <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
             <label className="edit-user-label">All User</label>
           </Col>
         </Row>
+        <Row>
+          <Col lg={12} md={12} sm={12}>
+            <Paper className="span-edit-user">
+              <Row className="mt-3">
+                <Col lg={12} md={12} sm={12}>
+                  <Row>
+                    <Col lg={3} md={3} sm={3}>
+                      <TextField
+                        name="userLdapAccount"
+                        className="text-fields-edituser"
+                        placeholder="Login ID"
+                        maxLength={100}
+                        value={editUser.userLdapAccount.value}
+                        onChange={editUserValidateHandler}
+                      />
+                    </Col>
+                    <Col lg={3} md={3} sm={3}>
+                      <TextField
+                        name="firstName"
+                        className="text-fields-edituser"
+                        maxLength={100}
+                        placeholder="First Name"
+                        value={editUser.firstName.value}
+                        onChange={editUserValidateHandler}
+                      />
+                    </Col>
+                    <Col lg={3} md={3} sm={3}>
+                      <TextField
+                        name="lastName"
+                        maxLength={100}
+                        className="text-fields-edituser"
+                        placeholder="Last Name"
+                        value={editUser.lastName.value}
+                        onChange={editUserValidateHandler}
+                      />
+                    </Col>
+                    <Col lg={3} md={3} sm={3}>
+                      <Select
+                        name="roleID"
+                        options={editSelectRole}
+                        className="select-field-edit"
+                        placeholder="Select Role"
+                        onChange={selectRoleHandler}
+                        value={editSelectRoleValue}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
 
-        <Paper className="span-edit-user">
-          <Row className="mt-3">
-            <Col lg={12} md={12} sm={12} className="text-field-column">
-              <TextField
-                name="userLdapAccount"
-                className="text-fields-edituser"
-                placeholder="Login ID"
-                maxLength={100}
-                value={editUser.userLdapAccount.value}
-                onChange={editUserValidateHandler}
-              />
-              <TextField
-                name="firstName"
-                maxLength={100}
-                className="text-fields-edituser"
-                placeholder="First Name"
-                value={editUser.firstName.value}
-                onChange={editUserValidateHandler}
-              />
-              <TextField
-                name="lastName"
-                maxLength={100}
-                className="text-fields-edituser"
-                placeholder="Last Name"
-                value={editUser.lastName.value}
-                onChange={editUserValidateHandler}
-              />
-              <Select
-                name="roleID"
-                options={editSelectRole}
-                className="select-field-edit"
-                placeholder="Select Role"
-                onChange={selectRoleHandler}
-                value={editSelectRoleValue}
+              <Row>
+                <Col lg={3} md={3} sm={12}>
+                  <Select
+                    name="statusID"
+                    className="edit-user-select-status"
+                    placeholder="Select Status"
+                    options={editSelectStatus}
+                    onChange={selectStatusHandler}
+                    value={editSelectStatusValue}
+                  />
+                </Col>
+                <Col lg={3} md={3} sm={12}>
+                  <TextField
+                    name="email"
+                    className="edit-user-loginID-Textfield"
+                    placeholder="Email"
+                    onBlur={handlerEmail}
+                    maxLength={100}
+                    value={editUser.email.value}
+                    onChange={editUserValidateHandler}
+                  />
+                </Col>
+                <Col lg={6} md={6} sm={12}>
+                  <Button
+                    icon={<i className="icon-search icon-search-space"></i>}
+                    text="Search"
+                    onClick={onSearchBtnHit}
+                    className="search-Edit-User-btn"
+                  />
+                  <Button
+                    icon={<i className="icon-refresh icon-reset-space"></i>}
+                    text="Reset"
+                    onClick={resetHandler}
+                    className="reset-Edit-User-btn"
+                  />
+                </Col>
+              </Row>
 
-                // defaultValue={editSelectROleValue}
-              />
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg={3} md={3} sm={12}>
-              <Select
-                name="statusID"
-                className="edit-user-select-status"
-                placeholder="Select Status"
-                options={editSelectStatus}
-                onChange={selectStatusHandler}
-                value={editSelectStatusValue}
-              />
-            </Col>
-            <Col lg={3} md={3} sm={12}>
-              <TextField
-                name="email"
-                className="edit-user-loginID-Textfield"
-                placeholder="Email"
-                onBlur={handlerEmail}
-                maxLength={100}
-                value={editUser.email.value}
-                onChange={editUserValidateHandler}
-              />
-            </Col>
-            <Col lg={6} md={6} sm={12}>
-              <Button
-                icon={<i className="icon-search icon-search-space"></i>}
-                text="Search"
-                onClick={onSearchBtnHit}
-                className="search-Edit-User-btn"
-              />
-              <Button
-                icon={<i className="icon-refresh icon-reset-space"></i>}
-                text="Reset"
-                onClick={resetHandler}
-                className="reset-Edit-User-btn"
-              />
-            </Col>
-          </Row>
-
-          <Row className="mt-4">
-            <Col lg={12} md={12} sm={12}>
-              {securitReducer.Spinner === true ? (
-                <span className="edit-user-spinner">
-                  <Spin size="large" />
-                </span>
-              ) : (
-                <Table
-                  column={columns}
-                  rows={rows}
-                  scroll={{ x: true }}
-                  className="Edituser-table"
-                  pagination={false}
-                />
-              )}
-            </Col>
-          </Row>
-
-          <Row className="mt-2">
-            <Col lg={12} md={12} sm={12}>
-              <Pagination
-                total={totalRecords}
-                onChange={allUserPagination}
-                current={currentPage !== null ? currentPage : 1}
-                showSizeChanger
-                pageSizeOptions={[50, 100, 200]}
-                pageSize={currentPageSize !== null ? currentPageSize : 50}
-                className="PaginationStyle-allUser"
-              />
-            </Col>
-          </Row>
-        </Paper>
-      </Container>
+              <Row className="mt-4">
+                <Col lg={12} md={12} sm={12}>
+                  {securitReducer.Spinner === true ? (
+                    <span className="edit-user-spinner">
+                      <Spin size="large" />
+                    </span>
+                  ) : (
+                    <Table
+                      column={columns}
+                      rows={rows}
+                      scroll={{ x: true }}
+                      className="Edituser-table"
+                      pagination={true}
+                    />
+                  )}
+                </Col>
+              </Row>
+              <Row className="mt-2">
+                <Col lg={12} md={12} sm={12}>
+                  <Pagination
+                    total={totalRecords}
+                    onChange={allUserPagination}
+                    current={currentPage !== null ? currentPage : 1}
+                    showSizeChanger
+                    pageSizeOptions={[50, 100, 200]}
+                    pageSize={currentPageSize !== null ? currentPageSize : 50}
+                    className="PaginationStyle-allUser"
+                  />
+                </Col>
+              </Row>
+            </Paper>
+          </Col>
+        </Row>
+      </section>
 
       <Modal
         show={updateModal}

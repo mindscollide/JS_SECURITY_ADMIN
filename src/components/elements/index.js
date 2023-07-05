@@ -10,6 +10,7 @@ import CustomRadio from "./radioButton/Radio";
 import Table from "./table/Table";
 import Paper from "./paper/Paper";
 import Loader from "./loader/Loader";
+import CustomUpload from "./upload/Upload";
 
 export {
   Button,
@@ -24,4 +25,5 @@ export {
   CustomRadio,
   Table,
   Paper,
+  CustomUpload,
 };

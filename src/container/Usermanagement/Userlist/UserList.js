@@ -1,6 +1,12 @@
 import React, { Fragment, useState } from "react";
 import { Col, Row, Container } from "react-bootstrap";
-import { Paper, TextField, Button, Table } from "../../../components/elements";
+import {
+  Paper,
+  TextField,
+  Button,
+  Table,
+  Loader,
+} from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { validateEmail } from "../../../commen/functions/emailValidation";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +14,17 @@ import Select from "react-select";
 import { Spin } from "antd";
 import "./UserList.css";
 import { useEffect } from "react";
+import { getAllCorporateApi } from "../../../store/actions/CorporateActions";
+import { searchCorporateUsers } from "../../../store/actions/SearchCorporateActions";
 
 const Userlist = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { CorporateReducer, SearchReducer } = useSelector((state) => state);
+  console.log("SearchReducerSearchReducer", SearchReducer);
+
+  console.log("CorporateReducerCorporateReducer", CorporateReducer);
+  const [excelData, setexcelData] = useState([]);
   //state for customer list fields
   const [userListFields, setUserListFields] = useState({
     FirstName: {
@@ -42,6 +57,65 @@ const Userlist = () => {
     },
   });
 
+  useEffect(() => {
+    let newCorporateData = {
+      CorporateID: 1,
+    };
+    dispatch(getAllCorporateApi(navigate, newCorporateData));
+  }, []);
+
+  useEffect(() => {
+    console.log(
+      "excelDataexcelDataexcelData",
+      CorporateReducer.GetAllCorporateUser
+    );
+
+    if (Object.keys(CorporateReducer.GetAllCorporateUser).length > 0) {
+      console.log(
+        "excelDataexcelDataexcelData",
+        CorporateReducer.GetAllCorporateUser
+      );
+
+      let temp = [];
+      CorporateReducer.GetAllCorporateUser.map((data, index) => {
+        console.log("datadatadata", data);
+        temp.push(data);
+      });
+      setexcelData(temp);
+      console.log("excelDataexcelDataexcelData", excelData);
+    }
+  }, [CorporateReducer.GetAllCorporateUser]);
+
+  const handleSearchClick = () => {
+    let searchData = {
+      FirstName: userListFields.FirstName.value,
+      LastName: userListFields.LastName.value,
+      Email: userListFields.Email.value,
+      CompanyName: userListFields.companyName.value,
+      CategoryID: 0,
+    };
+
+    dispatch(searchCorporateUsers(navigate, searchData));
+  };
+
+  useEffect(() => {
+    if (Object.keys(SearchReducer.SearchCorporateUser).length > 0) {
+      setexcelData(SearchReducer.SearchCorporateUser);
+    } else {
+      setexcelData([]);
+    }
+  }, [SearchReducer.SearchCorporateUser]);
+
+  useEffect(() => {
+    let searchData = {
+      FirstName: "",
+      LastName: "",
+      Email: "",
+      CompanyName: "",
+      CategoryID: 0,
+    };
+    dispatch(searchCorporateUsers(navigate, searchData));
+  }, []);
   // validation for customer List
   const customerListValidation = (e) => {
     let name = e.target.name;
@@ -159,6 +233,10 @@ const Userlist = () => {
         value: "",
       },
     });
+    let newCorporateData = {
+      CorporateID: 1,
+    };
+    dispatch(getAllCorporateApi(navigate, newCorporateData));
   };
 
   //Table columns for customer List
@@ -167,14 +245,14 @@ const Userlist = () => {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "150px",
+      width: "200px",
       render: (text) => <label className="User-table-columns">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
       dataIndex: "firstName",
       key: "firstName",
-      width: "150px",
+      width: "100px",
       align: "center",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -182,7 +260,7 @@ const Userlist = () => {
       title: <label className="bottom-table-header">Last Name</label>,
       dataIndex: "lastName",
       key: "lastName",
-      width: "150px",
+      width: "100px",
       align: "center",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -216,17 +294,17 @@ const Userlist = () => {
   ];
 
   return (
-    <Fragment>
-      <Container className="user-List-container">
+    <>
+      <section className="user-List-container">
         <Row>
           <Col>
             <Row>
               <Col lg={12} md={12} sm={12}>
-                <span className="user-List-label">User List</span>
+                <span className="user-List-label">Customer User List</span>
               </Col>
             </Row>
             <Row className="mt-3">
-              <Col lg={11} md={11} sm={12}>
+              <Col lg={12} md={12} sm={12}>
                 <Paper className="user-List-paper">
                   <Row className="mt-3">
                     <Col lg={2} md={2} sm={12}>
@@ -273,7 +351,7 @@ const Userlist = () => {
                     <Col lg={3} md={3} sm={12}>
                       <Select
                         name="corporateCategoryID"
-                        placeholder="Select"
+                        placeholder="Category"
                         className="select-user-list-fontsize"
                       />
                     </Col>
@@ -290,6 +368,7 @@ const Userlist = () => {
                         icon={<i className="icon-search icon-check-space"></i>}
                         className="User-Search-btn"
                         text="Search"
+                        onClick={handleSearchClick}
                       />
                       <Button
                         icon={<i className="icon-refresh icon-check-space"></i>}
@@ -303,8 +382,9 @@ const Userlist = () => {
                     <Col lg={12} md={12} sm={12}>
                       <Table
                         column={columns}
-                        //   rows={rows}
-                        pagination={false}
+                        rows={excelData}
+                        scroll={{ x: true }}
+                        pagination={true}
                         className="User-List-table"
                       />
                     </Col>
@@ -314,8 +394,10 @@ const Userlist = () => {
             </Row>
           </Col>
         </Row>
-      </Container>
-    </Fragment>
+      </section>
+      {CorporateReducer.Loading ? <Loader /> : null}
+      {SearchReducer.Loading ? <Loader /> : null}
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Container, Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -13,18 +14,23 @@ const UploadCustomerModal = ({
   uploadCustomerModal,
   setUploadCustomerModal,
 }) => {
+  const [excelData, setexcelData] = useState([]);
   // for close modal handler
   const closeUploadCustomerModal = () => {
     setUploadCustomerModal(false);
   };
 
+  const { uploadReducer } = useSelector((state) => state);
+  console.log("statestatestate", uploadReducer);
   const columns = [
     {
       title: <label className="bottom-table-header">Name</label>,
-      dataIndex: "Name",
-      key: "Name",
+      dataIndex: "firstName",
+      key: "firstName",
       width: "100px",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      render: (text, record) => (
+        <label className="issue-date-column">{`${record.firstName} ${record.lastName}`}</label>
+      ),
     },
     {
       title: <label className="bottom-table-header">User Role</label>,
@@ -43,13 +49,27 @@ const UploadCustomerModal = ({
     },
     {
       title: <label className="bottom-table-header">Contact</label>,
-      dataIndex: "contact",
-      key: "contact",
+      dataIndex: "contactnumber",
+      key: "contactnumber",
       width: "100px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
   ];
+
+  useEffect(() => {
+    if (
+      Object.keys(uploadReducer.uploadDocumentsList.invalidUsers).length > 0
+    ) {
+      let temp = [];
+      uploadReducer.uploadDocumentsList.invalidUsers.map((data, index) => {
+        console.log("datadatadata", data);
+        temp.push(data);
+      });
+      setexcelData(temp);
+      console.log("excelDataexcelDataexcelData", excelData);
+    }
+  }, []);
   return (
     <Fragment>
       <Modal
@@ -127,6 +147,7 @@ const UploadCustomerModal = ({
                       <Col lg={12} md={12} sm={12}>
                         <Table
                           column={columns}
+                          rows={excelData}
                           className="Upload-Customer-Modal-table"
                         />
                       </Col>

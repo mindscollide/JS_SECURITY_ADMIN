@@ -1,16 +1,13 @@
 .addCustomer-user-container {
-  align-items: top !important;
-  height: 350px !important;
   width: 100% !important;
-  left: 260px !important;
-  justify-content: center !important;
-  position: absolute !important;
-  /* position: fixed !important; */
+  margin: 0 50px 0 0 !important;
 }
 
 .addCustomer-paper {
   border-radius: 4px;
-  padding: 3px 10px !important;
+  padding: 3px 6px !important;
+  width: 100% !important;
+  overflow: hidden !important;
   background-color: #ffffff !important;
 }
 

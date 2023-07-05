@@ -1,8 +1,9 @@
-.background-color{
-    background-color: #f4f4f4 !important;
+.background-color {
+  background-color: #f4f4f4 !important;
 }
 
-body{
-    background-color: #f4f4f4 !important;
-    font-family: 'Montserrat', sans-serif !important;
+body {
+  background-color: #f4f4f4 !important;
+  font-family: "Montserrat", sans-serif !important;
+  overflow: hidden;
 }
