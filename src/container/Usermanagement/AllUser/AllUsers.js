@@ -10,7 +10,7 @@ import {
 } from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Select, Spin } from "antd";
+import { Select, Spin, Pagination } from "antd";
 import {
   editSecurityAdmin,
   allUserList,
@@ -29,6 +29,16 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
+
+  const [totalRecords, setTotalRecord] = useState(0);
+
+  let currentPageSize = localStorage.getItem("allUserSize")
+    ? localStorage.getItem("allUserSize")
+    : 50;
+  let currentPage = localStorage.getItem("allUserPage")
+    ? localStorage.getItem("allUserPage")
+    : 1;
+
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [editUserStatusValue, setEditUserStatusValue] = useState({
@@ -353,7 +363,8 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       Email: "",
       UserRoleID: 0,
       UserStatusID: 0,
-      RequestingUserID: 0,
+      PageNumber: 1,
+      Length: 50,
     };
     dispatch(allUserList(navigate, data));
   };
@@ -621,8 +632,26 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       Email: editUser.email.value,
       UserRoleID: editUser.roleID.value,
       UserStatusID: editUser.statusID.value,
-      RequestingUserID: 0,
+      PageNumber: currentPage !== null ? parseInt(currentPage) : 1,
+      Length: currentPageSize !== null ? parseInt(currentPageSize) : 50,
     };
+    dispatch(allUserList(navigate, data));
+  };
+
+  // onChange handler for pagination
+  const allUserPagination = (current, pageSize) => {
+    let data = {
+      FirstName: editUser.firstName.value,
+      LastName: editUser.lastName.value,
+      UserLDAPAccount: editUser.userLdapAccount.value,
+      Email: editUser.email.value,
+      UserRoleID: editUser.roleID.value,
+      UserStatusID: editUser.statusID.value,
+      PageNumber: currentPage !== null ? parseInt(currentPage) : 1,
+      Length: currentPageSize !== null ? parseInt(currentPageSize) : 50,
+    };
+    localStorage.setItem("allUserSize", pageSize);
+    localStorage.setItem("allUserPage", current);
     dispatch(allUserList(navigate, data));
   };
 
@@ -678,7 +707,8 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       Email: "",
       UserRoleID: 0,
       UserStatusID: 0,
-      RequestingUserID: 0,
+      PageNumber: 1,
+      Length: 50,
     };
     dispatch(allUserList(navigate, data));
   }, []);
@@ -693,6 +723,11 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       UserRoleID: modalEditState.selectRole.value,
       UserStatusID: modalEditState.selectStatus.value,
       UserIdToEdit: modalEditState.userID,
+      Email: modalEditState.Email.value,
+      FirstName: modalEditState.FirstName.value,
+      LastName: modalEditState.LastName.value,
+      PageNumber: 1,
+      Length: 50,
     };
     dispatch(
       editSecurityAdmin(navigate, Data, setEditModalSecurity, setUpdateModal)
@@ -832,6 +867,20 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                   pagination={false}
                 />
               )}
+            </Col>
+          </Row>
+
+          <Row className="mt-2">
+            <Col lg={12} md={12} sm={12}>
+              <Pagination
+                total={totalRecords}
+                onChange={allUserPagination}
+                current={currentPage !== null ? currentPage : 1}
+                showSizeChanger
+                pageSizeOptions={[50, 100, 200]}
+                pageSize={currentPageSize !== null ? currentPageSize : 50}
+                className="PaginationStyle-allUser"
+              />
             </Col>
           </Row>
         </Paper>

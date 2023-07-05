@@ -1,6 +1,6 @@
 .edit-user-container {
   align-items: top !important;
-  height: 350px !important;
+  height: 320px !important;
   width: 100%;
   left: 260px !important;
   justify-content: center !important;
@@ -274,4 +274,20 @@
   font-size: 13px;
   height: 37px;
   border: 1px solid #ccc;
+}
+
+.PaginationStyle-allUser {
+  background-color: #fff !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: auto !important;
+  padding: 10px 0px !important;
+  margin: 10px 0 10px 0;
+  height: auto !important;
+  box-shadow: 0px 0px 5px #ccc !important;
+  border-radius: 4px !important;
+}
+
+.PaginationStyle-allUser:is(:focus-visible) {
+  outline: none !important;
 }
