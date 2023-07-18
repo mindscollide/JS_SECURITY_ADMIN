@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import { Container, Col, Row, ModalFooter } from "react-bootstrap";
 import {
   TextField,
@@ -10,7 +10,8 @@ import {
 } from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Select, Spin, Pagination } from "antd";
+import { Spin, Pagination } from "antd";
+import Select from "react-select";
 import {
   editSecurityAdmin,
   allUserList,
@@ -31,6 +32,9 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   const [rows, setRows] = useState([]);
 
   const [totalRecords, setTotalRecord] = useState(0);
+
+  //this the email Ref for copy paste handler
+  const emailRef = useRef(null);
 
   let currentPageSize = localStorage.getItem("allUserSize")
     ? localStorage.getItem("allUserSize")
@@ -200,6 +204,26 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     dispatch(allUserStatus());
   }, []);
 
+  // this is the paste handler for email in which extra space doesn't paste
+  const emailHandlerPaste = (event) => {
+    event.preventDefault();
+    const clipboardData = event.clipboardData || window.clipboardData;
+    const pastedText = clipboardData.getData("text/plain");
+    const trimmedText = pastedText.trim();
+
+    const input = emailRef.current;
+    document.execCommand("insertText", false, trimmedText);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  };
+
+  // this is the copy handler in which copy doesn't allow to copy extra space
+  const emailHandlerCopy = (event) => {
+    event.preventDefault();
+    const input = emailRef.current;
+    input.select();
+    document.execCommand("copy");
+  };
+
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {
     let name = e.target.name;
@@ -293,9 +317,9 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   const handlerEmail = () => {
     if (editUser.email.value !== "") {
       if (validateEmail(editUser.email.value)) {
-        alert("Email verified");
+        console.log("Email verified");
       } else {
-        alert("Email Not Verified");
+        console.log("Email Not Verified");
       }
     }
   };
@@ -307,7 +331,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     setEditUser({
       ...editUser,
       roleID: {
-        value: selectedRole,
+        value: selectedRole.value,
       },
     });
   };
@@ -320,7 +344,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     setEditUser({
       ...editUser,
       statusID: {
-        value: selectedStatus,
+        value: selectedStatus.value,
       },
     });
   };
@@ -460,14 +484,18 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "userLDAPAccount",
       key: "userLDAPAccount",
-      width: "200px",
+      width: "170px",
+      align: "center",
+      ellipsis: true,
+
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "150px",
+      width: "200px",
+      align: "center",
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
@@ -475,6 +503,8 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       dataIndex: "firstName",
       key: "firstName",
       width: "100px",
+      align: "center",
+      ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
@@ -482,6 +512,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       dataIndex: "lastName",
       key: "lastName",
       width: "100px",
+      align: "center",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -490,6 +521,8 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       dataIndex: "userRoleID",
       key: "userRoleID",
       width: "120px",
+      align: "center",
+      ellipsis: true,
       render: (text, record) => {
         if (record.userRoleID === 1) {
           return (
@@ -534,7 +567,8 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
-      width: "60px",
+      ellipsis: true,
+      width: "100px",
       align: "center",
       render: (text, record) => {
         if (record.userStatusID === 1) {
@@ -607,7 +641,8 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       title: <label className="bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
-      width: "70px",
+      ellipsis: true,
+      width: "100px",
       align: "center",
       render: (text, record) => {
         console.log("recordrecordrecord");
@@ -726,11 +761,27 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       Email: modalEditState.Email.value,
       FirstName: modalEditState.FirstName.value,
       LastName: modalEditState.LastName.value,
+    };
+
+    let updateAllUser = {
+      FirstName: "",
+      LastName: "",
+      UserLDAPAccount: "",
+      Email: "",
+      UserRoleID: 0,
+      UserStatusID: 0,
       PageNumber: 1,
       Length: 50,
     };
+
     dispatch(
-      editSecurityAdmin(navigate, Data, setEditModalSecurity, setUpdateModal)
+      editSecurityAdmin(
+        navigate,
+        Data,
+        setEditModalSecurity,
+        setUpdateModal,
+        updateAllUser
+      )
     );
   };
 
@@ -769,57 +820,56 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     <>
       <section className="edit-user-container">
         <Row>
-          <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
+          <Col lg={12} md={12} sm={12}>
             <label className="edit-user-label">All User</label>
           </Col>
         </Row>
-        <Row>
+        <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
             <Paper className="span-edit-user">
               <Row className="mt-3">
-                <Col lg={12} md={12} sm={12}>
-                  <Row>
-                    <Col lg={3} md={3} sm={3}>
-                      <TextField
-                        name="userLdapAccount"
-                        className="text-fields-edituser"
-                        placeholder="Login ID"
-                        maxLength={100}
-                        value={editUser.userLdapAccount.value}
-                        onChange={editUserValidateHandler}
-                      />
-                    </Col>
-                    <Col lg={3} md={3} sm={3}>
-                      <TextField
-                        name="firstName"
-                        className="text-fields-edituser"
-                        maxLength={100}
-                        placeholder="First Name"
-                        value={editUser.firstName.value}
-                        onChange={editUserValidateHandler}
-                      />
-                    </Col>
-                    <Col lg={3} md={3} sm={3}>
-                      <TextField
-                        name="lastName"
-                        maxLength={100}
-                        className="text-fields-edituser"
-                        placeholder="Last Name"
-                        value={editUser.lastName.value}
-                        onChange={editUserValidateHandler}
-                      />
-                    </Col>
-                    <Col lg={3} md={3} sm={3}>
-                      <Select
-                        name="roleID"
-                        options={editSelectRole}
-                        className="select-field-edit"
-                        placeholder="Select Role"
-                        onChange={selectRoleHandler}
-                        value={editSelectRoleValue}
-                      />
-                    </Col>
-                  </Row>
+                <Col lg={3} md={3} sm={3}>
+                  <TextField
+                    name="userLdapAccount"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
+                    placeholder="Login ID"
+                    maxLength={100}
+                    value={editUser.userLdapAccount.value}
+                    onChange={editUserValidateHandler}
+                  />
+                </Col>
+                <Col lg={3} md={3} sm={3}>
+                  <TextField
+                    name="firstName"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
+                    maxLength={100}
+                    placeholder="First Name"
+                    value={editUser.firstName.value}
+                    onChange={editUserValidateHandler}
+                  />
+                </Col>
+                <Col lg={3} md={3} sm={3}>
+                  <TextField
+                    name="lastName"
+                    labelClass="d-none"
+                    maxLength={100}
+                    className="text-fields-edituser"
+                    placeholder="Last Name"
+                    value={editUser.lastName.value}
+                    onChange={editUserValidateHandler}
+                  />
+                </Col>
+                <Col lg={3} md={3} sm={3}>
+                  <Select
+                    name="roleID"
+                    options={editSelectRole}
+                    className="select-field-edit"
+                    placeholder="Select Role"
+                    onChange={selectRoleHandler}
+                    value={editSelectRoleValue}
+                  />
                 </Col>
               </Row>
 
@@ -843,6 +893,9 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                     maxLength={100}
                     value={editUser.email.value}
                     onChange={editUserValidateHandler}
+                    onPaste={emailHandlerPaste}
+                    onCopy={emailHandlerCopy}
+                    ref={emailRef}
                   />
                 </Col>
                 <Col lg={6} md={6} sm={12}>
@@ -871,9 +924,9 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                     <Table
                       column={columns}
                       rows={rows}
-                      scroll={{ x: true }}
+                      // scroll={{ x: true }}
                       className="Edituser-table"
-                      pagination={true}
+                      pagination={false}
                     />
                   )}
                 </Col>

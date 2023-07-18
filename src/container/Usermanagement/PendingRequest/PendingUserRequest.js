@@ -79,20 +79,20 @@ const Createuser = () => {
       dataIndex: "email",
       key: "email",
       width: "200px",
+      ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
       dataIndex: "firstname",
       key: "firstname",
-      width: "100px",
+      ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Last Name</label>,
       dataIndex: "lastname",
       key: "lastname",
-      width: "100px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -100,7 +100,7 @@ const Createuser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "fK_UserRoleID",
       key: "fK_UserRoleID",
-      width: "200px",
+      ellipsis: true,
       render: (text, record) => {
         if (record.fK_UserRoleID === 1) {
           return (
@@ -145,7 +145,7 @@ const Createuser = () => {
       title: <label className="bottom-table-header">Accept</label>,
       dataIndex: "accept",
       key: "accept",
-      width: "100px",
+      ellipsis: true,
       align: "center",
       render: (text, data) => {
         console.log("dataddadat", data);
@@ -160,7 +160,7 @@ const Createuser = () => {
       title: <label className="bottom-table-header">Reject</label>,
       dataIndex: "reject",
       key: "reject",
-      width: "100px",
+      ellipsis: true,
       align: "center",
       render: (text, rejectData) => {
         console.log("rejectDatarejectData", rejectData);
@@ -208,7 +208,7 @@ const Createuser = () => {
                   column={columnsCreate}
                   rows={requestUserRows}
                   className="Createuser-table"
-                  pagination={true}
+                  pagination={false}
                 />
               )}
             </Col>

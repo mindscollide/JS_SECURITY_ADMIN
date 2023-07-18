@@ -13,9 +13,11 @@ import CustomerModal from "../../Pages/Modals/Add-Customer-Modal/Customermodal";
 import UploadCustomerModal from "../../Pages/Modals/Upload-Customer-Modal/UploadCustomerModal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
 import { useNavigate } from "react-router-dom";
+import { downloadAddBankorCustomerReport } from "../../../store/actions/Download-Report";
 import { getAllCorporate } from "../../../store/actions/Auth_Actions";
 import { FileBulkUpload } from "../../../store/actions/Upload_Action";
 import { corporateCreate } from "../../../store/actions/Security_Admin";
+import { Upload } from "antd";
 import "./Addcustomer.css";
 import Select from "react-select";
 
@@ -32,6 +34,8 @@ const Addcustomer = () => {
 
   // Upload Customer modal states
   const [customerUpload, setCustomerUpload] = useState(false);
+
+  let addBankSecurity = localStorage.getItem("bankID");
 
   // states For Corporates Category select Dropdown
   const [selectCorporate, setSelectCorporate] = useState([]);
@@ -55,12 +59,6 @@ const Addcustomer = () => {
       errorMessage: "",
       errorStatus: false,
     },
-
-    // companyName: {
-    //   value: "",
-    //   errorMessage: "",
-    //   errorStatus: false,
-    // },
 
     email: {
       value: "",
@@ -97,19 +95,29 @@ const Addcustomer = () => {
       errorMessage: "",
       errorStatus: false,
     },
+
+    addCorporateFile: {
+      value: 2,
+      errorMessage: "",
+      errorStatus: false,
+    },
   });
 
-  const HandleFileUpload = (data) => {
-    const UploadFile = data.target.value;
-    const uploadedFile = data.target.files[0];
-    console.log("UploadFileUploadFile", UploadFile);
-    console.log("uploadedFileuploadedFile", uploadedFile);
-    var ext = uploadedFile.name.split(".").pop();
-    if (ext === "xls" || ext === "xlsx") {
-      dispatch(FileBulkUpload(navigate, uploadedFile, setCustomerUpload));
-    } else {
-      alert("Invalid type");
-    }
+  const props = {
+    name: "file",
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      let counterUploadFile = info.file.originFileObj;
+      let ext = info.file.originFileObj.name.split(".").pop();
+      if (ext === "xls" || ext === "xlsx") {
+        dispatch(
+          FileBulkUpload(navigate, counterUploadFile, setCustomerUpload)
+        );
+      }
+    },
   };
 
   useEffect(() => {
@@ -228,11 +236,19 @@ const Addcustomer = () => {
   const handlerEmail = () => {
     if (addCustomerState.email.value !== "") {
       if (validateEmail(addCustomerState.email.value)) {
-        alert("email verified");
+        console.log("email verified");
       } else {
-        alert("email Not Verified");
+        console.log("email Not Verified");
       }
     }
+  };
+
+  // download report in Add Bank user page
+  const downloadReportAddCustomer = () => {
+    let downloadCustomerReport = {
+      FileTypeID: 2,
+    };
+    dispatch(downloadAddBankorCustomerReport(downloadCustomerReport));
   };
 
   //reset handler for Activate in Add a Customer user
@@ -372,289 +388,289 @@ const Addcustomer = () => {
     <>
       <section className="addCustomer-user-container">
         <Row>
-          <Col>
-            <Row>
-              <Col lg={12} md={12} sm={12}>
-                <span className="Customer-add-user-label">
-                  Add a Customer user
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={12} md={12} sm={12}>
-                <Paper className="addCustomer-paper">
-                  <Row className="mt-3">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        First Name
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name="firstName"
-                        value={addCustomerState.firstName.value}
-                        onChange={addCustomerValidationHandler}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow &&
-                              addCustomerState.firstName.value === ""
-                                ? "addCustomerErrorMessage"
-                                : "addCustomerErrorMessage_hidden"
-                            }
-                          >
-                            First Name is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-1">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        Last Name
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name="lastName"
-                        value={addCustomerState.lastName.value}
-                        onChange={addCustomerValidationHandler}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow &&
-                              addCustomerState.lastName.value === ""
-                                ? "addCustomerErrorMessage"
-                                : "addCustomerErrorMessage_hidden"
-                            }
-                          >
-                            Last Name is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-1">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        Company Name
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <span className="span-field">
-                        <Select
-                          name="corporateID"
-                          options={selectCorporate}
-                          value={selectCorporateValue}
-                          onChange={selectCorporateHandler}
-                          className="react-select-customer-field"
-                        />
-                        <span
-                          className="field-clickable-icon"
-                          onClick={openModalPlusIcon}
-                        >
-                          <PlusLg />
-                        </span>
-                      </span>
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow &&
-                              addCustomerState.corporateID.value === ""
-                                ? "addCustomerErrorMessage"
-                                : "addCustomerErrorMessage_hidden"
-                            }
-                          >
-                            Company Name is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-1">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        Category
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name="Category"
-                        value={addCustomerState.Category.value}
-                        labelClass="d-none"
-                        disable={true}
-                        className="disabled-fields"
-                      />
-                    </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-3">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        Email
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name="email"
-                        value={addCustomerState.email.value}
-                        onChange={addCustomerValidationHandler}
-                        onBlur={handlerEmail}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addCustomerState.email.value === ""
-                                ? "addCustomerErrorMessage"
-                                : "addCustomerErrorMessage_hidden"
-                            }
-                          >
-                            Email is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-1">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        Contact
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        name="Contact"
-                        value={addCustomerState.Contact.value}
-                        onChange={addCustomerValidationHandler}
-                        labelClass="d-none"
-                      />
-                      <Row>
-                        <Col className="d-flex justify-content-start">
-                          <p
-                            className={
-                              errorShow && addCustomerState.Contact.value === ""
-                                ? "addCustomerErrorMessage"
-                                : "addCustomerErrorMessage_hidden"
-                            }
-                          >
-                            Contact is required
-                          </p>
-                        </Col>
-                      </Row>
-                    </Col>
-
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-1">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        RFQ Timer
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        labelClass="d-none"
-                        value={addCustomerState.rfqTimer.value}
-                        disable={true}
-                        className="disabled-fields"
-                      />
-                    </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-3">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        Nature Of Client
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={5} md={5} sm={12}>
-                      <TextField
-                        disable={true}
-                        labelClass="d-none"
-                        className="disabled-fields"
-                        value={addCustomerState.natureClient.value}
-                      />
-                    </Col>
-                    <Col lg={5} md={5} sm={12}></Col>
-                  </Row>
-
-                  <Row className="mt-3">
-                    <Col lg={2} md={2} sm={12}>
-                      <span className="labels-add-Customer">
-                        File Upload
-                        <span className="addCustomer-aesterick-color">*</span>
-                      </span>
-                    </Col>
-                    <Col lg={2} md={2} sm={12}>
-                      <CustomUpload change={HandleFileUpload} />
-                    </Col>
-                    <Col
-                      lg={3}
-                      md={3}
-                      sm={12}
-                      className="d-flex justify-content-end"
-                    >
-                      <Button
-                        className="upload-btn-addCustomer"
-                        text="Download Excel Format"
-                      />
-                    </Col>
-                    <Col lg={7} md={7} sm={12} />
-
-                    <Row className="mt-3">
-                      <Col
-                        lg={9}
-                        md={9}
-                        sm={12}
-                        className="add-customer-active-cancel"
+          <Col lg={12} md={12} sm={12}>
+            <span className="Customer-add-user-label">Add a Customer user</span>
+          </Col>
+        </Row>
+        <Row className="mt-3">
+          <Col lg={12} md={12} sm={12}>
+            <Paper className="addCustomer-paper">
+              <Row className="mt-3">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    First Name
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <TextField
+                    name="firstName"
+                    className="add-customer-textfield"
+                    value={addCustomerState.firstName.value}
+                    onChange={addCustomerValidationHandler}
+                    labelClass="d-none"
+                  />
+                  <Row>
+                    <Col className="d-flex justify-content-start">
+                      <p
+                        className={
+                          errorShow && addCustomerState.firstName.value === ""
+                            ? "addCustomerErrorMessage"
+                            : "addCustomerErrorMessage_hidden"
+                        }
                       >
-                        <Button
-                          icon={<i className="icon-check icon-check-space"></i>}
-                          text="Activate"
-                          onClick={activateCustomerHandler}
-                          className="Active-btn-Add-Customer"
-                        />
-                        <Button
-                          icon={<i className="icon-close icon-check-space"></i>}
-                          text="Cancel"
-                          onClick={customerActivateResetHandler}
-                          className="Cancel-btn-Add-Customer"
-                        />
-                      </Col>
-                    </Row>
+                        First Name is required
+                      </p>
+                    </Col>
                   </Row>
-                </Paper>
-              </Col>
-            </Row>
+                </Col>
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-1">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    Last Name
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <TextField
+                    name="lastName"
+                    className="add-customer-textfield"
+                    value={addCustomerState.lastName.value}
+                    onChange={addCustomerValidationHandler}
+                    labelClass="d-none"
+                  />
+                  <Row>
+                    <Col className="d-flex justify-content-start">
+                      <p
+                        className={
+                          errorShow && addCustomerState.lastName.value === ""
+                            ? "addCustomerErrorMessage"
+                            : "addCustomerErrorMessage_hidden"
+                        }
+                      >
+                        Last Name is required
+                      </p>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-1">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    Company Name
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <span className="span-field">
+                    <Select
+                      name="corporateID"
+                      options={selectCorporate}
+                      value={selectCorporateValue}
+                      onChange={selectCorporateHandler}
+                      className="react-select-customer-field"
+                    />
+                    <span
+                      className="field-clickable-icon"
+                      onClick={openModalPlusIcon}
+                    >
+                      <PlusLg />
+                    </span>
+                  </span>
+                  <Row>
+                    <Col className="d-flex justify-content-start">
+                      <p
+                        className={
+                          errorShow && addCustomerState.corporateID.value === ""
+                            ? "addCustomerErrorMessage"
+                            : "addCustomerErrorMessage_hidden"
+                        }
+                      >
+                        Company Name is required
+                      </p>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-1">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    Category
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <TextField
+                    name="Category"
+                    value={addCustomerState.Category.value}
+                    labelClass="d-none"
+                    disable={true}
+                    className="disabled-fields"
+                  />
+                </Col>
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-3">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    Email
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <TextField
+                    name="email"
+                    className="add-customer-textfield"
+                    value={addCustomerState.email.value}
+                    onChange={addCustomerValidationHandler}
+                    onBlur={handlerEmail}
+                    labelClass="d-none"
+                  />
+                  <Row>
+                    <Col className="d-flex justify-content-start">
+                      <p
+                        className={
+                          errorShow && addCustomerState.email.value === ""
+                            ? "addCustomerErrorMessage"
+                            : "addCustomerErrorMessage_hidden"
+                        }
+                      >
+                        Email is required
+                      </p>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-1">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    Contact
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <TextField
+                    name="Contact"
+                    className="add-customer-textfield"
+                    value={addCustomerState.Contact.value}
+                    onChange={addCustomerValidationHandler}
+                    labelClass="d-none"
+                  />
+                  <Row>
+                    <Col className="d-flex justify-content-start">
+                      <p
+                        className={
+                          errorShow && addCustomerState.Contact.value === ""
+                            ? "addCustomerErrorMessage"
+                            : "addCustomerErrorMessage_hidden"
+                        }
+                      >
+                        Contact is required
+                      </p>
+                    </Col>
+                  </Row>
+                </Col>
+
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-1">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    RFQ Timer
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <TextField
+                    labelClass="d-none"
+                    value={addCustomerState.rfqTimer.value}
+                    disable={true}
+                    className="disabled-fields"
+                  />
+                </Col>
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-3">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    Nature Of Client
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col lg={5} md={5} sm={12}>
+                  <TextField
+                    disable={true}
+                    labelClass="d-none"
+                    className="disabled-fields"
+                    value={addCustomerState.natureClient.value}
+                  />
+                </Col>
+                <Col lg={5} md={5} sm={12}></Col>
+              </Row>
+
+              <Row className="mt-3">
+                <Col lg={2} md={2} sm={12}>
+                  <span className="labels-add-Customer">
+                    File Upload
+                    <span className="addCustomer-aesterick-color">*</span>
+                  </span>
+                </Col>
+                <Col
+                  lg={5}
+                  md={5}
+                  sm={12}
+                  className="add-Customer-upload-download-col"
+                >
+                  <Upload showUploadList={false} {...props}>
+                    <Button
+                      className="add-Customer-uplaod-contact"
+                      text={"Upload Your Contacts"}
+                    />
+                  </Upload>
+
+                  <Button
+                    onClick={downloadReportAddCustomer}
+                    className="add-Customer-download-contact"
+                    text="Download Excel Format"
+                  />
+                </Col>
+                <Col lg={5} md={5} sm={12} />
+
+                <Row className="mt-3">
+                  <Col
+                    lg={9}
+                    md={9}
+                    sm={12}
+                    className="add-customer-active-cancel"
+                  >
+                    <Button
+                      icon={<i className="icon-check icon-check-space"></i>}
+                      text="Activate"
+                      onClick={activateCustomerHandler}
+                      className="Active-btn-Add-Customer"
+                    />
+                    <Button
+                      icon={<i className="icon-close icon-check-space"></i>}
+                      text="Cancel"
+                      onClick={customerActivateResetHandler}
+                      className="Cancel-btn-Add-Customer"
+                    />
+                  </Col>
+                </Row>
+              </Row>
+            </Paper>
           </Col>
         </Row>
       </section>

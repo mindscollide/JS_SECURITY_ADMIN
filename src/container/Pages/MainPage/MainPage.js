@@ -9,8 +9,6 @@ import Sidebar from "../../../components/layout/Sidebar/Sidebar";
 import { Row, Col } from "react-bootstrap";
 
 const MainPage = () => {
-  const location = useLocation();
-
   return (
     <Fragment>
       <Row>
@@ -28,7 +26,7 @@ const MainPage = () => {
               style={{
                 width: "100%",
               }}
-              className="d-flex gap-5"
+              className="d-flex gap-4"
             >
               <Sidebar />
               <Outlet />

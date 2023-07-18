@@ -10,10 +10,13 @@ import {
   getAllCorporateCategoriesERM,
   getAllNatureBusinessERM,
   getAllAssetsTypeERM,
+  addNatureBusiness,
+  updateNatureOfBusiness,
+  viewNatureOfBusiness,
+  deleteNatureOfBusines,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
 import { getNewUserRequestsCount, allUserList } from "./Security_Admin";
-import { message } from "antd";
 
 const logininit = () => {
   return {
@@ -127,6 +130,10 @@ const logIn = (navigate, UserData) => {
                   "userID",
                   response.data.responseResult.userID
                 );
+                localStorage.setItem(
+                  "bankID",
+                  response.data.responseResult.bankID
+                );
                 localStorage.setItem("defaultOpenKey ", "sub1");
                 localStorage.setItem("defaultSelectedKey", "3");
                 localStorage.setItem(
@@ -167,6 +174,41 @@ const logIn = (navigate, UserData) => {
                   )
                 );
                 dispatch(allUserList(navigate, dataForEditUser));
+              } else if (response.data.responseResult.roleID === 5) {
+                localStorage.setItem(
+                  "userID",
+                  response.data.responseResult.userID
+                );
+                localStorage.setItem(
+                  "bankID",
+                  response.data.responseResult.bankID
+                );
+                localStorage.setItem(
+                  "firstName",
+                  response.data.responseResult.firstName
+                );
+                localStorage.setItem(
+                  "lastName",
+                  response.data.responseResult.lastName
+                );
+                localStorage.setItem(
+                  "userName",
+                  response.data.responseResult.userName
+                );
+                localStorage.setItem(
+                  "roleID",
+                  response.data.responseResult.roleID
+                );
+                localStorage.setItem(
+                  "token",
+                  response.data.responseResult.token
+                );
+                localStorage.setItem(
+                  "refreshToken",
+                  response.data.responseResult.refreshToken
+                );
+                navigate("/JS/Admin");
+                dispatch(loginsuccess("Successfully Logged In"));
               } else {
                 dispatch(
                   loginfail("This user is not authorise for this domain")
@@ -335,7 +377,7 @@ const signUp = (UserData, navigate) => {
                 );
                 navigate("/");
                 dispatch(signupSuccess("Successfully signup In"));
-              } else if (response.data.responseResult.roleID === 4) {
+              } else if (response.data.responseResult.roleID === 5) {
                 localStorage.setItem(
                   "userID",
                   response.data.responseResult.userID
@@ -572,7 +614,7 @@ const userStatusFail = (message) => {
   };
 };
 
-const allUserStatus = () => {
+const allUserStatus = (navigate) => {
   return (dispatch) => {
     dispatch(userStatusInit());
     let form = new FormData();
@@ -584,7 +626,10 @@ const allUserStatus = () => {
     })
       .then(async (response) => {
         console.log("UserStatusUserStatus", response);
-        if (response.data.responseCode === 200) {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(allUserStatus(navigate));
+        } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
               response.data.responseResult.responseMessage.toLowerCase() ===
@@ -988,6 +1033,400 @@ const getAssetType = (navigate) => {
   };
 };
 
+//FOR ADD NATURE OF BUSINESS
+const addNatureInit = () => {
+  return {
+    type: actions.ADD_NATURE_OF_BUSINESS_INIT,
+  };
+};
+
+const addNatureSuccess = (response, message) => {
+  return {
+    type: actions.ADD_NATURE_OF_BUSINESS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const addNatureFail = (message) => {
+  return {
+    type: actions.ADD_NATURE_OF_BUSINESS_FAIL,
+    message: message,
+  };
+};
+
+const addNatureApi = (navigate, newNatureData, newNatureTable) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(addNatureInit());
+    let form = new FormData();
+    form.append("RequestMethod", addNatureBusiness.RequestMethod);
+    form.append("RequestData", JSON.stringify(newNatureData));
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("getAllNaturegetAllNaturegetAllNature", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(addNatureApi(navigate, newNatureData, newNatureTable));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_AddNatureOfBussiness_01".toLowerCase()
+            ) {
+              console.log(
+                "UserRoleListUserRoleList",
+                response.data.responseResult.responseMessage
+              );
+              dispatch(
+                addNatureSuccess(
+                  response.data.responseResult.responseMessage,
+                  "Record Saved"
+                )
+              );
+              await dispatch(viewNatureApi(navigate, newNatureTable));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_AddNatureOfBussiness_02".toLowerCase()
+                )
+            ) {
+              dispatch(addNatureFail("No Record Saved"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_AddNatureOfBussiness_03".toLowerCase()
+                )
+            ) {
+              dispatch(addNatureFail("Record Already Exists"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_AddNatureOfBussiness_04".toLowerCase()
+                )
+            ) {
+              dispatch(addNatureFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(addNatureFail("Something went wrong"));
+            console.log("There's no corporates category");
+          }
+        } else {
+          dispatch(addNatureFail("Something went wrong"));
+          console.log("There's no corporates category");
+        }
+      })
+      .catch((response) => {
+        dispatch(addNatureFail("something went wrong"));
+      });
+  };
+};
+
+// FOR UPDATE NATURE OF BUSINESS IN NATURE BUSINESS PAGE
+const updateNatureInit = () => {
+  return {
+    type: actions.UPDATE_NATURE_OF_BUSINESS_INIT,
+  };
+};
+
+const updateNatureSuccess = (response, message) => {
+  return {
+    type: actions.UPDATE_NATURE_OF_BUSINESS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const updateNatureFail = (message) => {
+  return {
+    type: actions.UPDATE_NATURE_OF_BUSINESS_FAIL,
+    message: message,
+  };
+};
+
+const updateNatureApi = (navigate, updateNatureData, newNatureUpdateTable) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(updateNatureInit());
+    let form = new FormData();
+    form.append("RequestMethod", updateNatureOfBusiness.RequestMethod);
+    form.append("RequestData", JSON.stringify(updateNatureData));
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("getAllNaturegetAllNaturegetAllNature", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(
+            updateNatureApi(navigate, updateNatureData, newNatureUpdateTable)
+          );
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_UpdateNatureOfBussiness_01".toLowerCase()
+            ) {
+              console.log(
+                "UpdateNatureOfBussinessUpdateNatureOfBussiness",
+                response.data.responseResult.responseMessage
+              );
+              dispatch(
+                updateNatureSuccess(
+                  response.data.responseResult.responseMessage,
+                  "Record Updated"
+                )
+              );
+              dispatch(viewNatureApi(navigate, newNatureUpdateTable));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_UpdateNatureOfBussiness_02".toLowerCase()
+                )
+            ) {
+              dispatch(updateNatureFail("No Record Updated"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_UpdateNatureOfBussiness_03".toLowerCase()
+                )
+            ) {
+              dispatch(updateNatureFail("Record Already Exists"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_UpdateNatureOfBussiness_04".toLowerCase()
+                )
+            ) {
+              dispatch(updateNatureFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(updateNatureFail("Something went wrong"));
+            console.log("There's no corporates category");
+          }
+        } else {
+          dispatch(updateNatureFail("Something went wrong"));
+          console.log("There's no corporates category");
+        }
+      })
+      .catch((response) => {
+        dispatch(updateNatureFail("something went wrong"));
+      });
+  };
+};
+
+// FOR VIEW NATURE OF BUSINESS API FOR PAGINATION
+
+const viewNatureInit = () => {
+  return {
+    type: actions.VIEW_NATURE_BUSINESS_INIT,
+  };
+};
+
+const viewNatureSuccess = (response, message) => {
+  return {
+    type: actions.VIEW_NATURE_BUSINESS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const viewNatureFail = (message) => {
+  return {
+    type: actions.VIEW_NATURE_BUSINESS_FAIL,
+    message: message,
+  };
+};
+
+const viewNatureApi = (navigate, newDataRender) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(viewNatureInit());
+    let form = new FormData();
+    form.append("RequestMethod", viewNatureOfBusiness.RequestMethod);
+    form.append("RequestData", JSON.stringify(newDataRender));
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("viewNatureApiviewNatureApi", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(viewNatureApi(navigate, newDataRender));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_ViewAllNatureOfBussiness_01".toLowerCase()
+            ) {
+              console.log(
+                "viewNatureApiviewNatureApiviewNatureApiviewNatureApi",
+                response.data.responseResult.natureofBusinesses
+              );
+              dispatch(
+                viewNatureSuccess(
+                  response.data.responseResult.natureofBusinesses,
+                  "Record Updated"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_ViewAllNatureOfBussiness_02".toLowerCase()
+                )
+            ) {
+              dispatch(viewNatureFail("No Record Updated"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_ViewAllNatureOfBussiness_03".toLowerCase()
+                )
+            ) {
+              dispatch(viewNatureFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(viewNatureFail("Something went wrong"));
+            console.log("There's no corporates category");
+          }
+        } else {
+          dispatch(viewNatureFail("Something went wrong"));
+          console.log("There's no corporates category");
+        }
+      })
+      .catch((response) => {
+        dispatch(viewNatureFail("something went wrong"));
+      });
+  };
+};
+
+//FOR DELETE NATURE OF BUSINESS API
+const deleteNatureInit = () => {
+  return {
+    type: actions.DELETE_NATURE_BUSINESS_INIT,
+  };
+};
+
+const deleteNatureSuccess = (response, message) => {
+  return {
+    type: actions.DELETE_NATURE_BUSINESS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const deleteNatureFail = (message) => {
+  return {
+    type: actions.DELETE_NATURE_BUSINESS_SUCCESS,
+    message: message,
+  };
+};
+
+const deleteNatureApi = (navigate, newDeleteData, newNatureDeleteTable) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  return (dispatch) => {
+    dispatch(deleteNatureInit());
+    let form = new FormData();
+    form.append("RequestMethod", deleteNatureOfBusines.RequestMethod);
+    form.append("RequestData", JSON.stringify(newDeleteData));
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        console.log("deleteNatureApideleteNatureApi", response);
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(
+            deleteNatureApi(navigate, newDeleteData, newNatureDeleteTable)
+          );
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_DeleteNatureOfBussiness_01".toLowerCase()
+            ) {
+              console.log(
+                "deleteNatureApideleteNatureApideleteNatureApideleteNatureApi",
+                response.data.responseResult.responseMessage
+              );
+              dispatch(
+                deleteNatureSuccess(
+                  response.data.responseResult.responseMessage,
+                  "Record Delete"
+                )
+              );
+              await dispatch(viewNatureApi(navigate, newNatureDeleteTable));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_DeleteNatureOfBussiness_02".toLowerCase()
+                )
+            ) {
+              dispatch(deleteNatureFail("No Record Deleted"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_DeleteNatureOfBussiness_03".toLowerCase()
+                )
+            ) {
+              dispatch(
+                deleteNatureFail(
+                  "Nature Of Business Is Mapped With A Corporate"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_DeleteNatureOfBussiness_04".toLowerCase()
+                )
+            ) {
+              dispatch(deleteNatureFail("Exception Something went wrong"));
+            }
+          } else {
+            dispatch(deleteNatureFail("Something went wrong"));
+          }
+        } else {
+          dispatch(deleteNatureFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(deleteNatureFail("something went wrong"));
+      });
+  };
+};
+
 export {
   logIn,
   signUp,
@@ -999,4 +1438,8 @@ export {
   getAllCorporateCategoryApi,
   getAllNature,
   getAssetType,
+  addNatureApi,
+  updateNatureApi,
+  viewNatureApi,
+  deleteNatureApi,
 };

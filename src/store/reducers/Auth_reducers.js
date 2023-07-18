@@ -12,6 +12,10 @@ const initialState = {
   getAllCategoryCorporate: [],
   natureOfBusiness: [],
   allAssetType: [],
+  addNatureBusiness: "",
+  updateNatureBusiness: "",
+  viewNatureBusiness: [],
+  deleteNatureBusiness: "",
   SessionExpeireResponseMessage: "",
   roles: [],
   Token: "",
@@ -193,6 +197,97 @@ const authReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         allAssetType: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.ADD_NATURE_OF_BUSINESS_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.ADD_NATURE_OF_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        addNatureBusiness: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.ADD_NATURE_OF_BUSINESS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        addNatureBusiness: "",
+        ResponseMessage: action.message,
+      };
+
+    case actions.UPDATE_NATURE_OF_BUSINESS_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.UPDATE_NATURE_OF_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        updateNatureBusiness: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.UPDATE_NATURE_OF_BUSINESS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        updateNatureBusiness: "",
+        ResponseMessage: action.message,
+      };
+
+    case actions.VIEW_NATURE_BUSINESS_INIT:
+      return {
+        ...state,
+        Loading: true,
+        Spinner: true,
+      };
+
+    case actions.VIEW_NATURE_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        Spinner: false,
+        viewNatureBusiness: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.VIEW_NATURE_BUSINESS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        Spinner: false,
+        viewNatureBusiness: [],
+        ResponseMessage: action.message,
+      };
+
+    case actions.DELETE_NATURE_BUSINESS_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.DELETE_NATURE_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        deleteNatureBusiness: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.DELETE_NATURE_BUSINESS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        deleteNatureBusiness: "",
         ResponseMessage: action.message,
       };
 

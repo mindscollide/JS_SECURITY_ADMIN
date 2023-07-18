@@ -420,7 +420,8 @@ const editSecurityAdmin = (
   navigate,
   Data,
   setEditModalSecurity,
-  setUpdateModal
+  setUpdateModal,
+  updateAllUser
 ) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let data = {
@@ -448,7 +449,7 @@ const editSecurityAdmin = (
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(editSecurityAdmin(navigate, Data));
+          dispatch(editSecurityAdmin(navigate, Data, updateAllUser));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -464,9 +465,9 @@ const editSecurityAdmin = (
                   "User updated successfully"
                 )
               );
+              dispatch(allUserList(navigate, updateAllUser));
               setEditModalSecurity(false);
               setUpdateModal(false);
-              dispatch(allUserList(navigate, data));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

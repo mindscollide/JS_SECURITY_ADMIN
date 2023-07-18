@@ -13,7 +13,9 @@ import { useNavigate } from "react-router-dom";
 import BankModal from "../../Pages/Modals/Add-Banker-Modal/Bankuser-Modal";
 import { validateEmail } from "../../../commen/functions/emailValidation";
 import UploadAddModal from "../../Pages/Modals/Upload-AddBank-Modal/UploadAddModal";
+import { downloadAddBankorCustomerReport } from "../../../store/actions/Download-Report";
 import Select from "react-select";
+import { Upload } from "antd";
 import "./Bankuser.css";
 import { createBank } from "../../../store/actions/Security_Admin";
 import {
@@ -23,9 +25,13 @@ import {
 import { FileBulkUpload } from "../../../store/actions/Upload_Action";
 
 const Bankuser = () => {
-  const { auth, securitReducer } = useSelector((state) => state);
+  const { auth, securitReducer, downloadReducer } = useSelector(
+    (state) => state
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  let bankUserSecurity = localStorage.getItem("bankID");
 
   const [tasksAttachments, setTasksAttachments] = useState({
     TasksAttachments: [],
@@ -37,6 +43,7 @@ const Bankuser = () => {
 
   //state for error Message
   const [errorShow, setErrorShow] = useState(false);
+  const [isValidEmail, setIsValidEmail] = useState("");
 
   //state for Bankmodal
   const [addBankModal, setAddBankModal] = useState(false);
@@ -79,6 +86,11 @@ const Bankuser = () => {
     },
     roleID: {
       value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    fileTypeId: {
+      value: 1,
       errorMessage: "",
       errorStatus: false,
     },
@@ -200,10 +212,12 @@ const Bankuser = () => {
   //email validation handler
   const handlerEmail = () => {
     if (addBankUser.email.value !== "") {
-      if (validateEmail(addBankUser.email.value)) {
-        alert("Email verified");
+      if (!validateEmail(addBankUser.email.value)) {
+        setIsValidEmail("Invalid Email Address");
+        console.log("Email verified");
       } else {
-        alert("Email Not Verified");
+        setIsValidEmail("");
+        console.log("Email Not Verified");
       }
     }
   };
@@ -261,6 +275,14 @@ const Bankuser = () => {
     setBankSelectRoleValue([]);
   };
 
+  // download report in Add Bank user page
+  const downloadReportAddBank = async () => {
+    let downloadReport = {
+      FileTypeID: 1,
+    };
+    await dispatch(downloadAddBankorCustomerReport(downloadReport));
+  };
+
   // show error message When user hit activate btn
   const activateHandler = () => {
     if (
@@ -285,9 +307,22 @@ const Bankuser = () => {
           // )}`,
           UserRoleID: addBankUser.roleID.value,
         },
-        BankId: 1,
+        BankId: parseInt(bankUserSecurity),
       };
       dispatch(createBank(navigate, newData));
+    } else if (
+      validateEmail(addBankUser.email.value) &&
+      addBankUser.email.value !== ""
+    ) {
+      setErrorShow(true);
+      setAddBankUser({
+        ...addBankUser,
+        email: {
+          value: addBankUser.email.value,
+          errorMessage: "Invalid email Address",
+          errorStatus: true,
+        },
+      });
     } else {
       setErrorShow(true);
     }
@@ -307,19 +342,20 @@ const Bankuser = () => {
       setBankSelectRole(tem);
     }
   }, [auth.UserRoleList]);
-  const [selectedFile, setSelectedFile] = useState(null);
 
-  const HandleFileUpload = (data) => {
-    const UploadFile = data.target.value;
-    const uploadedFile = data.target.files[0];
-    console.log("UploadFileUploadFile", UploadFile);
-    console.log("uploadedFileuploadedFile", uploadedFile);
-    var ext = uploadedFile.name.split(".").pop();
-    if (ext === "xls" || ext === "xlsx") {
-      dispatch(FileBulkUpload(navigate, uploadedFile, setUploadModal));
-    } else {
-      alert("Invalid type");
-    }
+  const props = {
+    name: "file",
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      let counterUploadFile = info.file.originFileObj;
+      let ext = info.file.originFileObj.name.split(".").pop();
+      if (ext === "xls" || ext === "xlsx") {
+        dispatch(FileBulkUpload(navigate, counterUploadFile, setUploadModal));
+      }
+    },
   };
 
   return (
@@ -331,13 +367,13 @@ const Bankuser = () => {
               lg={12}
               md={12}
               sm={12}
-              className="d-flex justify-content-start m-0 p-0"
+              className="d-flex justify-content-start"
             >
               <span className="bank-user-label">Add a Bank user</span>
             </Col>
           </Row>
-          <Row className="mt-1">
-            <Col lg={12} md={12} sm={12} className="m-0 p-0">
+          <Row className="mt-3">
+            <Col lg={12} md={12} sm={12}>
               <Paper className="bankuser-paper">
                 <Row>
                   <Col lg={12} md={12} sm={12}>
@@ -351,6 +387,7 @@ const Bankuser = () => {
                         <TextField
                           name={"firstName"}
                           value={addBankUser.firstName.value}
+                          className="bankUser-textfield"
                           onChange={addBankUserValidateHandler}
                           labelClass="d-none"
                         />
@@ -385,6 +422,7 @@ const Bankuser = () => {
                         <TextField
                           name={"lastName"}
                           value={addBankUser.lastName.value}
+                          className="bankUser-textfield"
                           onChange={addBankUserValidateHandler}
                           labelClass="d-none"
                         />
@@ -416,6 +454,7 @@ const Bankuser = () => {
                         <TextField
                           name={"ldapAccount"}
                           value={addBankUser.ldapAccount.value}
+                          className="bankUser-textfield"
                           onChange={addBankUserValidateHandler}
                           labelClass="d-none"
                         />
@@ -488,6 +527,7 @@ const Bankuser = () => {
                       <Col lg={5} md={5} sm={12}>
                         <TextField
                           name="email"
+                          className="bankUser-textfield"
                           value={addBankUser.email.value}
                           onChange={addBankUserValidateHandler}
                           onBlur={handlerEmail}
@@ -520,6 +560,7 @@ const Bankuser = () => {
                       <Col lg={5} md={5} sm={12}>
                         <TextField
                           name={"Contact"}
+                          className="bankUser-textfield"
                           value={addBankUser.Contact.value}
                           onChange={addBankUserValidateHandler}
                           labelClass="d-none"
@@ -548,21 +589,26 @@ const Bankuser = () => {
                           File Upload<span className="aesterick-color">*</span>
                         </span>
                       </Col>
-                      <Col lg={2} md={2} sm={12}>
-                        <CustomUpload change={HandleFileUpload} />
-                      </Col>
                       <Col
-                        lg={3}
-                        md={3}
+                        lg={5}
+                        md={5}
                         sm={12}
-                        className="d-flex justify-content-end"
+                        className="add-bank-upload-download-col"
                       >
+                        <Upload showUploadList={false} {...props}>
+                          <Button
+                            className="add-bank-uplaod-contact"
+                            text={"Upload Your Contacts"}
+                          />
+                        </Upload>
+
                         <Button
-                          text={"download excel format"}
-                          className="upload-btn"
+                          onClick={downloadReportAddBank}
+                          text={"Download excel format"}
+                          className="add-bank-download-contact"
                         />
                       </Col>
-                      <Col lg={7} md={7} sm={12} />
+                      <Col lg={5} md={5} sm={12} />
 
                       <Row className="mt-3">
                         <Col
@@ -606,7 +652,7 @@ const Bankuser = () => {
           setUploadAddModal={setUploadModal}
         />
       ) : null}
-      {securitReducer.Loading ? <Loader /> : null}
+      {securitReducer.Loading || downloadReducer.Loading ? <Loader /> : null}
     </section>
   );
 };
