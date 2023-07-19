@@ -6,6 +6,7 @@ import {
   Table,
   Paper,
   Loader,
+  Notification,
 } from "../../../components/elements";
 import { Select, Spin } from "antd";
 import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
@@ -29,6 +30,11 @@ const Createuser = () => {
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
 
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
+  });
+
   // state for set data in create table
   const [requestUserRows, setRequestUserRows] = useState([]);
 
@@ -40,6 +46,32 @@ const Createuser = () => {
     setData(userData);
     setAcceptModal(true);
   };
+
+  // for rendering data in user request table
+  useEffect(() => {
+    if (
+      securitReducer.userRequestList !== null &&
+      securitReducer.userRequestList !== undefined &&
+      securitReducer.userRequestList.length > 0 &&
+      securitReducer.userRequestList !== ""
+    ) {
+      setRequestUserRows(securitReducer.userRequestList);
+      setOpen({
+        ...open,
+        open: true,
+        message: "Record Found",
+      });
+    } else {
+      setRequestUserRows([]);
+      setOpen({
+        ...open,
+        open: true,
+        message: "No Record Found",
+      });
+    }
+  }, [securitReducer.userRequestList]);
+
+  console.log("requestRow", requestUserRows);
 
   useEffect(() => {
     let roleID = JSON.parse(localStorage.getItem("roleID"));
@@ -173,20 +205,6 @@ const Createuser = () => {
     },
   ];
 
-  useEffect(() => {
-    if (
-      securitReducer.userRequestList !== null &&
-      securitReducer.userRequestList !== undefined &&
-      securitReducer.userRequestList.length > 0
-    ) {
-      setRequestUserRows(securitReducer.userRequestList);
-    } else {
-      setRequestUserRows([]);
-    }
-  }, [securitReducer.userRequestList]);
-
-  console.log("requestRow", requestUserRows);
-
   return (
     <>
       <section className="create-user-container">
@@ -216,6 +234,11 @@ const Createuser = () => {
         </Row>
 
         {securitReducer.Loading ? <Loader /> : null}
+        <Notification
+          setOpen={setOpen}
+          open={open.open}
+          message={open.message}
+        />
       </section>
 
       {createRejectModal ? (

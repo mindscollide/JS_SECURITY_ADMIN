@@ -5,6 +5,7 @@ import {
   Paper,
   TextField,
   Button,
+  Notification,
   Loader,
   CustomUpload,
 } from "../../../components/elements";
@@ -33,8 +34,15 @@ const Bankuser = () => {
 
   let bankUserSecurity = localStorage.getItem("bankID");
 
+  const [isValidEmail, setIsValidEmail] = useState(false);
+
   const [tasksAttachments, setTasksAttachments] = useState({
     TasksAttachments: [],
+  });
+
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
   });
 
   //state for allUserRole List Dropdown
@@ -43,7 +51,6 @@ const Bankuser = () => {
 
   //state for error Message
   const [errorShow, setErrorShow] = useState(false);
-  const [isValidEmail, setIsValidEmail] = useState("");
 
   //state for Bankmodal
   const [addBankModal, setAddBankModal] = useState(false);
@@ -212,13 +219,32 @@ const Bankuser = () => {
   //email validation handler
   const handlerEmail = () => {
     if (addBankUser.email.value !== "") {
-      if (!validateEmail(addBankUser.email.value)) {
-        setIsValidEmail("Invalid Email Address");
+      if (validateEmail(addBankUser.email.value)) {
+        setIsValidEmail(true);
         console.log("Email verified");
       } else {
-        setIsValidEmail("");
+        setIsValidEmail(false);
+        setAddBankUser({
+          ...addBankUser,
+          email: {
+            value: addBankUser.email.value,
+            errorMessage: "Enter Valid Email Address",
+            errorStatus: true,
+          },
+        });
         console.log("Email Not Verified");
       }
+    } else {
+      setIsValidEmail(false);
+      setAddBankUser({
+        ...addBankUser,
+        email: {
+          value: addBankUser.email.value,
+          errorMessage: "Enter Valid Email Address",
+          errorStatus: true,
+        },
+      });
+      console.log("Email Not Verified");
     }
   };
 
@@ -281,6 +307,20 @@ const Bankuser = () => {
       FileTypeID: 1,
     };
     await dispatch(downloadAddBankorCustomerReport(downloadReport));
+
+    if (downloadReport.FileTypeID === 1) {
+      setOpen({
+        ...open,
+        open: true,
+        message: "Download Successfully",
+      });
+    } else {
+      setOpen({
+        ...open,
+        open: true,
+        message: "Downloading Failed",
+      });
+    }
   };
 
   // show error message When user hit activate btn
@@ -294,6 +334,7 @@ const Bankuser = () => {
       addBankUser.Contact.value !== ""
     ) {
       setErrorShow(false);
+
       let newData = {
         User: {
           FirstName: addBankUser.firstName.value,
@@ -301,29 +342,26 @@ const Bankuser = () => {
           Email: addBankUser.email.value,
           ContactNumber: addBankUser.Contact.value,
           LDAPAccount: addBankUser.ldapAccount.value,
-          // LDAPAccount: `mindscollide.${addBankUser.Name.value.replace(
-          //   " ",
-          //   ""
-          // )}`,
           UserRoleID: addBankUser.roleID.value,
         },
         BankId: parseInt(bankUserSecurity),
       };
       dispatch(createBank(navigate, newData));
-    } else if (
-      validateEmail(addBankUser.email.value) &&
-      addBankUser.email.value !== ""
-    ) {
-      setErrorShow(true);
+    } else {
+      setIsValidEmail(false);
+      setOpen({
+        ...open,
+        open: true,
+        message: "Please Fill All Fields",
+      });
       setAddBankUser({
         ...addBankUser,
         email: {
           value: addBankUser.email.value,
-          errorMessage: "Invalid email Address",
+          errorMessage: "Enter Valid Email Address",
           errorStatus: true,
         },
       });
-    } else {
       setErrorShow(true);
     }
   };
@@ -530,20 +568,42 @@ const Bankuser = () => {
                           className="bankUser-textfield"
                           value={addBankUser.email.value}
                           onChange={addBankUserValidateHandler}
-                          onBlur={handlerEmail}
+                          onBlur={() => {
+                            handlerEmail();
+                          }}
                           labelClass="d-none"
                         />
                         <Row>
                           <Col className="d-flex justify-content-start">
-                            <p
-                              className={
-                                errorShow && addBankUser.email.value === ""
-                                  ? "bankErrorMessage"
-                                  : "bankErrorMessage_hidden"
-                              }
-                            >
-                              Email is required
-                            </p>
+                            {(!isValidEmail &&
+                              addBankUser.email.value !== "" && (
+                                <p
+                                  className={
+                                    errorShow &&
+                                    addBankUser.email.errorMessage !== "" &&
+                                    "Enter Valid Email Address"
+                                      ? "bankErrorMessage"
+                                      : "bankErrorMessage_hidden" &&
+                                        errorShow &&
+                                        addBankUser.email.value === "" &&
+                                        "Email field is required"
+                                      ? "bankErrorMessage"
+                                      : "bankErrorMessage_hidden"
+                                  }
+                                >
+                                  {addBankUser.email.errorMessage}
+                                </p>
+                              )) || (
+                              <p
+                                className={
+                                  errorShow && addBankUser.email.value === ""
+                                    ? "bankErrorMessage"
+                                    : "bankErrorMessage_hidden"
+                                }
+                              >
+                                Email is required
+                              </p>
+                            )}
                           </Col>
                         </Row>
                       </Col>
@@ -652,6 +712,7 @@ const Bankuser = () => {
           setUploadAddModal={setUploadModal}
         />
       ) : null}
+      <Notification setOpen={setOpen} open={open.open} message={open.message} />
       {securitReducer.Loading || downloadReducer.Loading ? <Loader /> : null}
     </section>
   );

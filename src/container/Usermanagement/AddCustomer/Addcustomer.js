@@ -32,8 +32,15 @@ const Addcustomer = () => {
   //state for error message show on add a customer page
   const [errorShow, setErrorShow] = useState(false);
 
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
+  });
+
   // Upload Customer modal states
   const [customerUpload, setCustomerUpload] = useState(false);
+
+  const [isValidEmail, setIsValidEmail] = useState(false);
 
   let addBankSecurity = localStorage.getItem("bankID");
 
@@ -236,10 +243,31 @@ const Addcustomer = () => {
   const handlerEmail = () => {
     if (addCustomerState.email.value !== "") {
       if (validateEmail(addCustomerState.email.value)) {
+        setIsValidEmail(true);
         console.log("email verified");
       } else {
+        setIsValidEmail(false);
+        setAddCustomerState({
+          ...addCustomerState,
+          email: {
+            value: addCustomerState.email.value,
+            errorMessage: "Enter Valid Email Address",
+            errorStatus: true,
+          },
+        });
         console.log("email Not Verified");
       }
+    } else {
+      setIsValidEmail(false);
+      setAddCustomerState({
+        ...addCustomerState,
+        email: {
+          value: addCustomerState.email.value,
+          errorMessage: "Enter Valid Email Address",
+          errorStatus: true,
+        },
+      });
+      console.log("email Not Verified");
     }
   };
 
@@ -354,6 +382,15 @@ const Addcustomer = () => {
       console.log(corporateData);
       dispatch(corporateCreate(navigate, corporateData));
     } else {
+      setIsValidEmail(false);
+      setAddCustomerState({
+        ...addCustomerState,
+        email: {
+          value: addCustomerState.email.value,
+          errorMessage: "Enter Valid Email Address",
+          errorStatus: true,
+        },
+      });
       setErrorShow(true);
     }
   };
@@ -531,20 +568,42 @@ const Addcustomer = () => {
                     className="add-customer-textfield"
                     value={addCustomerState.email.value}
                     onChange={addCustomerValidationHandler}
-                    onBlur={handlerEmail}
+                    onBlur={() => {
+                      handlerEmail();
+                    }}
                     labelClass="d-none"
                   />
                   <Row>
                     <Col className="d-flex justify-content-start">
-                      <p
-                        className={
-                          errorShow && addCustomerState.email.value === ""
-                            ? "addCustomerErrorMessage"
-                            : "addCustomerErrorMessage_hidden"
-                        }
-                      >
-                        Email is required
-                      </p>
+                      {(!isValidEmail &&
+                        addCustomerState.email.value !== "" && (
+                          <p
+                            className={
+                              errorShow &&
+                              addCustomerState.email.errorMessage !== "" &&
+                              "Enter Valid Email Address"
+                                ? "addCustomerErrorMessage"
+                                : "addCustomerErrorMessage_hidden" &&
+                                  errorShow &&
+                                  addCustomerState.email.value === "" &&
+                                  "Email field is required"
+                                ? "addCustomerErrorMessage"
+                                : "addCustomerErrorMessage_hidden"
+                            }
+                          >
+                            {addCustomerState.email.errorMessage}
+                          </p>
+                        )) || (
+                        <p
+                          className={
+                            errorShow && addCustomerState.email.value === ""
+                              ? "addCustomerErrorMessage"
+                              : "addCustomerErrorMessage_hidden"
+                          }
+                        >
+                          Email is required
+                        </p>
+                      )}
                     </Col>
                   </Row>
                 </Col>

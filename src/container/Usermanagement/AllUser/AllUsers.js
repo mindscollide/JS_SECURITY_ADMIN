@@ -7,6 +7,7 @@ import {
   Paper,
   Loader,
   Modal,
+  Notification,
 } from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +33,11 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   const [rows, setRows] = useState([]);
 
   const [totalRecords, setTotalRecord] = useState(0);
+
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
+  });
 
   //this the email Ref for copy paste handler
   const emailRef = useRef(null);
@@ -130,6 +136,65 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     userID: 0,
   });
   console.log("modalEditState", modalEditState);
+
+  // for userRoles in select drop down
+  useEffect(() => {
+    if (Object.keys(auth.UserRoleList).length > 0) {
+      let tem = [];
+      auth.UserRoleList.map((data, index) => {
+        console.log(data, "datadatadatadata");
+        tem.push({
+          label: data.roleName,
+          value: data.roleID,
+        });
+      });
+      setEditSelectRole(tem);
+    }
+  }, [auth.UserRoleList]);
+
+  // for userStatus in select dropdown
+  useEffect(() => {
+    if (Object.keys(auth.UserStatus).length > 0) {
+      let tem = [];
+      auth.UserStatus.map((data, index) => {
+        console.log(data, "userStatususerStatus");
+        tem.push({
+          label: data.statusName,
+          value: data.statusID,
+        });
+      });
+      setEditSelectStatus(tem);
+    }
+  }, [auth.UserStatus]);
+
+  // for rendering data in table
+  useEffect(() => {
+    if (
+      securitReducer.allUserList !== null &&
+      securitReducer.allUserList !== undefined &&
+      securitReducer.allUserList.length > 0
+    ) {
+      setRows(securitReducer.allUserList);
+    } else {
+      setRows([]);
+    }
+  }, [securitReducer.allUserList]);
+
+  console.log("roewwwww", rows);
+
+  useEffect(() => {
+    let data = {
+      FirstName: "",
+      LastName: "",
+      UserLDAPAccount: "",
+      Email: "",
+      UserRoleID: 0,
+      UserStatusID: 0,
+      PageNumber: 1,
+      Length: 50,
+    };
+    dispatch(allUserList(navigate, data));
+  }, []);
 
   const onchangeModalTextFieldsHandler = (e) => {
     let name = e.target.name;
@@ -391,11 +456,6 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       Length: 50,
     };
     dispatch(allUserList(navigate, data));
-  };
-
-  // open Update modal
-  const openUpdateModal = async () => {
-    setUpdateModal(true);
   };
 
   // open edit modal
@@ -674,7 +734,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
   };
 
   // onChange handler for pagination
-  const allUserPagination = (current, pageSize) => {
+  const allUserPagination = async (current, pageSize) => {
     let data = {
       FirstName: editUser.firstName.value,
       LastName: editUser.lastName.value,
@@ -682,71 +742,13 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       Email: editUser.email.value,
       UserRoleID: editUser.roleID.value,
       UserStatusID: editUser.statusID.value,
-      PageNumber: currentPage !== null ? parseInt(currentPage) : 1,
-      Length: currentPageSize !== null ? parseInt(currentPageSize) : 50,
+      PageNumber: current !== null ? parseInt(current) : 1,
+      Length: pageSize !== null ? parseInt(pageSize) : 50,
     };
     localStorage.setItem("allUserSize", pageSize);
     localStorage.setItem("allUserPage", current);
     dispatch(allUserList(navigate, data));
   };
-
-  // for userRoles in select drop down
-  useEffect(() => {
-    if (Object.keys(auth.UserRoleList).length > 0) {
-      let tem = [];
-      auth.UserRoleList.map((data, index) => {
-        console.log(data, "datadatadatadata");
-        tem.push({
-          label: data.roleName,
-          value: data.roleID,
-        });
-      });
-      setEditSelectRole(tem);
-    }
-  }, [auth.UserRoleList]);
-
-  // for userStatus in select dropdown
-  useEffect(() => {
-    if (Object.keys(auth.UserStatus).length > 0) {
-      let tem = [];
-      auth.UserStatus.map((data, index) => {
-        console.log(data, "userStatususerStatus");
-        tem.push({
-          label: data.statusName,
-          value: data.statusID,
-        });
-      });
-      setEditSelectStatus(tem);
-    }
-  }, [auth.UserStatus]);
-
-  useEffect(() => {
-    if (
-      securitReducer.allUserList !== null &&
-      securitReducer.allUserList !== undefined &&
-      securitReducer.allUserList.length > 0
-    ) {
-      setRows(securitReducer.allUserList);
-    } else {
-      setRows([]);
-    }
-  }, [securitReducer.allUserList]);
-
-  console.log("roewwwww", rows);
-
-  useEffect(() => {
-    let data = {
-      FirstName: "",
-      LastName: "",
-      UserLDAPAccount: "",
-      Email: "",
-      UserRoleID: 0,
-      UserStatusID: 0,
-      PageNumber: 1,
-      Length: 50,
-    };
-    dispatch(allUserList(navigate, data));
-  }, []);
 
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
@@ -938,7 +940,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                     onChange={allUserPagination}
                     current={currentPage !== null ? currentPage : 1}
                     showSizeChanger
-                    pageSizeOptions={[50, 100, 200]}
+                    pageSizeOptions={[30, 50, 100, 200]}
                     pageSize={currentPageSize !== null ? currentPageSize : 50}
                     className="PaginationStyle-allUser"
                   />
@@ -1007,7 +1009,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
           onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
-
+      <Notification setOpen={setOpen} open={open.open} message={open.message} />
       {securitReducer.Loading ? <Loader /> : null}
     </>
   );
