@@ -11,8 +11,6 @@ function App() {
       <Sidebar />
       <Header />
       <Bankuser />
-      {/* {<Createuser />} */}
-      {/* <Userreport /> */}
     </>
   );
 }

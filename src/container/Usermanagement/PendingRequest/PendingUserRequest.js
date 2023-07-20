@@ -6,6 +6,7 @@ import {
   Table,
   Paper,
   Loader,
+  Notification,
 } from "../../../components/elements";
 import { Select, Spin } from "antd";
 import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
@@ -29,6 +30,11 @@ const Createuser = () => {
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
 
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
+  });
+
   // state for set data in create table
   const [requestUserRows, setRequestUserRows] = useState([]);
 
@@ -40,6 +46,32 @@ const Createuser = () => {
     setData(userData);
     setAcceptModal(true);
   };
+
+  // for rendering data in user request table
+  useEffect(() => {
+    if (
+      securitReducer.userRequestList !== null &&
+      securitReducer.userRequestList !== undefined &&
+      securitReducer.userRequestList.length > 0 &&
+      securitReducer.userRequestList !== ""
+    ) {
+      setRequestUserRows(securitReducer.userRequestList);
+      setOpen({
+        ...open,
+        open: true,
+        message: "Record Found",
+      });
+    } else {
+      setRequestUserRows([]);
+      setOpen({
+        ...open,
+        open: true,
+        message: "No Record Found",
+      });
+    }
+  }, [securitReducer.userRequestList]);
+
+  console.log("requestRow", requestUserRows);
 
   useEffect(() => {
     let roleID = JSON.parse(localStorage.getItem("roleID"));
@@ -79,20 +111,20 @@ const Createuser = () => {
       dataIndex: "email",
       key: "email",
       width: "200px",
+      ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
       dataIndex: "firstname",
       key: "firstname",
-      width: "100px",
+      ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Last Name</label>,
       dataIndex: "lastname",
       key: "lastname",
-      width: "100px",
       ellipsis: true,
       render: (text) => <label className="issue-date-column">{text}</label>,
     },
@@ -100,7 +132,7 @@ const Createuser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "fK_UserRoleID",
       key: "fK_UserRoleID",
-      width: "200px",
+      ellipsis: true,
       render: (text, record) => {
         if (record.fK_UserRoleID === 1) {
           return (
@@ -145,7 +177,7 @@ const Createuser = () => {
       title: <label className="bottom-table-header">Accept</label>,
       dataIndex: "accept",
       key: "accept",
-      width: "100px",
+      ellipsis: true,
       align: "center",
       render: (text, data) => {
         console.log("dataddadat", data);
@@ -160,7 +192,7 @@ const Createuser = () => {
       title: <label className="bottom-table-header">Reject</label>,
       dataIndex: "reject",
       key: "reject",
-      width: "100px",
+      ellipsis: true,
       align: "center",
       render: (text, rejectData) => {
         console.log("rejectDatarejectData", rejectData);
@@ -172,20 +204,6 @@ const Createuser = () => {
       },
     },
   ];
-
-  useEffect(() => {
-    if (
-      securitReducer.userRequestList !== null &&
-      securitReducer.userRequestList !== undefined &&
-      securitReducer.userRequestList.length > 0
-    ) {
-      setRequestUserRows(securitReducer.userRequestList);
-    } else {
-      setRequestUserRows([]);
-    }
-  }, [securitReducer.userRequestList]);
-
-  console.log("requestRow", requestUserRows);
 
   return (
     <>
@@ -208,7 +226,7 @@ const Createuser = () => {
                   column={columnsCreate}
                   rows={requestUserRows}
                   className="Createuser-table"
-                  pagination={true}
+                  pagination={false}
                 />
               )}
             </Col>
@@ -216,6 +234,11 @@ const Createuser = () => {
         </Row>
 
         {securitReducer.Loading ? <Loader /> : null}
+        <Notification
+          setOpen={setOpen}
+          open={open.open}
+          message={open.message}
+        />
       </section>
 
       {createRejectModal ? (

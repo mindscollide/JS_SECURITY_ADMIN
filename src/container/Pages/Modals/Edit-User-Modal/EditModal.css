@@ -54,11 +54,14 @@
 
 .select-role {
   width: 100%;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .select-status {
   width: 100%;
-  margin-left: 0px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .select-labels {

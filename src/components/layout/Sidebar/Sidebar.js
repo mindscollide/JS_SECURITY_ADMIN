@@ -1,24 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Row, Col, Nav, Container, Navbar, NavDropdown } from "react-bootstrap";
-import Chat from "../../../assets/images/Comment-Icon.png";
-import {
-  Gear,
-  ChatLeft,
-  People,
-  Search,
-  ArrowsAngleExpand,
-  X,
-  ChatDots,
-  Send,
-  Paperclip,
-} from "react-bootstrap-icons";
-import JohnCater from "../../../assets/images/profile3.png";
-import { Button, TextField } from "../../../components/elements";
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
@@ -78,6 +59,8 @@ const Sidebar = () => {
     navigate("/Js/Admin/natureofBusiness");
   };
 
+  let defaultKeySidebar = localStorage.getItem("defaultSelectedKey");
+
   return (
     <Row>
       <Col lg={12} md={12} sm={12}>
@@ -97,7 +80,11 @@ const Sidebar = () => {
                 className="submenu-sidebar-icons"
               >
                 <Menu.Item
-                  className="menu-items-sidebar"
+                  className={
+                    defaultKeySidebar !== "3"
+                      ? "menu-items-sidebar noDefault"
+                      : "menu-items-sidebar"
+                  }
                   key="3"
                   onClick={navigateToBankUsers}
                 >
@@ -105,14 +92,22 @@ const Sidebar = () => {
                 </Menu.Item>
 
                 <Menu.Item
-                  className="menu-items-sidebar"
+                  className={
+                    defaultKeySidebar === "4"
+                      ? "ant-menu-item ant-menu-item-selected ant-menu-item-only-child menu-items-sidebar"
+                      : "menu-items-sidebar"
+                  }
                   key="4"
                   onClick={navigateToPendingRequest}
                 >
                   Pending user requests
                 </Menu.Item>
                 <Menu.Item
-                  className="menu-items-sidebar"
+                  className={
+                    defaultKeySidebar !== "5"
+                      ? "menu-items-sidebar noDefault"
+                      : "menu-items-sidebar"
+                  }
                   key="5"
                   onClick={navigateToAllUsers}
                 >
@@ -126,14 +121,22 @@ const Sidebar = () => {
                 className="submenu-sidebar-icons"
               >
                 <Menu.Item
-                  className="menu-items-sidebar"
+                  className={
+                    defaultKeySidebar !== "6"
+                      ? "menu-items-sidebar noDefault"
+                      : "menu-items-sidebar"
+                  }
                   key="6"
                   onClick={navigateToCustomer}
                 >
                   Add a Customer
                 </Menu.Item>
                 <Menu.Item
-                  className="menu-items-sidebar"
+                  className={
+                    defaultKeySidebar !== "7"
+                      ? "menu-items-sidebar noDefault"
+                      : "menu-items-sidebar"
+                  }
                   key="7"
                   onClick={navigateToUserList}
                 >
@@ -147,7 +150,11 @@ const Sidebar = () => {
                 className="submenu-sidebar-icons"
               >
                 <Menu.Item
-                  className="menu-items-sidebar"
+                  className={
+                    defaultKeySidebar !== "8"
+                      ? "menu-items-sidebar noDefault"
+                      : "menu-items-sidebar"
+                  }
                   key="8"
                   onClick={navigateToReport}
                 >
@@ -161,7 +168,11 @@ const Sidebar = () => {
                 className="submenu-sidebar-icons"
               >
                 <Menu.Item
-                  className="menu-items-sidebar"
+                  className={
+                    defaultKeySidebar !== "9"
+                      ? "menu-items-sidebar noDefault"
+                      : "menu-items-sidebar"
+                  }
                   key="9"
                   onClick={navigateToNatureOfBusiness}
                 >

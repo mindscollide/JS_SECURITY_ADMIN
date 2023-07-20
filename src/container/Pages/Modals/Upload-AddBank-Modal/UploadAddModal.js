@@ -172,6 +172,7 @@ const UploadAddModal = ({ ModalTitle, uploadAddModal, setUploadAddModal }) => {
                 />
                 <Button
                   text="Cancel Import"
+                  onClick={closeUploadModal}
                   className="Cancel-Import-btn"
                   icon={<i class="icon-close Upload-Bank-modal"></i>}
                 />

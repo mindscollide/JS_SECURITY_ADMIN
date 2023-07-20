@@ -31,6 +31,9 @@ const CustomerModal = ({
   console.log(auth, "authauth");
   const [selectedOption, setSelectedOption] = useState(null);
 
+  // bankuser id get by localstorage
+  let addCustomerSecurity = localStorage.getItem("bankID");
+
   // select for category in customer add modal
   const [customerModalSelect, setCustomerModalSelect] = useState([]);
   const [customerModalSelectValue, setCustomerModalSelectValue] = useState([]);
@@ -207,19 +210,36 @@ const CustomerModal = ({
 
   // reset Handler for addComapny modal
   const handleAddCancelReset = () => {
-    setAddCustomerModal({
-      ...addCustomerModal,
-      companyName: {
-        value: "",
-      },
+    if (
+      addCustomerModal.companyName.value === "" &&
+      addCustomerModal.corporateCategoryID.value === "" &&
+      addCustomerModal.rfqTimer.value === "" &&
+      addCustomerModal.pK_NatureOfBusiness.value === ""
+    ) {
+      setCustomerModal(false);
+    } else {
+      setAddCustomerModal({
+        ...addCustomerModal,
+        companyName: {
+          value: "",
+        },
 
-      rfqTimer: {
-        value: "",
-      },
-    });
-    setAssetTypeSelectValue([]);
-    setNatureBusinessSelectValue([]);
-    setCustomerModalSelectValue([]);
+        corporateCategoryID: {
+          value: "",
+        },
+
+        rfqTimer: {
+          value: "",
+        },
+
+        pK_NatureOfBusiness: {
+          value: "",
+        },
+      });
+      setAssetTypeSelectValue([]);
+      setNatureBusinessSelectValue([]);
+      setCustomerModalSelectValue([]);
+    }
   };
 
   //error show on input field when user hit Add btn
@@ -239,7 +259,7 @@ const CustomerModal = ({
         CorporateName: addCustomerModal.companyName.value,
         NatureOfBusinessID: addCustomerModal.pK_NatureOfBusiness.value,
         FK_CorporateCategoryID: addCustomerModal.corporateCategoryID.value,
-        BankId: 1,
+        BankId: parseInt(addCustomerSecurity),
         UserID: JSON.parse(userId),
       };
       console.log(corporateNew);
@@ -335,6 +355,7 @@ const CustomerModal = ({
                       value={addCustomerModal.companyName.value}
                       onChange={addCustomerModalValidateHandler}
                       labelClass="d-none"
+                      className="addCustomer-modal-field"
                     />
                     <Row>
                       <Col className="d-flex justify-content-start">
@@ -366,6 +387,7 @@ const CustomerModal = ({
                       value={customerModalSelectValue}
                       onChange={selectNewCorporateChangeHandler}
                       isSearchable={true}
+                      className="Select-addcustomer-modal"
                       labelClass="d-none"
                     />
                     <Row>
@@ -397,6 +419,7 @@ const CustomerModal = ({
                       value={addCustomerModal.rfqTimer.value}
                       onChange={addCustomerModalValidateHandler}
                       labelClass="d-none"
+                      className={"addCustomer-modal-field"}
                     />
                     <Row>
                       <Col className="d-flex justify-content-start">
@@ -459,6 +482,7 @@ const CustomerModal = ({
                       value={natureBusinessSelectValue}
                       onChange={selectNatureOfBusinessHandler}
                       isSearchable={true}
+                      className="Select-addcustomer-modal"
                       labelClass="d-none"
                     />
                     <Row>

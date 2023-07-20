@@ -26,6 +26,7 @@
 
 .Active-btn {
   font-size: 14px;
+  font-weight: 500;
   margin-left: 10px;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 0px;
@@ -57,6 +58,7 @@
 
 .Cancel-btn {
   font-size: 14px;
+  font-weight: 500;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-left-radius: 8px;
@@ -87,6 +89,9 @@
 }
 
 .react-select-field {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif !important;
   width: 100% !important;
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
@@ -131,4 +136,47 @@
   margin: 0;
   height: 16px;
   color: #f16b6b !important;
+}
+
+.add-bank-uplaod-contact {
+  font-size: 15px !important;
+  font-weight: 500;
+  border-top-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  background-color: #6873a9 !important;
+  border-color: #6873a9 !important;
+  color: #ffffff !important;
+  padding: 7px 20px;
+}
+
+.add-bank-download-contact {
+  font-size: 15px !important;
+  font-weight: 500;
+  border-top-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  background-color: #6873a9 !important;
+  border-color: #6873a9 !important;
+  color: #ffffff !important;
+  padding: 7px 15px;
+}
+
+.add-bank-upload-download-col {
+  display: flex;
+  justify-content: start !important;
+  gap: 10px !important;
+}
+
+.bankUser-textfield {
+  font-size: 13px !important;
+  font-weight: 500;
+  height: 37px;
+}
+
+.bankUser-Select {
+  font-size: 13px !important;
+  font-weight: 500;
 }

@@ -94,6 +94,51 @@ const SearchApiCorporate = {
   RequestMethod: "ServiceManager.SearchCorporateUsers",
 };
 
+// get All Bank Corporate By Bank ID Api
+const getAllBankCorporate = {
+  RequestMethod: "ServiceManager.GetAllCorporatesByBankID",
+};
+
+// for search coporate User API in system Admin
+const searchCorporateUsersSysAdmin = {
+  RequestMethod: "ServiceManager.SearchCorporateUsers",
+};
+
+// update corporate User Api
+const updateCorporateApiSysAdmin = {
+  RequestMethod: "ServiceManager.UpdateCorporateUser",
+};
+
+// get all Corporate Name By Bank ID
+const getCorporateNameApi = {
+  RequestMethod: "ServiceManager.GetAllCorporateNameByBankID",
+};
+
+// Add Nature of Business Api In Nature Business API
+const addNatureBusiness = {
+  RequestMethod: "ServiceManager.AddNatureOfBussiness",
+};
+
+//Update Nature of Business Api
+const updateNatureOfBusiness = {
+  RequestMethod: "ServiceManager.UpdateNatureOfBussiness",
+};
+
+//view Nature of businness pagination API
+const viewNatureOfBusiness = {
+  RequestMethod: "ServiceManager.ViewAllNatureOfBussiness",
+};
+
+//delete Nature of Business in Nature Business Page
+const deleteNatureOfBusines = {
+  RequestMethod: "ServiceManager.DeleteNatureOfBussiness",
+};
+
+// download report api for security admin
+const downloadReportSecurityApi = {
+  RequestMethod: "DownloadFile",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -116,4 +161,13 @@ export {
   BankBulkUserList,
   CorporateUserList,
   SearchApiCorporate,
+  getAllBankCorporate,
+  searchCorporateUsersSysAdmin,
+  updateCorporateApiSysAdmin,
+  getCorporateNameApi,
+  addNatureBusiness,
+  updateNatureOfBusiness,
+  viewNatureOfBusiness,
+  deleteNatureOfBusines,
+  downloadReportSecurityApi,
 };

@@ -21,10 +21,16 @@ const Header = () => {
   const { securitReducer } = useSelector((state) => state);
   const roleID = parseInt(localStorage.getItem("roleID"));
 
-  const [countState, setCountState] = useState(5);
+  const [countState, setCountState] = useState(0);
   console.log(securitReducer.NewUserCountData, "securitReducersecuritReducer");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  let defaultOpenKey = localStorage.getItem("defaultOpenKey ");
+  let defaultSelectedKey = localStorage.getItem("defaultSelectedKey");
+
+  console.log("defaultOpenKey", defaultOpenKey);
+  console.log("defaultSelectedKey", defaultSelectedKey);
 
   // For Api hit on refresh page
   useEffect(() => {
@@ -42,6 +48,8 @@ const Header = () => {
 
   // navigate to pending Request page
   const navigateToCreatePage = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "4");
     navigate("/JS/Admin/pendingRequest");
   };
 

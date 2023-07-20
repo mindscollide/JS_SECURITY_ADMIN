@@ -64,6 +64,7 @@
 
 .Active-btn-Add-Customer {
   font-size: 14px;
+  font-weight: 500;
   margin-left: 10px;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 0px;
@@ -81,6 +82,7 @@
 
 .Cancel-btn-Add-Customer {
   font-size: 14px;
+  font-weight: 500;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-left-radius: 8px;
@@ -112,6 +114,8 @@
 }
 
 .react-select-customer-field {
+  font-size: 13px;
+  font-weight: 500;
   width: 100% !important;
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
@@ -123,6 +127,7 @@
 }
 
 .disabled-fields {
+  height: 37px;
   background-color: #dbdde7 !important;
   cursor: default;
 }
@@ -139,4 +144,42 @@
   /* padding: 6px 6px !important; */
   background-color: #6873a9 !important;
   border-color: #6873a9 !important;
+}
+
+.add-Customer-uplaod-contact {
+  font-size: 15px !important;
+  font-weight: 500;
+  border-top-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  background-color: #6873a9 !important;
+  border-color: #6873a9 !important;
+  color: #ffffff !important;
+  padding: 7px 20px;
+}
+
+.add-Customer-download-contact {
+  font-size: 15px !important;
+  font-weight: 500;
+  border-top-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  background-color: #6873a9 !important;
+  border-color: #6873a9 !important;
+  color: #ffffff !important;
+  padding: 7px 12px;
+}
+
+.add-Customer-upload-download-col {
+  display: flex;
+  justify-content: start !important;
+  gap: 10px !important;
+}
+
+.add-customer-textfield {
+  font-size: 13px !important;
+  font-weight: 500;
+  height: 37px;
 }
