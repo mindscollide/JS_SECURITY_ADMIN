@@ -4,6 +4,7 @@ import {
   Paper,
   TextField,
   Button,
+  Notification,
   Table,
   Loader,
 } from "../../components/elements";
@@ -32,6 +33,11 @@ const NatureofBus = () => {
   let currentPage = localStorage.getItem("NatureBusinessPage")
     ? localStorage.getItem("NatureBusinessPage")
     : 1;
+
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
+  });
 
   const NatureBusiness = useRef(null);
 
@@ -74,11 +80,6 @@ const NatureofBus = () => {
   console.log(editIcon, "valueeeeeee");
 
   useEffect(() => {
-    // let newNatureData = {
-    //   NatureOfBussiness: "",
-    // };
-    // dispatch(addNatureApi(navigate, newNatureData));
-
     // dispatch view API in useEffect to render data in table
     let newDataRender = {
       PageNumber: 1,
@@ -92,11 +93,22 @@ const NatureofBus = () => {
     if (
       auth.viewNatureBusiness.length > 0 &&
       auth.viewNatureBusiness !== null &&
-      auth.viewNatureBusiness !== undefined
+      auth.viewNatureBusiness !== undefined &&
+      auth.viewNatureBusiness !== ""
     ) {
       setRows(auth.viewNatureBusiness);
+      setOpen({
+        ...open,
+        open: true,
+        message: "Record Found",
+      });
     } else {
       setRows([]);
+      setOpen({
+        ...open,
+        open: true,
+        message: "No Record Found",
+      });
     }
   }, [auth.viewNatureBusiness]);
   console.log("viewNatureBusinessviewNatureBusiness", rows);
@@ -172,6 +184,19 @@ const NatureofBus = () => {
     let newNatureData = {
       NatureOfBussiness: natureFields.natureBusiness.value,
     };
+    if (newNatureData.NatureOfBussiness !== "") {
+      setOpen({
+        ...open,
+        open: true,
+        message: "Record Add",
+      });
+    } else {
+      setOpen({
+        ...open,
+        open: true,
+        message: "No Record Add",
+      });
+    }
     let newNatureTable = {
       PageNumber: 1,
       Length: 50,
@@ -241,18 +266,6 @@ const NatureofBus = () => {
     },
   ];
 
-  //Table data for nature of business
-  const natureData = [
-    {
-      natureOfBusiness: "Testing Data",
-    },
-    {
-      natureOfBusiness: "Testing Data Two",
-    },
-    {
-      natureOfBusiness: "Testing Data Two",
-    },
-  ];
   return (
     <Fragment>
       <section className="Nature-Business-section">
@@ -350,6 +363,11 @@ const NatureofBus = () => {
             </Paper>
           </Col>
         </Row>
+        <Notification
+          setOpen={setOpen}
+          open={open.open}
+          message={open.message}
+        />
         {auth.Loading ? <Loader /> : null}
       </section>
     </Fragment>

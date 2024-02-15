@@ -4,6 +4,7 @@ import { PlusLg } from "react-bootstrap-icons";
 import {
   Paper,
   TextField,
+  Notification,
   Button,
   Loader,
   CustomUpload,
@@ -24,7 +25,9 @@ import Select from "react-select";
 const Addcustomer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { auth, securitReducer } = useSelector((state) => state);
+  const { auth, securitReducer, downloadReducer } = useSelector(
+    (state) => state
+  );
   console.log(auth, "auth");
   // customer modal States
   const [modalAddCustomer, setModalAddCustomer] = useState(false);
@@ -239,43 +242,24 @@ const Addcustomer = () => {
     }
   };
 
-  //email validation handler
-  const handlerEmail = () => {
-    if (addCustomerState.email.value !== "") {
-      if (validateEmail(addCustomerState.email.value)) {
-        setIsValidEmail(true);
-        console.log("email verified");
-      } else {
-        setIsValidEmail(false);
-        setAddCustomerState({
-          ...addCustomerState,
-          email: {
-            value: addCustomerState.email.value,
-            errorMessage: "Enter Valid Email Address",
-            errorStatus: true,
-          },
-        });
-        console.log("email Not Verified");
-      }
-    } else {
-      setIsValidEmail(false);
-      setAddCustomerState({
-        ...addCustomerState,
-        email: {
-          value: addCustomerState.email.value,
-          errorMessage: "Enter Valid Email Address",
-          errorStatus: true,
-        },
-      });
-      console.log("email Not Verified");
-    }
-  };
-
   // download report in Add Bank user page
   const downloadReportAddCustomer = () => {
     let downloadCustomerReport = {
       FileTypeID: 2,
     };
+    if (downloadCustomerReport.FileTypeID === 2) {
+      setOpen({
+        ...open,
+        open: true,
+        message: "Download Successfully",
+      });
+    } else {
+      setOpen({
+        ...open,
+        open: true,
+        message: "Downloading Failed",
+      });
+    }
     dispatch(downloadAddBankorCustomerReport(downloadCustomerReport));
   };
 
@@ -358,51 +342,91 @@ const Addcustomer = () => {
   console.log("selectRoleValue", selectCorporateValue, addCustomerState);
 
   // Activate Button Handler when user hit button then error messages shown on field
-  const activateCustomerHandler = () => {
+  const activateCustomerHandler = (e) => {
+    e.preventDefault();
     if (
       addCustomerState.firstName.value !== "" &&
       addCustomerState.lastName.value !== "" &&
-      // addCustomerState.companyName.value !== "" &&
+      // addCustomerState.corporateValue.value !== "" &&
       // addCustomerState.corporateID.value !== "" &&
       addCustomerState.email.value !== "" &&
       addCustomerState.Contact.value !== ""
     ) {
-      setErrorShow(false);
-      let corporateData = {
-        User: {
-          FirstName: addCustomerState.firstName.value,
-          Lastname: addCustomerState.lastName.value,
-          Email: addCustomerState.email.value,
-          ContactNumber: addCustomerState.Contact.value,
-          LDAPAccount: "mindscollide.aun",
-          UserRoleID: 2,
-        },
-        CorporateID: corporateValue.value,
-      };
-      console.log(corporateData);
-      dispatch(corporateCreate(navigate, corporateData));
+      if (validateEmail(addCustomerState.email.value)) {
+        let corporateData = {
+          User: {
+            FirstName: addCustomerState.firstName.value,
+            Lastname: addCustomerState.lastName.value,
+            Email: addCustomerState.email.value,
+            ContactNumber: addCustomerState.Contact.value,
+            LDAPAccount: "mindscollide.aun",
+            UserRoleID: 2,
+          },
+          CorporateID: corporateValue.value,
+        };
+
+        const clearField = () => {
+          setAddCustomerState({
+            ...addCustomerState,
+            firstName: {
+              value: "",
+            },
+            lastName: {
+              value: "",
+            },
+            email: {
+              value: "",
+            },
+            Contact: {
+              value: "",
+            },
+            natureClient: {
+              value: "",
+            },
+            Category: {
+              value: "",
+            },
+            rfqTimer: {
+              value: "",
+            },
+          });
+          setSelectCorporateValue([]);
+        };
+
+        let clearTextFieldData = clearField;
+        console.log(corporateData);
+        setErrorShow(false);
+        setIsValidEmail(true);
+        dispatch(corporateCreate(navigate, corporateData, clearTextFieldData));
+      } else if (validateEmail(addCustomerState.email.value) === false) {
+        setErrorShow(true);
+        setIsValidEmail(false);
+        setAddCustomerState({
+          ...addCustomerState,
+          email: {
+            value: addCustomerState.email.value,
+            errorMessage: "Email Should be In Valid Format",
+            errorStatus: true,
+          },
+        });
+      }
     } else {
+      setErrorShow(true);
       setIsValidEmail(false);
       setAddCustomerState({
         ...addCustomerState,
         email: {
           value: addCustomerState.email.value,
-          errorMessage: "Enter Valid Email Address",
+          errorMessage: "Email Should be In Valid Format",
           errorStatus: true,
         },
       });
-      setErrorShow(true);
     }
   };
 
   // open modal on Plus icon
   const openModalPlusIcon = () => {
     setModalAddCustomer(true);
-  };
-
-  // open Customer Upload modal
-  const openUploadCustomerModal = () => {
-    setCustomerUpload(true);
   };
 
   // for category Corporate in select drop down
@@ -506,7 +530,7 @@ const Addcustomer = () => {
                 <Col lg={5} md={5} sm={12}>
                   <span className="span-field">
                     <Select
-                      name="corporateID"
+                      name="corporateValue"
                       options={selectCorporate}
                       value={selectCorporateValue}
                       onChange={selectCorporateHandler}
@@ -523,7 +547,7 @@ const Addcustomer = () => {
                     <Col className="d-flex justify-content-start">
                       <p
                         className={
-                          errorShow && addCustomerState.corporateID.value === ""
+                          errorShow && corporateValue.value === ""
                             ? "addCustomerErrorMessage"
                             : "addCustomerErrorMessage_hidden"
                         }
@@ -568,9 +592,6 @@ const Addcustomer = () => {
                     className="add-customer-textfield"
                     value={addCustomerState.email.value}
                     onChange={addCustomerValidationHandler}
-                    onBlur={() => {
-                      handlerEmail();
-                    }}
                     labelClass="d-none"
                   />
                   <Row>
@@ -580,13 +601,7 @@ const Addcustomer = () => {
                           <p
                             className={
                               errorShow &&
-                              addCustomerState.email.errorMessage !== "" &&
-                              "Enter Valid Email Address"
-                                ? "addCustomerErrorMessage"
-                                : "addCustomerErrorMessage_hidden" &&
-                                  errorShow &&
-                                  addCustomerState.email.value === "" &&
-                                  "Email field is required"
+                              addCustomerState.email.errorMessage !== ""
                                 ? "addCustomerErrorMessage"
                                 : "addCustomerErrorMessage_hidden"
                             }
@@ -601,7 +616,7 @@ const Addcustomer = () => {
                               : "addCustomerErrorMessage_hidden"
                           }
                         >
-                          Email is required
+                          Email is Required
                         </p>
                       )}
                     </Col>
@@ -751,8 +766,8 @@ const Addcustomer = () => {
           />
         </>
       ) : null}
-
-      {securitReducer.Loading ? <Loader /> : null}
+      <Notification setOpen={setOpen} open={open.open} message={open.message} />
+      {securitReducer.Loading || downloadReducer.Loading ? <Loader /> : null}
     </>
   );
 };

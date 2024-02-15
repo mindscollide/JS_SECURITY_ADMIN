@@ -228,7 +228,7 @@ const Bankuser = () => {
           ...addBankUser,
           email: {
             value: addBankUser.email.value,
-            errorMessage: "Enter Valid Email Address",
+            errorMessage: "Email Should be In Valid Format",
             errorStatus: true,
           },
         });
@@ -240,7 +240,7 @@ const Bankuser = () => {
         ...addBankUser,
         email: {
           value: addBankUser.email.value,
-          errorMessage: "Enter Valid Email Address",
+          errorMessage: "Email Should be In Valid Format",
           errorStatus: true,
         },
       });
@@ -324,7 +324,8 @@ const Bankuser = () => {
   };
 
   // show error message When user hit activate btn
-  const activateHandler = () => {
+  const activateHandler = (e) => {
+    e.preventDefault();
     if (
       addBankUser.firstName.value !== "" &&
       addBankUser.lastName.value !== "" &&
@@ -333,36 +334,74 @@ const Bankuser = () => {
       addBankUser.email.value !== "" &&
       addBankUser.Contact.value !== ""
     ) {
-      setErrorShow(false);
+      if (validateEmail(addBankUser.email.value)) {
+        setErrorShow(false);
+        setIsValidEmail(true);
+        let newData = {
+          User: {
+            FirstName: addBankUser.firstName.value,
+            Lastname: addBankUser.lastName.value,
+            Email: addBankUser.email.value,
+            ContactNumber: addBankUser.Contact.value,
+            LDAPAccount: addBankUser.ldapAccount.value,
+            UserRoleID: addBankUser.roleID.value,
+          },
+          BankId: parseInt(bankUserSecurity),
+        };
+        const clearData = () => {
+          setAddBankUser({
+            ...addBankUser,
+            firstName: {
+              value: "",
+            },
 
-      let newData = {
-        User: {
-          FirstName: addBankUser.firstName.value,
-          Lastname: addBankUser.lastName.value,
-          Email: addBankUser.email.value,
-          ContactNumber: addBankUser.Contact.value,
-          LDAPAccount: addBankUser.ldapAccount.value,
-          UserRoleID: addBankUser.roleID.value,
-        },
-        BankId: parseInt(bankUserSecurity),
-      };
-      dispatch(createBank(navigate, newData));
+            lastName: {
+              value: "",
+            },
+
+            roleID: {
+              value: "",
+            },
+
+            ldapAccount: {
+              value: "",
+            },
+
+            email: {
+              value: "",
+            },
+
+            Contact: {
+              value: "",
+            },
+          });
+          setBankSelectRoleValue([]);
+        };
+        let clearFieldData = clearData;
+        dispatch(createBank(navigate, newData, clearFieldData));
+      } else if (validateEmail(addBankUser.email.value) === false) {
+        setErrorShow(true);
+        setIsValidEmail(false);
+        setAddBankUser({
+          ...addBankUser,
+          email: {
+            value: addBankUser.email.value,
+            errorMessage: "Email Should be In Valid Format",
+            errorStatus: true,
+          },
+        });
+      }
     } else {
+      setErrorShow(true);
       setIsValidEmail(false);
-      setOpen({
-        ...open,
-        open: true,
-        message: "Please Fill All Fields",
-      });
       setAddBankUser({
         ...addBankUser,
         email: {
           value: addBankUser.email.value,
-          errorMessage: "Enter Valid Email Address",
+          errorMessage: "Email is requried",
           errorStatus: true,
         },
       });
-      setErrorShow(true);
     }
   };
 
@@ -580,13 +619,7 @@ const Bankuser = () => {
                                 <p
                                   className={
                                     errorShow &&
-                                    addBankUser.email.errorMessage !== "" &&
-                                    "Enter Valid Email Address"
-                                      ? "bankErrorMessage"
-                                      : "bankErrorMessage_hidden" &&
-                                        errorShow &&
-                                        addBankUser.email.value === "" &&
-                                        "Email field is required"
+                                    addBankUser.email.errorMessage !== ""
                                       ? "bankErrorMessage"
                                       : "bankErrorMessage_hidden"
                                   }
@@ -601,7 +634,7 @@ const Bankuser = () => {
                                     : "bankErrorMessage_hidden"
                                 }
                               >
-                                Email is required
+                                {addBankUser.email.errorMessage}
                               </p>
                             )}
                           </Col>

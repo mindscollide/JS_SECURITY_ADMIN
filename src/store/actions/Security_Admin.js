@@ -748,7 +748,7 @@ const createBankUserFail = (message) => {
   };
 };
 
-const createBank = (navigate, newData) => {
+const createBank = (navigate, newData, clearFieldData) => {
   let token = JSON.parse(localStorage.getItem("token"));
 
   return (dispatch) => {
@@ -767,7 +767,7 @@ const createBank = (navigate, newData) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(createBank(navigate, newData));
+          dispatch(createBank(navigate, newData, clearFieldData));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -783,6 +783,7 @@ const createBank = (navigate, newData) => {
                   "user created"
                 )
               );
+              clearFieldData();
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -875,7 +876,7 @@ const createCorporateFail = (message) => {
   };
 };
 
-const corporateCreate = (navigate, corporateData) => {
+const corporateCreate = (navigate, corporateData, clearTextFieldData) => {
   let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(createCorporateInit());
@@ -896,7 +897,9 @@ const corporateCreate = (navigate, corporateData) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(corporateCreate(navigate, corporateData));
+          dispatch(
+            corporateCreate(navigate, corporateData, clearTextFieldData)
+          );
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -912,6 +915,7 @@ const corporateCreate = (navigate, corporateData) => {
                   "user created"
                 )
               );
+              clearTextFieldData();
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

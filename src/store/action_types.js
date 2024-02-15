@@ -165,3 +165,16 @@ export const DOWNLOAD_REPORT_INIT = "DOWNLOAD_REPORT_INIT";
 
 //for download something went wrong
 export const SOME_THING_WENT_WRONG = "SOME_THING_WENT_WRONG";
+
+// for downlaod Access Report Api
+export const DOWNLOAD_ACCESS_REPORT_INIT = "DOWNLOAD_ACCESS_REPORT_INIT";
+
+// for download STatus wise report
+export const DOWNLOAD_STATUSWISE_REPORT_INIT =
+  "DOWNLOAD_STATUSWISE_REPORT_INIT";
+
+// for download Last Login report
+export const DOWNLOAD_LASTLOGIN_REPORT_INIT = "DOWNLOAD_LASTLOGIN_REPORT_INIT";
+
+// for download bank User login History Excel File
+export const DOWNLOAD_EXCEL_BANK_FILE_INIT = "DOWNLOAD_EXCEL_BANK_FILE_INIT";

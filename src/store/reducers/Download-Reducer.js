@@ -21,6 +21,29 @@ const downloadReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
       };
+    case actions.DOWNLOAD_ACCESS_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.DOWNLOAD_STATUSWISE_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.DOWNLOAD_LASTLOGIN_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.DOWNLOAD_EXCEL_BANK_FILE_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
 
     default:
       return { ...state };

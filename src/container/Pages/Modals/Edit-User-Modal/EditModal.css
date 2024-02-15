@@ -1,11 +1,12 @@
 .modal-Edit-styles .modal-content {
-  position: relative;
+  /* position: relative;
   top: 0px !important;
-  left: 100px;
+  left: 100px; */
   height: 470px !important;
   width: 650px !important;
   background-color: #f2f3f9;
   border-radius: 8px !important;
+  margin: 0px 50px;
   display: flex !important;
   justify-content: center !important;
   border: 1px solid #e0e1e2 !important;
@@ -38,10 +39,12 @@
   margin-top: 10px;
   height: 37px !important;
   font-size: 14px;
+  font-weight: 500;
   color: #45494d;
 }
 .textfield-fname-lname {
   height: 37px !important;
+  font-weight: 500;
   font-size: 14px;
 }
 

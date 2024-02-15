@@ -3,6 +3,7 @@ import { Col, Row, Container } from "react-bootstrap";
 import {
   Paper,
   TextField,
+  Notification,
   Button,
   Table,
   Loader,
@@ -37,6 +38,11 @@ const Userlist = () => {
   console.log(systemReducer, "systemAdminsystemAdmin");
 
   const [totalRecords, setTotalRecord] = useState(0);
+
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
+  });
 
   //this the email Ref for copy paste handler
   const emailRef = useRef(null);
@@ -80,6 +86,32 @@ const Userlist = () => {
 
   // state for table rows
   const [rows, setRows] = useState([]);
+
+  //this useEffect Condition is for when user hit search btn if data isn't same
+  // as in the table then table should be empty
+  useEffect(() => {
+    if (
+      systemReducer.searchCorporate.length > 0 &&
+      systemReducer.searchCorporate !== null &&
+      systemReducer.searchCorporate !== undefined &&
+      systemReducer.searchCorporate !== ""
+    ) {
+      setRows(systemReducer.searchCorporate);
+      setOpen({
+        ...open,
+        open: true,
+        message: "Record Found",
+      });
+    } else {
+      setRows([]);
+      setOpen({
+        ...open,
+        open: true,
+        message: "No Record Found",
+      });
+    }
+  }, [systemReducer.searchCorporate]);
+  console.log("searchCorporatesearchCorporate", rows);
 
   //state for customer list fields
   const [customerListFields, setCustomerListFields] = useState({
@@ -191,6 +223,66 @@ const Userlist = () => {
       setCompanyDropdown(tem);
     }
   }, [systemReducer.corporateNameByBankId]);
+
+  // for category Corporate in select drop down
+  useEffect(() => {
+    if (Object.keys(auth.getAllCategoryCorporate).length > 0) {
+      let tem = [];
+      auth.getAllCategoryCorporate.map((data, index) => {
+        console.log(data, "datadatadatadatassssss");
+        tem.push({
+          label: data.category,
+          value: data.corporateCategoryID,
+        });
+      });
+      setSelectAllCategory(tem);
+    }
+  }, [auth.getAllCategoryCorporate]);
+
+  // for bank corporate bank id dropdown useEffect
+  useEffect(() => {
+    if (Object.keys(systemReducer.bankCorporates).length > 0) {
+      let tem = [];
+      systemReducer.bankCorporates.map((data, index) => {
+        console.log(data, "datadatadatadatassssss");
+        tem.push({
+          // value: data.corporateID,
+          label: data.corporateName,
+        });
+      });
+      setSelectBankCorporate(tem);
+    }
+  }, [systemReducer.bankCorporates]);
+
+  // for corporate company select drop down
+  useEffect(() => {
+    if (Object.keys(auth.allCorporates).length > 0) {
+      let tem = [];
+      auth.allCorporates.map((data, index) => {
+        console.log(data, "datadatadatadatassssss");
+        tem.push({
+          label: data.corporateName,
+          value: data.corporateID,
+        });
+      });
+      setSelectCompany(tem);
+    }
+  }, [auth.allCorporates]);
+
+  // for userStatus in select dropdown
+  useEffect(() => {
+    if (Object.keys(auth.UserStatus).length > 0) {
+      let tem = [];
+      auth.UserStatus.map((data, index) => {
+        console.log(data, "userStatususerStatus");
+        tem.push({
+          label: data.statusName,
+          value: data.statusID,
+        });
+      });
+      setStatusDropdown(tem);
+    }
+  }, [auth.UserStatus]);
 
   //ON CHANGE HANDLER FOR CORPORATE COMPANY DROPDOWN
   const selectBankCompanyOnchangeHandler = async (selectedCompany) => {
@@ -344,81 +436,6 @@ const Userlist = () => {
     };
     dispatch(searchUserCorporateApi(navigate, corporateSearchData));
   }, []);
-
-  //this useEffect Condition is for when user hit search btn if data isn't same
-  // as in the table then table should be empty
-  useEffect(() => {
-    if (
-      systemReducer.searchCorporate.length > 0 &&
-      systemReducer.searchCorporate !== null &&
-      systemReducer.searchCorporate !== undefined
-    ) {
-      setRows(systemReducer.searchCorporate);
-    } else {
-      setRows([]);
-    }
-  }, [systemReducer.searchCorporate]);
-  console.log("searchCorporatesearchCorporate", rows);
-
-  // for category Corporate in select drop down
-  useEffect(() => {
-    if (Object.keys(auth.getAllCategoryCorporate).length > 0) {
-      let tem = [];
-      auth.getAllCategoryCorporate.map((data, index) => {
-        console.log(data, "datadatadatadatassssss");
-        tem.push({
-          label: data.category,
-          value: data.corporateCategoryID,
-        });
-      });
-      setSelectAllCategory(tem);
-    }
-  }, [auth.getAllCategoryCorporate]);
-
-  // for bank corporate bank id dropdown useEffect
-  useEffect(() => {
-    if (Object.keys(systemReducer.bankCorporates).length > 0) {
-      let tem = [];
-      systemReducer.bankCorporates.map((data, index) => {
-        console.log(data, "datadatadatadatassssss");
-        tem.push({
-          // value: data.corporateID,
-          label: data.corporateName,
-        });
-      });
-      setSelectBankCorporate(tem);
-    }
-  }, [systemReducer.bankCorporates]);
-
-  // for corporate company select drop down
-  useEffect(() => {
-    if (Object.keys(auth.allCorporates).length > 0) {
-      let tem = [];
-      auth.allCorporates.map((data, index) => {
-        console.log(data, "datadatadatadatassssss");
-        tem.push({
-          label: data.corporateName,
-          value: data.corporateID,
-        });
-      });
-      setSelectCompany(tem);
-    }
-  }, [auth.allCorporates]);
-
-  // for userStatus in select dropdown
-  useEffect(() => {
-    if (Object.keys(auth.UserStatus).length > 0) {
-      let tem = [];
-      auth.UserStatus.map((data, index) => {
-        console.log(data, "userStatususerStatus");
-        tem.push({
-          label: data.statusName,
-          value: data.statusID,
-        });
-      });
-      setStatusDropdown(tem);
-    }
-  }, [auth.UserStatus]);
 
   //ON CHANGE HANDLER FOR CATEGORY DROPDOWN
   const selectAllCategoryOnchangeHandler = async (selectedCategory) => {
@@ -978,6 +995,7 @@ const Userlist = () => {
           />
         </>
       ) : null}
+      <Notification setOpen={setOpen} open={open.open} message={open.message} />
       {systemReducer.Loading ? <Loader /> : null}
     </section>
   );
