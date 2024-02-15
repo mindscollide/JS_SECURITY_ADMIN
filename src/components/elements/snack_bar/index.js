@@ -33,7 +33,7 @@ const Notification = ({ setOpen, open, message }) => {
       {message != "" ? (
         <div className={classes.root}>
           <Snackbar
-            autoHideDuration={3000}
+            autoHideDuration={4000}
             anchorOrigin={{ vertical, horizontal }}
             open={open}
             onClose={handleClose}

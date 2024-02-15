@@ -172,11 +172,22 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
     if (
       securitReducer.allUserList !== null &&
       securitReducer.allUserList !== undefined &&
-      securitReducer.allUserList.length > 0
+      securitReducer.allUserList.length > 0 &&
+      securitReducer.allUserList !== ""
     ) {
       setRows(securitReducer.allUserList);
+      setOpen({
+        ...open,
+        open: true,
+        message: "Record Found",
+      });
     } else {
       setRows([]);
+      setOpen({
+        ...open,
+        open: true,
+        message: "No Record Found",
+      });
     }
   }, [securitReducer.allUserList]);
 
@@ -548,7 +559,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       align: "center",
       ellipsis: true,
 
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      render: (text) => <label className="Email_Coloumn">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">Email</label>,
@@ -556,7 +567,8 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
       key: "email",
       width: "200px",
       align: "center",
-      render: (text) => <label className="issue-date-column">{text}</label>,
+      ellipsis: true,
+      render: (text) => <label className="Email_Coloumn">{text}</label>,
     },
     {
       title: <label className="bottom-table-header">First Name</label>,
@@ -830,7 +842,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
           <Col lg={12} md={12} sm={12}>
             <Paper className="span-edit-user">
               <Row className="mt-3">
-                <Col lg={3} md={3} sm={3}>
+                <Col lg={3} md={3} sm={12}>
                   <TextField
                     name="userLdapAccount"
                     className="text-fields-edituser"
@@ -841,7 +853,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={3}>
+                <Col lg={3} md={3} sm={12}>
                   <TextField
                     name="firstName"
                     className="text-fields-edituser"
@@ -852,7 +864,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={3}>
+                <Col lg={3} md={3} sm={12}>
                   <TextField
                     name="lastName"
                     labelClass="d-none"
@@ -863,7 +875,7 @@ const Alluser = ({ show, setShow, ModalTitle }) => {
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={3}>
+                <Col lg={3} md={3} sm={12}>
                   <Select
                     name="roleID"
                     options={editSelectRole}

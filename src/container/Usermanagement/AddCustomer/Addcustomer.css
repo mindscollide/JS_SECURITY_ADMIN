@@ -127,6 +127,8 @@
 }
 
 .disabled-fields {
+  font-size: 13px !important;
+  font-weight: 500;
   height: 37px;
   background-color: #dbdde7 !important;
   cursor: default;

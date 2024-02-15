@@ -1,6 +1,6 @@
 .overlay {
   width: 100%;
-  position: fixed;
+  position: fixed !important;
   bottom: 0;
   right: 0;
   display: flex;
@@ -9,13 +9,13 @@
   top: 0;
   backdrop-filter: blur(10px);
   left: 0;
-  z-index: 40 !important;
+  z-index: 1060 !important;
   min-height: 100vh !important;
   overflow: hidden;
 }
 
 .overlay-content {
-  z-index: 40 !important;
+  z-index: 1060 !important;
   overflow: hidden;
   padding: 20px;
   text-align: center;

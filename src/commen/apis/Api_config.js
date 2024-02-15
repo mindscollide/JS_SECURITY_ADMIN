@@ -88,12 +88,6 @@ const CorporateUserList = {
   RequestMethod: "ServiceManager.GetAllCorporateUsers",
 };
 
-//SearchUserApi
-
-const SearchApiCorporate = {
-  RequestMethod: "ServiceManager.SearchCorporateUsers",
-};
-
 // get All Bank Corporate By Bank ID Api
 const getAllBankCorporate = {
   RequestMethod: "ServiceManager.GetAllCorporatesByBankID",
@@ -139,6 +133,26 @@ const downloadReportSecurityApi = {
   RequestMethod: "DownloadFile",
 };
 
+//download report api for security user Report access details Report
+const downloadAccessReportApi = {
+  RequestMethod: "DownloadAccessDetailsReport",
+};
+
+// downlaod statuswise report for security user report status wise
+const downlaodStatusWiseReportApi = {
+  RequestMethod: "DownloadStatusWiseReport",
+};
+
+// downlaod lastlogin report for security user report last Login
+const downlaodLastLoginReportApi = {
+  RequestMethod: "DownloadLastLoginReport",
+};
+
+//DOWNLOAD REPORTS FOR BANK USER LOGIN HISTORY REPORT
+const downloadBankUserLoginHistory = {
+  RequestMethod: "BankUsersLoginHistoryReportExcel",
+};
+
 export {
   authenticationLogIn,
   authenticationSignUp,
@@ -160,7 +174,6 @@ export {
   getAllAssetsTypeERM,
   BankBulkUserList,
   CorporateUserList,
-  SearchApiCorporate,
   getAllBankCorporate,
   searchCorporateUsersSysAdmin,
   updateCorporateApiSysAdmin,
@@ -170,4 +183,8 @@ export {
   viewNatureOfBusiness,
   deleteNatureOfBusines,
   downloadReportSecurityApi,
+  downloadAccessReportApi,
+  downlaodStatusWiseReportApi,
+  downlaodLastLoginReportApi,
+  downloadBankUserLoginHistory,
 };
